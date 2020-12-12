@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Projects Page</title>
+
+    <link rel="stylesheet" href="style.css">
+    
+    <script type='text/javascript' src='script.js'>
+      console.log('Script and stylesheet loaded')
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap" rel="stylesheet">
+  </head>
+  
+  <body class=main>
+    <table>
+      <tr>
+        <td>
+          <a href="index.html">Cover</a>
+        </td>
+        <td>
+          <a href="work.html">Work</a>
+        </td>
+        <td>
+          <a href="projects.html">Projects</a>
+        </td>
+        <td>
+          <a href="contact.html">
+            <img title="Contact" src="resources/pics/envelope.jpg" width=30px>
+          </a>
+        </td>
+      </tr>
+    </table>
+    <hr size="3" noshade>
+    
+    <ul>
+        <li> <a href="#pf_showcase"> Prime Factorization </a> </li>
+        <li> <a href="#sailing__showcase"> Sailing optimization </a> </li>
+        <li> <a href="#fourier_showcase"> Fourier Transform (DFT) </a> </li>
+        <li> <a href="#gui_showcase"> Music/media player</a> </li>
+        <ul>
+            <li> <a href="#gui_showcase">GUI</a></li>
+            <li> <a href="#terminal_showcase">Terminal</a></li>
+        </ul>
+        <li></li>
+        <li></li>
+    </ul>
+    
+    <hr>
+    
+    <p>
+      
+    </p>
+    
+    <br>
+    
+    <p>
+      <input
+      type="range"
+      id="slider"
+      value=0
+      min=-1
+      max=1
+      oninput="test_range.value=slider.value">
+      <output id="test_range"></output>
+      <button onclick="echo('slider')">Sample</button>
+    </p>
+    
+    <hr>
+    
+    <p id=pf_showcase>
+      <lable>Prime factorize:</lable>
+      <input
+      id="product"
+      type="number"
+      width="10"
+      placeholder=" number to factor"
+      oninput="pf('product','factors')">
+      <output id="factors"></output>
+    </p>
+    
+    <hr>
+    
+    <p id=sail_showcase>
+      <p> <strong><ct><wave>Sail </wave></ct></strong>
+ calculates the minimal speed required, to keep up</br>
+		  with any change of heading when tacking or gibing</br>
+		  Wind data should be Apparent¹</p>
+
+	    
+		  <table>				
+			  <tr>
+				  <td><vars class="var">Boat Speed</vars> </td>
+				  <td>
+					  <input id="bs_in" value="5" type="text" placeholder="kts">
+				  </td>
+			  </tr>	
+			
+			  <tr>
+				  <td><vars class="var">Wind Speed</vars> </td>
+				  <td>
+					  <input id="rs_in" value="15" type="text" placeholder="kts">
+				  </td>
+			  </tr>
+
+			  <tr>
+				  <td><vars class="var">Wind Angle</vars> </td>
+				  <td>
+					  <input id="ra_in" value="30" type="text" placeholder="degrees">
+				  </td>
+			  </tr>
+			
+			  <tr>
+				  <td><vars class="var">Deviation</vars> </td>
+				  <td>
+					  <input id="de_in" value="10" type="number" placeholder="degrees">
+				  </td>
+		  </tr>
+			
+			  <tr>
+				  <td>
+					  <input class="btn" type="button" value="Minimum" onclick="sail()">
+				  </td>
+				  <td>
+					  <strong>
+					  <output id="sail_out" value=":)" type="text"></output>
+					  </strong>
+				  </td>
+			  </tr>
+		  </table>
+
+		  <p>
+			  <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
+		  </p>
+		
+    </p>
+    <hr>
+    <p id=fourier_showcase>
+        here will be a showcase of Fourier
+        <canvas
+        id="drawContainer"
+        width="500"
+        height="500"
+        style="border: 1px solid #333"
+        ></canvas>
+    </p>
+    <hr>
+    <p id=gui_showcase>
+        here will be a showcase of µTube
+    </p>
+    <hr>
+    <p id=terminal_showcase>
+        here will be a showcase of WebSound
+    </p>
+    <hr>
+    <p id=_showcase>
+        here will be a showcase of ...
+    </p>
+    <hr>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    end
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

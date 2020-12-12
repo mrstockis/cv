@@ -1,15 +1,84 @@
 
-.main {
-    color: rgb(200,100,100);
+.main
+{
+    color: rgb(190,180,180);
+    background-color: rgb(0,45,50);
 }
 
 
-.logo {
-    color: rgb(100,50,50);
+.logo
+{
+    color: rgb(255,255,255);
     font-family: 'Princess Sofia', cursive;
 }
 
 
-.sub {
+hr
+{
+    border-style: dotted;
+}
+
+a
+{
+    color: rgb(250,50,0);
+}
+
+.sub
+{
     color: grey;
 }
+
+
+
+
+
+
+// css
+
+:root{
+	--title-col: #105870;
+}
+
+wave {
+	text-decoration-line: underline;
+	text-decoration-style: wavy;
+}
+
+body {
+	font-family: sans-serif;
+	color: grey;
+	background-color: black;
+}
+h2 {
+	text-align: center;
+	color: /*var(--title-col);*/ #105870;
+}
+
+p {
+	color: grey;
+}
+
+output {
+	color: white;
+}
+
+.var {
+	color: lightgrey;
+}
+
+.btn {
+	background-color: lightgrey;
+	border-color: violet;
+	margin: 5%;
+}
+
+cg { color: green; }
+ct { color: teal; }
+
+
+
+
+
+
+
+
