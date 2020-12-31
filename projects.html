@@ -35,14 +35,20 @@
     </table>
     <hr size="3" noshade>
     
+  
+    <h3> Index </h3>
     <ul>
-        <li> <a href="#pf_showcase"> Prime Factorization </a> </li>
-        <li> <a href="#sailing__showcase"> Sailing optimization </a> </li>
-        <li> <a href="#fourier_showcase"> Fourier Transform (DFT) </a> </li>
         <li> <a href="#gui_showcase"> Music/media player</a> </li>
         <ul>
             <li> <a href="#gui_showcase">GUI</a></li>
             <li> <a href="#terminal_showcase">Terminal</a></li>
+        </ul>
+        
+        <li> <a href="#sailing_showcase">Math</a>
+        <ul>
+            <li> <a href="#sailing_showcase"> Sailing optimization </a> </li>
+            <li> <a href="#fourier_showcase"> Fourier Transform (DFT) </a> </li>
+            <li> <a href="#pf_showcase"> Prime Factorization </a> </li>
         </ul>
         <li></li>
         <li></li>
@@ -50,13 +56,8 @@
     
     <hr>
     
-    <p>
-      
-    </p>
     
-    <br>
-    
-    <p>
+    <!--<p>
       <input
       type="range"
       id="slider"
@@ -68,54 +69,56 @@
       <button onclick="echo('slider')">Sample</button>
     </p>
     
-    <hr>
+    <hr>-->
     
-    <p id=pf_showcase>
-      <lable>Prime factorize:</lable>
-      <input
-      id="product"
-      type="number"
-      width="10"
-      placeholder=" number to factor"
-      oninput="pf('product','factors')">
-      <output id="factors"></output>
+    <p id=gui_showcase>
+      <h3>µTube</h3>
+        here will be a showcase of µTube
     </p>
     
     <hr>
     
+    <p id=terminal_showcase>
+      <h3>WebSound</h3>
+      here will be a showcase of WebSound
+    </p>
+    
+    <hr>
+    
+
     <p id=sail_showcase>
-      <p> <strong><ct><wave>Sail </wave></ct></strong>
- calculates the minimal speed required, to keep up</br>
+      <h3>Sailing Optimization</h3>
+      <p><strong id="sail_wave"> Sail </strong>
+      calculates the minimal speed required, to keep up</br>
 		  with any change of heading when tacking or gibing</br>
 		  Wind data should be Apparent¹</p>
-
 	    
 		  <table>				
 			  <tr>
 				  <td><vars class="var">Boat Speed</vars> </td>
 				  <td>
-					  <input id="bs_in" value="5" type="text" placeholder="kts">
+					  <input id="bs_in" value="" type="text" placeholder=" kts">
 				  </td>
 			  </tr>	
 			
 			  <tr>
 				  <td><vars class="var">Wind Speed</vars> </td>
 				  <td>
-					  <input id="rs_in" value="15" type="text" placeholder="kts">
+					  <input id="rs_in" value="" type="text" placeholder=" kts">
 				  </td>
 			  </tr>
 
 			  <tr>
 				  <td><vars class="var">Wind Angle</vars> </td>
 				  <td>
-					  <input id="ra_in" value="30" type="text" placeholder="degrees">
+					  <input id="ra_in" value="" type="text" placeholder=" degrees">
 				  </td>
 			  </tr>
 			
 			  <tr>
 				  <td><vars class="var">Deviation</vars> </td>
 				  <td>
-					  <input id="de_in" value="10" type="number" placeholder="degrees">
+					  <input id="de_in" value="" type="text" placeholder=" degrees">
 				  </td>
 		  </tr>
 			
@@ -138,23 +141,31 @@
     </p>
     <hr>
     <p id=fourier_showcase>
-        here will be a showcase of Fourier
-        <canvas
-        id="drawContainer"
-        width="500"
-        height="500"
-        style="border: 1px solid #333"
-        ></canvas>
+      <h3>Fourier Transformation - DFT</h3>
+      here will be a showcase of Fourier
+      
+      <canvas></canvas>
+      <script src="canvas.js"></script>
+      
     </p>
+    
     <hr>
-    <p id=gui_showcase>
-        here will be a showcase of µTube
+    
+    <p id=pf_showcase>
+      <h3>Prime Factoring</h3>
+      <lable>Prime factorize:</lable>
+      <input
+      id="product"
+      type="number"
+      width="10"
+      placeholder=" number to factor"
+      oninput="pf('product','factors')">
+      <output id="factors"></output>
     </p>
+    
     <hr>
-    <p id=terminal_showcase>
-        here will be a showcase of WebSound
-    </p>
-    <hr>
+    
+    
     <p id=_showcase>
         here will be a showcase of ...
     </p>
