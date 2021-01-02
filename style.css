@@ -29,7 +29,8 @@ hr
 
 a
 {
-    color: rgb(220,50,50);
+    text-decoration: none;
+    color: rgb(210,50,50);
 }
 a:hover
 {
