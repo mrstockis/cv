@@ -6,6 +6,19 @@ function Log(thing)
     }
 
 
+function toggle_visibility(id)
+{
+    e = document.getElementById(id);
+    
+    if(e.style.visibility == "hidden")
+    {
+        e.style.visibility = "visible";
+    } else {
+        e.style.visibility = "hidden";
+    }
+}
+
+
 function flip() {
     var normal = document.getElementById('phone').textContent;
     var range = normal.length;

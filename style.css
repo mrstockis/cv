@@ -10,6 +10,13 @@ body
     margin-right: 2%;
 }
 
+td
+{
+    /*border-collapse: separate;/
+    margin-left: 1%; */
+    padding-left: 10px;
+}
+
 
 ppop
 {
@@ -107,6 +114,21 @@ ct { color: teal; }
 }
 
 
+.sandbox
+{
+    /*display: none;*/
+    visibility: hidden;
+}
+
+.opaque
+{
+    opacity: 0;
+}
+
+.opaque:hover
+{
+    opacity: 1;
+}
 
 
 /* IDs */
