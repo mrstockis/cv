@@ -155,7 +155,6 @@ canvas.height = 400;
 
 
 
-
 canvas.addEventListener('mousemove',
     function(event)
     {
@@ -165,22 +164,151 @@ canvas.addEventListener('mousemove',
         }
         mouse.x = event.x - canvasPos.left;
         mouse.y = event.y - canvasPos.top ;
+        
+    }
+)
+
+
+var isPainting = false;
+
+keyPressed = {
+    ctrl: false
+}
+
+
+window.addEventListener('keydown',
+    function(event)
+    {
+        //Log(event.key)
+        if(event.key == 'Control') {
+            keyPressed.ctrl = true;
+        }
+        
+        if (event.key == 'c')
+        {
+            status(drawn);
+        }
+        
+        if (event.key == 'C')
+        {
+            clear(canvas);
+        }
+        
+        if (event.key == 'd')
+        {
+            repaint(drawn);
+        }
     }
 )
 
 /*
-function getCursorPosition(canvas, event) {
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
-    console.log("x: " + x + " y: " + y)
+d
+    s1
+        c1 [ x1,y2 ]
+        c2 [ x2,y2 ]
+        c3 ...
+        
+    s2  c1 [ x1,y2 ]
+        c2 [ x2,y2 ]
+        c3 ...
+*/
+
+async function repaint(drw){
+    for (var shp=0; shp<drw.length; shp++) {
+        c.beginPath();
+        c.strokeStyle = drw[shp][0];
+        c.moveTo( drw[shp][1][0], drw[shp][1][1] )
+        //Log( [ drwn[shp][0][0], drwn[shp][0][1] ] )
+        for (var pos=1; pos<drw[shp].length; pos++) {
+            await sleep(2);
+            var xy = drw[shp][pos] ;
+            Log(xy);
+            c.lineTo( xy[0], xy[1] );
+            c.stroke();
+        }
+        
+    }
 }
 
-//const canvas = document.querySelector('canvas')
-canvas.addEventListener('mousedown', function(e) {
-    getCursorPosition(canvas, e)
-})
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/*
+async function demo() {
+  console.log('Taking a break...');
+  await sleep(2000);
+  console.log('Two seconds later, showing sleep in a loop...');
+
+  // Sleep in loop
+  for (let i = 0; i < 5; i++) {
+    if (i === 3)
+      await sleep(2000);
+    console.log(i);
+  }
+}
 */
+
+
+window.addEventListener('keyup',
+    function(event)
+    {
+        //Log(event)
+        if(event.key == 'Control') {
+            keyPressed.ctrl = false;
+        }
+    }
+)
+
+
+function status(stuff) {
+    stuff = new Array(stuff);
+    stuff.forEach(Log);
+}
+
+
+var activeColor;
+var shape = [];
+canvas.addEventListener('mousedown',paintStart);
+function paintStart(event)
+{
+    let canvasPos = {
+        left: canvas.getBoundingClientRect().left,
+        top: canvas.getBoundingClientRect().top
+    }
+    mouse.x = event.x - canvasPos.left;
+    mouse.y = event.y - canvasPos.top;
+    
+    isPainting = true;
+    activeColor = document.getElementById('colorPick').value;
+    c.strokeStyle = activeColor;
+    shape = [activeColor];
+    if (!keyPressed.ctrl) c.beginPath();
+    c.lineTo(mouse.x,mouse.y);
+    shape.push( [mouse.x,mouse.y] ) 
+}
+
+
+canvas.addEventListener('mouseup',paintEnd);
+function paintEnd(event)
+{
+    let canvasPos = {
+        left: canvas.getBoundingClientRect().left,
+        top: canvas.getBoundingClientRect().top
+    }
+    mouse.x = event.x - canvasPos.left;
+    mouse.y = event.y - canvasPos.top;
+
+    c.stroke();
+
+    if (!keyPressed.ctrl) {
+        isPainting = false;
+        //drawn.push(shape);
+        drawn.push(truncate(shape));
+    }
+}
+
+
 
 var mouse = {
     x: undefined,
@@ -188,28 +316,34 @@ var mouse = {
 }
 
 
-var times=0;
 
+var animateTimes = 000;
+var animateCount = 0;
 function animate()
 {
-    
     //times < 100 ? requestAnimationFrame(Animate) : 0;
     
-    if (times < 1000)
+    if ( animateTimes )
     {
+        if (animateCount < animateTimes) {
+            animateCount += 1;
+            requestAnimationFrame(animate);
+        }
+    } else {
         requestAnimationFrame(animate);
     }
     
-    clear(canvas);
-    draw(items);
     
-    /*;
-    ball_1.move(); ball_1.show();
-    ball_2.move(); ball_2.show();
-    ball_3.move(); ball_3.show();
-    */
-    
-    times += 1;
+    var canvasMode = document.getElementById("canvasMode").value;
+    ;
+    if (canvasMode == 'paint') {
+        paint();
+    }
+    ;
+    if (canvasMode == 'animation') {
+        clear(canvas);
+        draw(items);
+    }
 }
 
 
@@ -225,46 +359,75 @@ function draw(things)
         function(thing) // 'thing' holds element within the list 'things';
         {
             thing.update();
-            //Log(thing.color);
             //Log(thing);
         }
     )
-    /*   // 'thing' just holds count //
-    for (var thing in things)
+}
+
+function paint()
+{
+    if (isPainting)
     {
-        things[thing].move();
-        things[thing].show();
-        Log(thing);
+        c.lineTo(mouse.x,mouse.y);
+        shape.push( [mouse.x,mouse.y] );
+        c.stroke();
     }
-    //*/
-    
-    //ball_1.move();
-    //ball_1.show();
 }
 
 
-var array = new Array();
+//var array = new Array();
 
+
+//* Add some balls //
 var ball_1 = new Ball(200,100,3,'blue',14,20);
 var ball_2 = new Ball(50,210,8,'red',24,10);
 var ball_3 = new Ball(20,100,12,'green',4,5);
+
+var items = [ball_1, ball_2, ball_3];
+
 var ball_4 = new Ball();
-
-var items = [ball_1, ball_2, ball_3, ball_4];
-
 var ball_5 = new Ball();
 var ball_6 = new Ball();
-var ball_7 = new Ball();
-var extra = [ball_5, ball_6, ball_7];
+
+var extra = [ball_4, ball_5, ball_6];
 
 items.concat(extra);    // alt: Array(any arr/arrObject).push.apply(base,addition)
 
 for (let i=0; i<50; i++)
 {
-    items.push(new Ball())
+    items.push(new Ball());
+}
+//*/
+
+
+
+
+// Top level
+var drawn = [];
+
+animate();
+
+
+
+function truncate(arr) {
+    var tarr = [];
+    for (var i=0; i<arr.length; i++) {
+        if (i+1 < arr.length) {
+            if ( (arr[i][0] != arr[i+1][0]) || (arr[i][1] != arr[i+1][1]) ) {
+                tarr.push(arr[i])
+            }
+        } else if ( (arr[i][0] != arr[i-1][0]) || (arr[i][1] != arr[i-1][1]) ){
+            tarr.push(arr[i])
+        }
+    }
+    return tarr
 }
 
 
+
+
+
+// Objects //
 
 function Ball(
         x=false, //size+Math.random()*200,
@@ -282,10 +445,13 @@ function Ball(
     this.vx = vx ? vx : 10*(Math.random()-0.5) ;
     this.vy = vy ? vy : 10*(Math.random()-0.5) ;
     
+    this.xDirection = 1;
+    this.yDirection = 1;
+    
     this.time = 0
     
-    this.mtdx = mouse.x-this.x;
-    this.mtdy = mouse.y-this.y;
+    this.mtdx = this.x-mouse.x;
+    this.mtdy = this.y-mouse.y;
     
     this.show = function()
     {
@@ -301,29 +467,34 @@ function Ball(
     this.update = function()
     {
         this.time += 1
-        if (this.time > 5 && Math.min(this.vx,this.vy) > 0 )
+        //*
+        if (this.time > 20 && Math.min(this.vx,this.vy) > 1 )
         {
             this.vx -= 1
             this.vy -= 1
             
             this.time = 0
         }
+        //*/
         
         //* Interactive //
-        this.mtdx = mouse.x-this.x;
-        this.mtdy = mouse.y-this.y;
+        this.mtdx = this.x-mouse.x;
+        this.mtdy = this.y-mouse.y;
+        
+        distance = Math.sqrt( Math.pow(this.mtdx,2)+Math.pow(this.mtdy,2) )
+        
         if (this.size < 50)
         {
-            if (this.mtdx < 40 && this.mtdx > -40)
+            if (distance < 40)
             {
                 this.size += 1;
-                this.vx += 1
+                this.vx += 1;
             } else if (this.size > 5) {
                 this.size -= 1;
             }
-            if (this.mtdy < 40 && this.mtdy > -40) {
+            if (distance < 40) {
                 this.size += 1;
-                this.vy += 1
+                this.vy += 1;
             } else if (this.size > 5) {
                 this.size -= 1;
             }
@@ -334,8 +505,8 @@ function Ball(
         //*/
                 
         this.checkBounce();
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx * this.xDirection;
+        this.y += this.vy * this.yDirection;
         
         this.show();
     }
@@ -344,34 +515,24 @@ function Ball(
     {
         if (this.x + this.vx > canvas.width - this.size || this.x + this.vx < this.size)
         {
-            this.vx *= -(1);
-            //this.vx *= (this.vx*Math.random());
+            this.xDirection *= (-1);
         }
-        //this.vy *= this.y > canvas.height - this.size || this.y < this.size ? -1 : 1;
-
+        
         if (this.y + this.vy > canvas.height - this.size || this.y + this.vy < this.size)
         {
-            this.vy *= -(1);
+            this.yDirection *= (-1);
         }
-        // this.vx = this.x > canvas.width  ? this.vx*(-1) : this.vx;
-        // this.vy = this.y > canvas.height ? this.vy*(-1) : this.vy;
+        
     }
 }
 
 
-/*
-for (let i=0; i<10; i++);
-{;
-    clear();
-    ball_1.update()
-    ball_2.update()  
-    ball_3.update()
-};
-//*/
 
-animate();
 
-Log( canvas )
+
+/// Start ///
+
+//main()
 
 
 
