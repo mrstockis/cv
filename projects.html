@@ -147,22 +147,46 @@
     <hr>
     <p id=fourier_showcase>
       <h3>Fourier Transformation - DFT</h3>
-      here will be a showcase of Fourier
       
       <canvas></canvas>
       <script src="canvas.js"></script>
-      <select id="canvasMode">
-        <option value="None">-- Select --</option>
-        <option value="paint">Paint</option>
-        <option value="animation" selected>Animation</option>
-        <option value="ID003">Malaysia</option>
+      <br>
+      <select id="canvasMode" name="cm" oninput="modePicked()">
+        <option value="paint" selected>Paint</option>
+        <option value="animation">Animation</option>
       </select>
       <lable for="colorPick"> Pallete </lable>
       <input
         id="colorPick"
         value="#052fa2"
         type=color
+        oninput="colorPicked()"
         ></input>
+       
+      <lable for="sizePick"> Pallete </lable>
+      <input
+        id="sizePick"
+        name="sizePick"
+        type=range
+        value=3
+        min=0
+        max=10
+        oninput="showSize.value=sizePick.value"
+        onclick="sizePicked()"
+      ></input>
+      <output id="showSize"></output>
+      
+      <input 
+        type=text
+        id='dftData'
+        placeholder="Data, seperated by space"
+        oninput="makeDFT()"
+      ></input>
+      <input 
+        type=button
+        value="Create DFT"
+        onclick="makeDFT()"
+      ></input>
       
     </p>
     

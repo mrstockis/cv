@@ -220,7 +220,7 @@ async function repaint(drw){
         c.moveTo( drw[shp][1][0], drw[shp][1][1] )
         //Log( [ drwn[shp][0][0], drwn[shp][0][1] ] )
         for (var pos=1; pos<drw[shp].length; pos++) {
-            await sleep(2);
+            await delay(2);
             var xy = drw[shp][pos] ;
             Log(xy);
             c.lineTo( xy[0], xy[1] );
@@ -230,20 +230,20 @@ async function repaint(drw){
     }
 }
 
-function sleep(ms) {
+function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /*
 async function demo() {
   console.log('Taking a break...');
-  await sleep(2000);
+  await delay(2000);
   console.log('Two seconds later, showing sleep in a loop...');
 
   // Sleep in loop
   for (let i = 0; i < 5; i++) {
     if (i === 3)
-      await sleep(2000);
+      await delay(2000);
     console.log(i);
   }
 }
@@ -267,6 +267,21 @@ function status(stuff) {
 }
 
 
+function pen() {
+    this.test = "hi";
+    this.size = 1;
+    this.color = 'blue';
+}
+
+
+var activeSize;
+function sizePicked() {
+    activeSize = document.getElementById('sizePick').value;
+}
+
+///////////////////   TRY MAKE PEN OBJECT ||  ADD SIZE AS ELEMENT to eiterh pen or shape
+
+
 var activeColor;
 var shape = [];
 canvas.addEventListener('mousedown',paintStart);
@@ -282,6 +297,7 @@ function paintStart(event)
     isPainting = true;
     activeColor = document.getElementById('colorPick').value;
     c.strokeStyle = activeColor;
+    c.lineWidth = activeSize;
     shape = [activeColor];
     if (!keyPressed.ctrl) c.beginPath();
     c.lineTo(mouse.x,mouse.y);
@@ -304,7 +320,7 @@ function paintEnd(event)
     if (!keyPressed.ctrl) {
         isPainting = false;
         //drawn.push(shape);
-        drawn.push(truncate(shape));
+        drawn.push( truncate(shape) );
     }
 }
 
@@ -316,6 +332,11 @@ var mouse = {
 }
 
 
+
+var canvasMode = 'paint';
+function modePicked() {
+    canvasMode = document.getElementById("canvasMode").value;
+}
 
 var animateTimes = 000;
 var animateCount = 0;
@@ -334,8 +355,7 @@ function animate()
     }
     
     
-    var canvasMode = document.getElementById("canvasMode").value;
-    ;
+    
     if (canvasMode == 'paint') {
         paint();
     }
@@ -428,6 +448,215 @@ function truncate(arr) {
 
 
 // Objects //
+
+
+var sampleSet = [ 0,1,2,3,4,5,6,7,8,0,7,10,7,0,-7,-10,-7 ];
+
+
+var dft = new DFT(sampleSet);
+
+
+
+function Sine(hz) {
+    this.hz = hz;
+    
+    this.wave = [];
+    this.res = 100;
+    for (var x=0 ; x<this.res ; x++) {
+        this.wave.push( [x, 10* Math.sin( this.hz * x /10 ) ] );
+    }
+    this.trace = function () {
+        c.beginPath();
+        c.moveTo(0,canvas.height/2);
+        for ( var t=0 ; t<this.wave.length ; t++ ) {
+            c.lineTo( t, - this.wave[t][1] + posH(1/2) );
+        }
+        c.stroke();
+    }
+}
+
+function sumLists(a,b) {
+    var s = [];
+    for (var i=0 ; i<a.length ; i++) {
+        s.push( [ i, a[i][1]+b[i][1] ] );
+    }
+    return s;
+}
+
+
+var s1 = new Sine(1);
+var s2 = new Sine(2);
+var s3 = new Sine(1)
+s3.wave = sumLists( s1.wave , s2.wave )
+
+function posW(part) {  // width
+    return part*canvas.width
+}
+
+function posH(part) {  // height
+    return part*canvas.height
+}
+
+
+
+
+
+function makeDFT() {
+    var dataString = document.getElementById('dftData').value;
+    Log( 'dataString: ' + dataString );
+    var data = stringToNumbers(dataString);
+    var user_dft = new DFT(data);
+    user_dft.show(0);
+}
+
+
+
+function stringToNumbers(str) {
+    var list = [];
+    list = str.split(' ');
+    list.forEach( n => Number(n) );
+    Log( "nlist: " + list );
+    return list
+    
+    for (var i=0 ; i<str.length ; i++) {
+        if ( !Number(str[i]) && str[i] != '0' ) {
+            slist.push(tmp);
+            tmp = '';
+        } else {
+            tmp += str[i];
+        }
+        Log( str[i] );
+    }
+    
+    for (var i=0 ; i<slist.length ; i++) {
+        nlist.push( Number( slist[i] ) );
+    }
+    
+    Log( 'nlist: ' + nlist );
+    return nlist;
+    
+}
+
+
+
+function DFT(set)
+{
+    this.set = set;
+    this.x = 0;
+    this.D = set.length;
+    this.isDrawing = false;
+    
+    this.k_i = [];
+    this.k_j = [];
+    var ki;
+    var kj;
+    
+    this.build = function () {
+        k_i = k_j = [];
+        
+        for (var n = 0; n<this.D/2; n++) {
+            ki = 0;
+            kj = 0;
+            for (var k = 0; k<this.D; k++) {
+                ki += this.set[k] * Math.cos( (n * k) * TAU/this.D );
+                kj += this.set[k] * Math.sin( (n * k) * TAU/this.D );
+            }
+            this.k_i.push( ki );
+            this.k_j.push( kj );
+        }
+        
+        this.wave = [];
+        this.res = 100;
+        
+        this.zoom = 5;
+        this.xStretch = 15; //Math.round(TAU);
+        this.yStretch = 1;
+        
+        var FX = 0;
+        var FY = 0;
+        var cH = canvas.height;
+        var cW = canvas.width;
+        
+        this.xPos = posW(1/5);
+        this.yPos = posH(1/2);
+        
+        for (var x=0; x<this.res; x++) {
+            FY = 0;
+            for (var n=0; n<this.D/2 ; n++) { 
+                    FY += (
+                        this.yStretch*this.zoom) * (
+                            ( 2 / this.D ) * (
+                                this.k_i[n] * Math.cos( n * x / (this.xStretch) ) +
+                                this.k_j[n] * Math.sin( n * x / (this.xStretch) )
+                        )
+                    );
+            }
+            this.wave.push( [ x , FY ] );
+        }
+    }
+    this.build()
+    
+    
+    this.show = async function(sleep=0) {
+        if (this.isDrawing) {
+            return;
+        }
+        this.isDrawing = true;
+        clear(canvas);
+        
+        await this.trace(sleep);
+        this.freq();
+        
+        this.isDrawing = false;
+    }
+    
+    
+    this.freq = function() {
+        c.font = '12px Times';
+        c.fillStyle = 'white';
+        c.textAlign = 'center';
+        c.lineWidth = 2;
+        
+        for (var f=0 ; f<this.D ; f++) {
+            
+            if ( Math.abs(this.k_i[f]) + Math.abs(this.k_j[f],2) > 1 ) {
+                c.fillText(f, posW(1/2) + f*20, posH(1/2) + 20 );
+                c.fillText(this.k_i[f], posW(1/2) + f*20, posH(1/2) + 2*20 );
+                c.fillText(this.k_j[f], posW(1/2) + f*20, posH(1/2) + 3*20 );
+            }
+            
+            c.beginPath();
+            c.moveTo( posW(1/2) + f*20 -2, posH(1/2) );
+            c.lineTo( posW(1/2) + f*20 -2, posH(1/2) - Math.abs(this.k_i[f]) );
+            c.strokeStyle='green';
+            c.stroke();
+            
+            c.beginPath();
+            c.moveTo( posW(1/2) + f*20 +2, posH(1/2) );
+            c.lineTo( posW(1/2) + f*20 +2, posH(1/2) - Math.abs(this.k_j[f]) );
+            c.strokeStyle='red';
+            c.stroke();
+        }
+    }
+    
+    this.trace = async function (sleep=false) {
+        sleep = sleep ? sleep : 0;
+        
+        c.beginPath();
+        c.strokeStyle = 'white';
+        c.lineWidth = 1;
+        c.moveTo( this.xPos, -this.wave[0][1] + this.yPos );
+        
+        for ( var t=0; t<(this.wave.length) ; t++ ) {
+            sleep ? await delay(sleep) : 0;
+            c.lineTo( this.xPos +t, -this.wave[t][1] + this.yPos );
+            //Log( this.wave[t] );
+            c.stroke()
+        }
+    
+    }
+}
+
 
 function Ball(
         x=false, //size+Math.random()*200,
@@ -522,7 +751,6 @@ function Ball(
         {
             this.yDirection *= (-1);
         }
-        
     }
 }
 
