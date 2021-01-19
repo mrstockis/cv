@@ -222,13 +222,13 @@ async function repaint(drw){
         for (var pos=1; pos<drw[shp].length; pos++) {
             await delay(2);
             var xy = drw[shp][pos] ;
-            Log(xy);
+            //Log(xy);
             c.lineTo( xy[0], xy[1] );
             c.stroke();
         }
-        
     }
 }
+
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -372,6 +372,7 @@ function clear(patch)
     c.clearRect(0, 0, patch.width, patch.height);
 }
 
+
 function draw(things)
 {
     things.forEach
@@ -383,6 +384,7 @@ function draw(things)
         }
     )
 }
+
 
 function paint()
 {
@@ -450,11 +452,9 @@ function truncate(arr) {
 // Objects //
 
 
-var sampleSet = [ 0,1,2,3,4,5,6,7,8,0,7,10,7,0,-7,-10,-7 ];
 
-
-var dft = new DFT(sampleSet);
-
+var dft = new DFT([]);
+dft.set = dft.example;
 
 
 function Sine(hz) {
@@ -499,11 +499,15 @@ function posH(part) {  // height
 
 
 
+function mRound(n) {
+    return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
+}
+
 
 
 function makeDFT() {
     var dataString = document.getElementById('dftData').value;
-    Log( 'dataString: ' + dataString );
+    //Log( 'dataString: ' + dataString );
     var data = stringToNumbers(dataString);
     var user_dft = new DFT(data);
     user_dft.show(0);
@@ -515,26 +519,8 @@ function stringToNumbers(str) {
     var list = [];
     list = str.split(' ');
     list.forEach( n => Number(n) );
-    Log( "nlist: " + list );
-    return list
-    
-    for (var i=0 ; i<str.length ; i++) {
-        if ( !Number(str[i]) && str[i] != '0' ) {
-            slist.push(tmp);
-            tmp = '';
-        } else {
-            tmp += str[i];
-        }
-        Log( str[i] );
-    }
-    
-    for (var i=0 ; i<slist.length ; i++) {
-        nlist.push( Number( slist[i] ) );
-    }
-    
-    Log( 'nlist: ' + nlist );
-    return nlist;
-    
+    //Log( "nlist: " + list );
+    return list   
 }
 
 
@@ -546,6 +532,8 @@ function DFT(set)
     this.D = set.length;
     this.isDrawing = false;
     
+    this.example = [ 0,1,2,3,4,5,6,7,8,9,0,7.1,10,7.1,0,-7.1,-10,-7.1 ];
+    
     this.k_i = [];
     this.k_j = [];
     var ki;
@@ -553,6 +541,7 @@ function DFT(set)
     
     this.build = function () {
         k_i = k_j = [];
+        this.D = set.length;
         
         for (var n = 0; n<this.D/2; n++) {
             ki = 0;
@@ -561,15 +550,15 @@ function DFT(set)
                 ki += this.set[k] * Math.cos( (n * k) * TAU/this.D );
                 kj += this.set[k] * Math.sin( (n * k) * TAU/this.D );
             }
-            this.k_i.push( ki );
-            this.k_j.push( kj );
+            this.k_i.push( ki * (2/this.D) );
+            this.k_j.push( kj * (2/this.D) );
         }
         
         this.wave = [];
         this.res = 100;
         
-        this.zoom = 5;
-        this.xStretch = 15; //Math.round(TAU);
+        this.zoom = 10;
+        this.xStretch = 1; //Math.round(TAU);
         this.yStretch = 1;
         
         var FX = 0;
@@ -583,18 +572,16 @@ function DFT(set)
         for (var x=0; x<this.res; x++) {
             FY = 0;
             for (var n=0; n<this.D/2 ; n++) { 
-                    FY += (
-                        this.yStretch*this.zoom) * (
-                            ( 2 / this.D ) * (
-                                this.k_i[n] * Math.cos( n * x / (this.xStretch) ) +
-                                this.k_j[n] * Math.sin( n * x / (this.xStretch) )
-                        )
-                    );
+                FY += (
+                    this.k_i[n] * Math.cos( n * x / (this.xStretch*this.zoom) ) +
+                    this.k_j[n] * Math.sin( n * x / (this.xStretch*this.zoom) )
+                );
             }
-            this.wave.push( [ x , FY ] );
+            this.wave.push( [ x , FY * this.yStretch ] );
         }
     }
     this.build()
+    
     
     
     this.show = async function(sleep=0) {
@@ -617,23 +604,29 @@ function DFT(set)
         c.textAlign = 'center';
         c.lineWidth = 2;
         
+        var fWidth = 30;
+        
+        c.fillText('Freq ', posW(1/2) - 30, posH(1/2) + 20 );
+        c.fillText(' cos ', posW(1/2) - 30, posH(1/2) + 2*20 );
+        c.fillText(' sin ', posW(1/2) - 30, posH(1/2) + 3*20 );
+   
         for (var f=0 ; f<this.D ; f++) {
             
-            if ( Math.abs(this.k_i[f]) + Math.abs(this.k_j[f],2) > 1 ) {
-                c.fillText(f, posW(1/2) + f*20, posH(1/2) + 20 );
-                c.fillText(this.k_i[f], posW(1/2) + f*20, posH(1/2) + 2*20 );
-                c.fillText(this.k_j[f], posW(1/2) + f*20, posH(1/2) + 3*20 );
+            if ( Math.abs(this.k_i[f]) + Math.abs(this.k_j[f]) > 0 ) {
+                c.fillText(f, posW(1/2) + f*fWidth, posH(1/2) + 20 );
+                c.fillText(mRound(this.k_i[f] ), posW(1/2)+ f*fWidth, posH(1/2)+ 2*20 );
+                c.fillText(mRound(this.k_j[f] ), posW(1/2)+ f*fWidth, posH(1/2)+ 3*20 );
             }
             
             c.beginPath();
-            c.moveTo( posW(1/2) + f*20 -2, posH(1/2) );
-            c.lineTo( posW(1/2) + f*20 -2, posH(1/2) - Math.abs(this.k_i[f]) );
+            c.moveTo( posW(1/2) + f*fWidth -2, posH(1/2) );
+            c.lineTo( posW(1/2) + f*fWidth -2, posH(1/2) - Math.abs(this.k_i[f]) );
             c.strokeStyle='green';
             c.stroke();
             
             c.beginPath();
-            c.moveTo( posW(1/2) + f*20 +2, posH(1/2) );
-            c.lineTo( posW(1/2) + f*20 +2, posH(1/2) - Math.abs(this.k_j[f]) );
+            c.moveTo( posW(1/2) + f*fWidth +2, posH(1/2) );
+            c.lineTo( posW(1/2) + f*fWidth +2, posH(1/2) - Math.abs(this.k_j[f]) );
             c.strokeStyle='red';
             c.stroke();
         }
@@ -645,11 +638,13 @@ function DFT(set)
         c.beginPath();
         c.strokeStyle = 'white';
         c.lineWidth = 1;
-        c.moveTo( this.xPos, -this.wave[0][1] + this.yPos );
+        c.moveTo( this.xPos, -this.wave[0][1]*(this.zoom*this.yStretch) + this.yPos );
         
         for ( var t=0; t<(this.wave.length) ; t++ ) {
             sleep ? await delay(sleep) : 0;
-            c.lineTo( this.xPos +t, -this.wave[t][1] + this.yPos );
+            c.lineTo( this.xPos +t,
+                -(this.wave[t][1])*(this.zoom*this.yStretch) + this.yPos
+            );
             //Log( this.wave[t] );
             c.stroke()
         }

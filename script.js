@@ -10,7 +10,7 @@ function toggle_visibility(id)
 {
     e = document.getElementById(id);
     
-    if(e.style.visibility == "hidden")
+    if (e.style.visibility == "hidden")
     {
         e.style.visibility = "visible";
     } else {
