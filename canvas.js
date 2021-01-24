@@ -333,9 +333,22 @@ var mouse = {
 
 
 
-var canvasMode = 'paint';
+var canvasMode = 'modeDFT';
+//document.getElementById('dftMode');
 function modePicked() {
     canvasMode = document.getElementById("canvasMode").value;
+    if ( canvasMode == 'modeDFT' )
+    {
+        modeDFT();
+    }
+    else if ( canvasMode == 'modeAnimate' )
+    {
+        modeAnimate();
+    }
+    else if ( canvasMode == 'modePaint' )
+    {
+        modePaint();
+    }
 }
 
 var animateTimes = 000;
@@ -355,12 +368,17 @@ function animate()
     }
     
     
-    
-    if (canvasMode == 'paint') {
+    /*
+    if (activeMode == 'dft') {
+        //modeDFT();
+    }
+    ;*/
+    if (canvasMode == 'modePaint') {
         paint();
     }
     ;
-    if (canvasMode == 'animation') {
+    if (canvasMode == 'modeAnimate') {
+        //modeAnimate();
         clear(canvas);
         draw(items);
     }
@@ -452,11 +470,6 @@ function truncate(arr) {
 // Objects //
 
 
-
-var dft = new DFT([]);
-dft.set = dft.example;
-
-
 function Sine(hz) {
     this.hz = hz;
     
@@ -489,6 +502,8 @@ var s2 = new Sine(2);
 var s3 = new Sine(1)
 s3.wave = sumLists( s1.wave , s2.wave )
 
+
+
 function posW(part) {  // width
     return part*canvas.width
 }
@@ -500,10 +515,37 @@ function posH(part) {  // height
 
 
 function mRound(n) {
+    //Log( "n@mRound: " + n )
+    if ( typeof(n) != 'number' ) return;
     return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
 }
 
 
+function modeDFT() {
+    document.getElementById('dftMode').hidden = false;
+    document.getElementById('freqTable').hidden=false;
+    
+    document.getElementById('paintMode').hidden = true;
+    
+    clear(canvas);
+}
+function modeAnimate() {
+    document.getElementById('dftMode').hidden = true;
+    document.getElementById('freqTable').hidden=true
+    
+    document.getElementById('paintMode').hidden = true;
+    
+    animate();
+}
+function modePaint() {
+    document.getElementById('dftMode').hidden = true;
+    document.getElementById('freqTable').hidden=true
+    
+    document.getElementById('paintMode').hidden = false;
+    
+    clear(canvas);
+    //paint();
+}
 
 function makeDFT() {
     var dataString = document.getElementById('dftData').value;
@@ -518,7 +560,7 @@ function average (nums) {
         //return nums.reduce((a, b) => (a + b) / nums.length);
         var total = 0;
         for ( let i=0 ; i<nums.length ; i++ ) {
-            total += nums[i];
+            total += Number(nums[i]);
         }
         Log( "nums length " + nums.length )
         return (total/nums.length)
@@ -533,13 +575,32 @@ function stringToNumbers(str) {
 }
 
 
+function table(headers,data) {
+    var fullTable = headers.concat(data);
+    var newTable = "<table>";
+    for (let r=0 ; r<(1 + data.length/headers.length) ; r++)
+    {
+        newTable += "<tr>";
+        for (let c=0 ; c<headers.length ; c++) {
+            newTable += "<td>";
+            newTable += fullTable[c+3*r];
+            newTable += "</td>";
+        }
+        newTable += "</tr>";
+    }
+    newTable += "</table>";
+    
+    return newTable;
+}
+
+
 
 function DFT(set=[0,0])
 {
     this.isDrawing = false;
     
-    this.example = [ 0,1,2,3,4,5,6,7,8,9,0,7.1,10,7.1,0,-7.1,-10,-7.1 ];
-    
+    this.example = [ 10, -2.9, 0, 2.9, -10, -17.1, 0, 17.1 ];  // 10cos(1hz) + 10sin(2hz)
+
     this.k_i = [];
     this.k_j = [];
     var ki;
@@ -553,8 +614,8 @@ function DFT(set=[0,0])
         this.N = this.set.length;
         
         this.a0 = average(this.set);
-        Log( " a0 " + this.a0 )
-        Log( "set " + this.set )
+        Log( " a0@build " + this.a0 );
+        //Log( "set " + this.set )
         
         k_i = k_j = [];
         for (var n = 0; n<this.N/2; n++) {
@@ -570,8 +631,8 @@ function DFT(set=[0,0])
         this.wave = [];
         this.res = 30*TAU;
         
-        this.zoom = 5;
-        this.widen = 1; //Math.round(TAU);
+        this.zoom = 10;
+        this.widen = TAU/2; //Math.round(TAU);
         this.lift = 1;
         this.xStretch = this.widen * this.zoom
         this.yStretch = this.lift * this.zoom
@@ -592,9 +653,8 @@ function DFT(set=[0,0])
                     this.k_j[n] * Math.sin( n * x / this.xStretch )
                 );
             }
-            this.wave.push( [ x , FY * this.lift /*+ this.a0*/ ] );
+            this.wave.push( [ x , FY * this.lift - this.k_i[0] ] );
         }
-        console.log( this.a0 );
     }
     this.build()
     
@@ -620,32 +680,71 @@ function DFT(set=[0,0])
         c.textAlign = 'center';
         c.lineWidth = 2;
         
-        var fWidth = 30;
+        var fWidth = 30*(10 / this.N);
         
-        c.fillText('Freq ', posW(1/2) - 30, posH(1/2) + 20 );
-        c.fillText(' cos ', posW(1/2) - 30, posH(1/2) + 2*20 );
-        c.fillText(' sin ', posW(1/2) - 30, posH(1/2) + 3*20 );
-   
+        if ( fWidth > 20 )
+        {
+            c.fillText(' HZ ', posW(3/5) - 30, posH(1/2) + 20 );
+            c.fillText(' COS ', posW(3/5) - 30, posH(1/2) + 2*20 );
+            c.fillText(' SIN ', posW(3/5) - 30, posH(1/2) + 3*20 );
+        }
+        
+        var tHead = [' Hz ','cos','sin'];
+        var tData = [];
+        //var freqTable = document.getElementById('freqTable');
+        
         for (var f=0 ; f<this.N ; f++) {
             
-            if ( Math.abs(this.k_i[f]) + Math.abs(this.k_j[f]) > 0.1 ) {
-                c.fillText(f, posW(1/2) + f*fWidth, posH(1/2) + 20 );
-                c.fillText(mRound(this.k_i[f] ), posW(1/2)+ f*fWidth, posH(1/2)+ 2*20 );
-                c.fillText(mRound(this.k_j[f] ), posW(1/2)+ f*fWidth, posH(1/2)+ 3*20 );
+            //var row = freqTable.insertRow(f);
+            
+            var ki = mRound(this.k_i[f]);
+            var kj = mRound(this.k_j[f]);
+            
+
+            if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )
+            {
+                tData.push( f, ki, kj );
+                //tData.push( f, ki, kj );
+                //tData.push( f, mRound(this.k_i[f]), mRound(this.k_j[f]) );
+                //Log(tData)
+                /*var cell0 = row.insertCell(0);
+                var cell1 = row.insertCell(1);
+                var cell2 = row.insertCell(2);
+                
+                cell0.innerHTML = f;
+                cell1.innerHTML = this.k_i[f];
+                cell2.innerHTML = this.k_j[f];*/
+                
+                if ( fWidth > 20 )
+                {
+                    c.fillText(  f, posW(3/5) + f*fWidth, posH(1/2) + 20 );
+                    c.fillText( ki, posW(3/5) + f*fWidth, posH(1/2)+ 2*20 );
+                    c.fillText( kj, posW(3/5) + f*fWidth, posH(1/2)+ 3*20 );
+                }
             }
             
+            
             c.beginPath();
-            c.moveTo( posW(1/2) + f*fWidth -2, posH(1/2) );
-            c.lineTo( posW(1/2) + f*fWidth -2, posH(1/2) - Math.abs(this.k_i[f])*10 );
-            c.strokeStyle='green';
+            c.moveTo( posW(3/5) + f*fWidth -2, posH(1/2) );
+            c.lineTo( posW(3/5) + f*fWidth -2, posH(1/2) - Math.abs( ki )*10 );
+            c.strokeStyle='#008080';
             c.stroke();
             
             c.beginPath();
-            c.moveTo( posW(1/2) + f*fWidth +2, posH(1/2) );
-            c.lineTo( posW(1/2) + f*fWidth +2, posH(1/2) - Math.abs(this.k_j[f])*10 );
-            c.strokeStyle='red';
+            c.moveTo( posW(3/5) + f*fWidth +2, posH(1/2) );
+            c.lineTo( posW(3/5) + f*fWidth +2, posH(1/2) - Math.abs( kj )*10 );
+            c.strokeStyle='#52acb7';
             c.stroke();
         }
+        
+        //var tbl = document.createElement('table');
+        var freqTable = table(tHead,tData);
+        document.getElementById('freqTable').innerHTML = freqTable;
+        
+        //document.createElement('table');
+        //var tbl = document.createTextNode
+        //Log(tData);
+        //Log(freqTable);
     }
     
     this.trace = async function (sleep=false) {

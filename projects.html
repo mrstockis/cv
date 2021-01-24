@@ -148,45 +148,62 @@
     <p id=fourier_showcase>
       <h3>Fourier Transformation - DFT</h3>
       
-      <canvas></canvas>
-      <script src="canvas.js"></script>
+      <table><tr>
+        <td>
+          <canvas></canvas>
+          <script src="canvas.js"></script>
+        </td>
+        <td>
+            <table id="freqTable">
+            </table>
+        </td>
+      </tr></table>
+      
       <br>
       <select id="canvasMode" name="cm" oninput="modePicked()">
-        <option value="paint" selected>Paint</option>
-        <option value="animation">Animation</option>
+        <option value="modeDFT" selected>DFT</option>
+        <option value="modeAnimate">Animation</option>
+        <option value="modePaint">Paint</option>
       </select>
-      <lable for="colorPick"> Pallete </lable>
-      <input
-        id="colorPick"
-        value="#052fa2"
-        type=color
-        oninput="colorPicked()"
-        ></input>
-       
-      <lable for="sizePick"> Pen size </lable>
-      <input
-        id="sizePick"
-        name="sizePick"
-        type=range
-        value=3
-        min=0
-        max=10
-        oninput="showSize.value=sizePick.value"
-        onclick="sizePicked()"
-      ></input>
-      <output id="showSize"></output>
       
-      <input 
-        type=text
-        id='dftData'
-        placeholder="Data, seperated by space"
-        oninput="makeDFT()"
-      ></input>
-      <input 
-        type=button
-        value="Create DFT"
-        onclick="makeDFT()"
-      ></input>
+      <div id="paintMode" hidden=true>
+        <lable for="colorPick"> Pallete </lable>
+        <input
+          id="colorPick"
+          value="#052fa2"
+          type=color
+          oninput="colorPicked()"
+          ></input>
+         
+        <lable for="sizePick"> Pen size </lable>
+        <input
+          id="sizePick"
+          name="sizePick"
+          type=range
+          value=3
+          min=0
+          max=10
+          oninput="showSize.value=sizePick.value"
+          onclick="sizePicked()"
+        ></input>
+        <output id="showSize"></output>
+      </div>
+      
+      <div id='dftMode'>
+        <input 
+          type=text
+          size='90px'
+          id='dftData'
+          placeholder="Data, seperated by space"
+          oninput="makeDFT()"
+        ></input>
+        <input 
+          type=button
+          id='dftBtn'
+          value="Create DFT"
+          onclick="makeDFT()"
+        ></input>
+      </div>
       
     </p>
     

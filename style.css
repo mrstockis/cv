@@ -133,6 +133,11 @@ ct { color: teal; }
 
 /* IDs */
 
+#freqTable
+{
+    text-align: center;
+}
+
 #sail_wave {
     color: #105870;
 	text-decoration-line: underline;
