@@ -184,11 +184,6 @@ window.addEventListener('keydown',
             keyPressed.ctrl = true;
         }
         
-        if (event.key == 'c')
-        {
-            status(drawn);
-        }
-        
         if (event.key == 'C')
         {
             clear(canvas);
@@ -259,12 +254,6 @@ window.addEventListener('keyup',
         }
     }
 )
-
-
-function status(stuff) {
-    stuff = new Array(stuff);
-    stuff.forEach(Log);
-}
 
 
 function pen() {
@@ -578,7 +567,7 @@ function stringToNumbers(str) {
 function table(headers,data) {
     var fullTable = headers.concat(data);
     var newTable = "<table>";
-    for (let r=0 ; r<(1 + data.length/headers.length) ; r++)
+    for (let r=0 ; r<(1 + data.length/headers.length) && r<17 ; r++)
     {
         newTable += "<tr>";
         for (let c=0 ; c<headers.length ; c++) {

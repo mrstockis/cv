@@ -24,7 +24,8 @@ ppop
 }
 ppop:hover
 {
-	color: rgba(200,200,200,1);
+	color: rgba(250,250,250,1);
+	/*font-weight: 500;*/
 }
 
 
@@ -86,6 +87,10 @@ ct { color: teal; }
 .logo
 {
     color: rgb(255,255,255);
+    font-family: 'Princess Sofia', cursive;
+}
+.cap
+{
     font-family: 'Princess Sofia', cursive;
 }
 
