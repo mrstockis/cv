@@ -74,6 +74,7 @@ output
 canvas
 {
     border: 1px solid black;
+    background: rgba(10,30,40,1);
 }
 
 /*
@@ -140,7 +141,7 @@ ct { color: teal; }
 
 #freqTable
 {
-    text-align: center;
+    text-align: top;
 }
 
 #sail_wave {

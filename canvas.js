@@ -536,12 +536,18 @@ function modePaint() {
     //paint();
 }
 
+var user_dft = new DFT();
 function makeDFT() {
+
     var dataString = document.getElementById('dftData').value;
     //Log( 'dataString: ' + dataString );
     var data = stringToNumbers(dataString);
-    var user_dft = new DFT(data);
-    user_dft.show(0);
+    //var user_dft = new DFT(data);
+    user_dft.data = data;
+    user_dft.build();
+    
+    user_dft.show(1);
+
 }
 
 function average (nums) {
@@ -584,10 +590,11 @@ function table(headers,data) {
 
 
 
-function DFT(set=[0,0])
+function DFT(data=false)
 {
     this.isDrawing = false;
-    
+    this.drawRequest = false;
+    this.data = data;
     this.example = [ 10, -2.9, 0, 2.9, -10, -17.1, 0, 17.1 ];  // 10cos(1hz) + 10sin(2hz)
 
     this.k_i = [];
@@ -595,30 +602,33 @@ function DFT(set=[0,0])
     var ki;
     var kj;
 
-    //this.a0 = average(this.set);
+    //this.a0 = average(this.data);
     
     this.build = function () {
 
-        this.set = set;
-        this.N = this.set.length;
+        if (!this.data) {return};
         
-        this.a0 = average(this.set);
-        Log( " a0@build " + this.a0 );
-        //Log( "set " + this.set )
+        this.N = this.data.length;
         
-        k_i = k_j = [];
+        this.a0 = average(this.data);
+        //Log( " a0@build " + this.a0 );
+        //Log( "set " + this.data )
+        
+        this.k_i = [];
+        this.k_j = [];
         for (var n = 0; n<this.N/2; n++) {
-            ki = kj = 0;
+            ki = 0;
+            kj = 0;
             for (var k = 0; k<this.N; k++) {
-                ki += this.set[k] * Math.cos( (n * k) * TAU/this.N );
-                kj += this.set[k] * Math.sin( (n * k) * TAU/this.N );
+                ki += this.data[k] * Math.cos( (n * k) * TAU/this.N );
+                kj += this.data[k] * Math.sin( (n * k) * TAU/this.N );
             }
             this.k_i.push( ki * (2/this.N) );
             this.k_j.push( kj * (2/this.N) );
         }
         
         this.wave = [];
-        this.res = 30*TAU;
+        this.res = 5*TAU**2 //31*TAU;
         
         this.zoom = 10;
         this.widen = TAU/2; //Math.round(TAU);
@@ -650,16 +660,22 @@ function DFT(set=[0,0])
     
     
     this.show = async function(sleep=0) {
-        if (this.isDrawing) {
-            return;
+        if (this.drawRequest == true) { return }
+        if (this.isDrawing) { this.drawRequest = true }
+        
+        while (this.isDrawing) {
+            await delay( 1000*(sleep) );
         }
+        
         this.isDrawing = true;
+        
         clear(canvas);
-        
-        await this.trace(sleep);
         this.freq();
-        
+        await this.trace(sleep);
+                
         this.isDrawing = false;
+        this.drawRequest = false;
+        
     }
     
     
