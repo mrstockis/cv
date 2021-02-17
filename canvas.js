@@ -557,7 +557,7 @@ function average (nums) {
         for ( let i=0 ; i<nums.length ; i++ ) {
             total += Number(nums[i]);
         }
-        Log( "nums length " + nums.length )
+        //Log( "nums length " + nums.length )
         return (total/nums.length)
     }
 
@@ -565,7 +565,7 @@ function stringToNumbers(str) {
     var list = [];
     list = str.split(' ');
     list.forEach( n => Number(n) );
-    Log( "list@strToNum: " + list );
+    //Log( "list@strToNum: " + list );
     return list   
 }
 
@@ -670,7 +670,7 @@ function DFT(data=false)
         this.isDrawing = true;
         
         clear(canvas);
-        this.freq();
+        this.frequencyPlot();
         await this.trace(sleep);
                 
         this.isDrawing = false;
@@ -679,7 +679,7 @@ function DFT(data=false)
     }
     
     
-    this.freq = function() {
+    this.frequencyPlot = function() {
         c.font = '12px Times';
         c.fillStyle = 'white';
         c.textAlign = 'center';

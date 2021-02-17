@@ -1,5 +1,5 @@
 
-gedit script.js style.css index.html $@ &
+gedit $@ & #script.js style.css index.html $@ &
 
 mySite="file:///home/pi/Udemy_WebDev/HTML_PersonalSite/index.html"
 myProj="file:///home/pi/Udemy_WebDev/HTML_PersonalSite/index.html"
