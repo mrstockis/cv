@@ -138,43 +138,60 @@ for (i=0; i<range; i++);
 
 
 
-var TAU = Math.PI * 2;
+// DECLARATIONS & ASSIGNEMENTS //
 
-
-function Log(thing)
-{
-    console.log(thing);
-}
-
-
-var canvas = document.querySelector('canvas');
-var c = canvas.getContext('2d');
-
-canvas.width = window.innerWidth * 0.5;
-canvas.height = 400;
-
-
-
-canvas.addEventListener('mousemove',
-    function(event)
-    {
-        let canvasPos = {
-            left: canvas.getBoundingClientRect().left,
-            top: canvas.getBoundingClientRect().top
-        }
-        mouse.x = event.x - canvasPos.left;
-        mouse.y = event.y - canvasPos.top ;
-        
-    }
-)
-
-
+/*
+var activeSize;  // pen width
+var activeColor;
 var isPainting = false;
+*/
+
+var TAU = Math.PI * 2;
+var R = 100;  //  DFT resolution %
+
+
+var shape = [];  // [e] where e = [ color, size, [(x0,y0),(x1,y1),..] ]  ????
+
+
+var canvasMode = 'modeDFT';
+
+var mouse = {
+    x: undefined,
+    y: undefined
+}
 
 keyPressed = {
     ctrl: false
 }
 
+
+///////////////////   TRY MAKE PEN OBJECT ||  ADD SIZE AS ELEMENT to eiterh pen or shape
+var pen = {
+    size:1,
+    color:"white",
+    isPainting: false
+}
+
+/*
+function pen() {
+    this.test = "hi";
+    this.size = 1;
+    this.color = 'blue';
+}
+*/
+
+var canvas = document.querySelector('canvas');
+canvas.width = window.innerWidth * 0.5;
+canvas.height = 400;
+var c = canvas.getContext('2d');
+
+
+
+
+// EVENTS //
+
+
+// KEYS
 
 window.addEventListener('keydown',
     function(event)
@@ -196,55 +213,6 @@ window.addEventListener('keydown',
     }
 )
 
-/*
-d
-    s1
-        c1 [ x1,y2 ]
-        c2 [ x2,y2 ]
-        c3 ...
-        
-    s2  c1 [ x1,y2 ]
-        c2 [ x2,y2 ]
-        c3 ...
-*/
-
-async function repaint(drw){
-    for (var shp=0; shp<drw.length; shp++) {
-        c.beginPath();
-        c.strokeStyle = drw[shp][0];
-        c.moveTo( drw[shp][1][0], drw[shp][1][1] )
-        //Log( [ drwn[shp][0][0], drwn[shp][0][1] ] )
-        for (var pos=1; pos<drw[shp].length; pos++) {
-            await delay(2);
-            var xy = drw[shp][pos] ;
-            //Log(xy);
-            c.lineTo( xy[0], xy[1] );
-            c.stroke();
-        }
-    }
-}
-
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/*
-async function demo() {
-  console.log('Taking a break...');
-  await delay(2000);
-  console.log('Two seconds later, showing sleep in a loop...');
-
-  // Sleep in loop
-  for (let i = 0; i < 5; i++) {
-    if (i === 3)
-      await delay(2000);
-    console.log(i);
-  }
-}
-*/
-
-
 window.addEventListener('keyup',
     function(event)
     {
@@ -256,23 +224,23 @@ window.addEventListener('keyup',
 )
 
 
-function pen() {
-    this.test = "hi";
-    this.size = 1;
-    this.color = 'blue';
-}
+
+// MOUSE
+
+canvas.addEventListener('mousemove',
+    function(event)
+    {
+        let canvasPos = {
+            left: canvas.getBoundingClientRect().left,
+            top: canvas.getBoundingClientRect().top
+        }
+        mouse.x = event.x - canvasPos.left;
+        mouse.y = event.y - canvasPos.top ;
+        
+    }
+)
 
 
-var activeSize;
-function sizePicked() {
-    activeSize = document.getElementById('sizePick').value;
-}
-
-///////////////////   TRY MAKE PEN OBJECT ||  ADD SIZE AS ELEMENT to eiterh pen or shape
-
-
-var activeColor;
-var shape = [];
 canvas.addEventListener('mousedown',paintStart);
 function paintStart(event)
 {
@@ -283,11 +251,23 @@ function paintStart(event)
     mouse.x = event.x - canvasPos.left;
     mouse.y = event.y - canvasPos.top;
     
+    /*
     isPainting = true;
     activeColor = document.getElementById('colorPick').value;
     c.strokeStyle = activeColor;
     c.lineWidth = activeSize;
     shape = [activeColor];
+    //*/
+    
+    if ( canvasMode == "modeDFT" ) { clear(canvas); }
+    
+    pen.isPainting = true;
+    pen.color = document.getElementById('colorPick').value;    
+    c.strokeStyle = pen.color;
+    c.lineWidth = pen.size;
+    let currentPen = {size:pen.size, color:pen.color};
+    shape = [currentPen];
+    
     if (!keyPressed.ctrl) c.beginPath();
     c.lineTo(mouse.x,mouse.y);
     shape.push( [mouse.x,mouse.y] ) 
@@ -307,38 +287,71 @@ function paintEnd(event)
     c.stroke();
 
     if (!keyPressed.ctrl) {
-        isPainting = false;
+        //isPainting = false;
+        pen.isPainting = false;
         //drawn.push(shape);
         drawn.push( truncate(shape) );
     }
+    
+    //*
+    if (canvasMode == "modeDFT") {
+        let tshape = truncate(shape);
+        DFT_2d( tshape );
+        //clear(canvas)
+        repaint(drawn)
+    }
+    //*/
+}
+
+var initialShape
+function updateShape() {
+    clear(canvas)
+    DFT_2d( initialShape, ignore=true );
+    repaint(drawn)
+}
+
+function DFT_2d(shape, ignore=false) {
+    if (!ignore) {
+        initialShape = shape;  // for future reference
+    }
+    
+    toggle_visibility('freqTable2','visible');
+    
+    var xs = [];
+    var ys = [];
+
+    initialShape[0].color = "white";
+    for (let i=1; i<initialShape.length; i++ ) {
+        xs.push(initialShape[i][0]);
+        ys.push(initialShape[i][1]);
+    }
+    // Zero  average xs -> for n in xs ; n - average
+    let mx = average(xs)
+    let my = average(ys)
+    for (let n=0 ; n < xs.length ; n++) {
+        xs[n] = xs[n] - mx;
+        ys[n] = ys[n] - my;
+    }
+    
+    let res = document.getElementById('resolutionPick').value;
+    
+    var xDFT = new DFT( xs, res, "x" );
+    var yDFT = new DFT( ys, res, "y" );
+    
+    xDFT.show(0,doClear=false);
+    yDFT.show(0,doClear=false);
+    var dftShape = [ initialShape[0] ];
+    for (let p = 0; p < xDFT.wave.length; p++){
+        dftShape.push( [ xDFT.wave[p][1] + posW(8/9),yDFT.wave[p][1] + posH(1/2) ] );
+        //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
+    }
+    //dftShape.forEach(n => { Log(n) })
+    drawn = [dftShape];
+    //Log("2d made");
+
 }
 
 
-
-var mouse = {
-    x: undefined,
-    y: undefined
-}
-
-
-
-var canvasMode = 'modeDFT';
-//document.getElementById('dftMode');
-function modePicked() {
-    canvasMode = document.getElementById("canvasMode").value;
-    if ( canvasMode == 'modeDFT' )
-    {
-        modeDFT();
-    }
-    else if ( canvasMode == 'modeAnimate' )
-    {
-        modeAnimate();
-    }
-    else if ( canvasMode == 'modePaint' )
-    {
-        modePaint();
-    }
-}
 
 var animateTimes = 000;
 var animateCount = 0;
@@ -357,11 +370,13 @@ function animate()
     }
     
     
-    /*
-    if (activeMode == 'dft') {
+    //*
+    if (canvasMode == 'modeDFT') {
         //modeDFT();
+        paint();
     }
-    ;*/
+    //*/
+        
     if (canvasMode == 'modePaint') {
         paint();
     }
@@ -374,10 +389,7 @@ function animate()
 }
 
 
-function clear(patch)
-{
-    c.clearRect(0, 0, patch.width, patch.height);
-}
+
 
 
 function draw(things)
@@ -387,7 +399,6 @@ function draw(things)
         function(thing) // 'thing' holds element within the list 'things';
         {
             thing.update();
-            //Log(thing);
         }
     )
 }
@@ -395,7 +406,7 @@ function draw(things)
 
 function paint()
 {
-    if (isPainting)
+    if (pen.isPainting)
     {
         c.lineTo(mouse.x,mouse.y);
         shape.push( [mouse.x,mouse.y] );
@@ -403,39 +414,69 @@ function paint()
     }
 }
 
-
-//var array = new Array();
-
-
-//* Add some balls //
-var ball_1 = new Ball(200,100,3,'blue',14,20);
-var ball_2 = new Ball(50,210,8,'red',24,10);
-var ball_3 = new Ball(20,100,12,'green',4,5);
-
-var items = [ball_1, ball_2, ball_3];
-
-var ball_4 = new Ball();
-var ball_5 = new Ball();
-var ball_6 = new Ball();
-
-var extra = [ball_4, ball_5, ball_6];
-
-items.concat(extra);    // alt: Array(any arr/arrObject).push.apply(base,addition)
-
-for (let i=0; i<50; i++)
-{
-    items.push(new Ball());
+async function repaint(drw){
+    for (var shp=0; shp<drw.length; shp++) {
+        c.beginPath();
+        c.strokeStyle = drw[shp][0].color;
+        c.lineWidth = drw[shp][0].size;
+        c.moveTo( drw[shp][1][0], drw[shp][1][1] )
+        for (var pos=1; pos<drw[shp].length; pos++) {
+            await delay(2);
+            var xy = drw[shp][pos] ;
+            c.lineTo( xy[0], xy[1] );
+            c.stroke();
+        }
+    }
 }
-//*/
 
 
 
 
-// Top level
-var drawn = [];
 
-animate();
 
+
+
+
+
+
+
+// TOOLS //
+
+function Log(thing)
+{
+    console.log(thing);
+}
+
+
+function clear(patch)
+{
+    c.clearRect(0, 0, patch.width, patch.height);
+}
+
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function table(headers,data) {
+    toggle_visibility('formulas','hidden');
+    var fullTable = headers.concat(data);
+    var newTable = "<table>";
+    for (let r=0 ; r<(1 + data.length/headers.length) && r<17 ; r++)
+    {
+        newTable += "<tr>";
+        for (let c=0 ; c<headers.length ; c++) {
+            newTable += "<td>";
+            newTable += fullTable[c+3*r];
+            newTable += "</td>";
+        }
+        newTable += "</tr>";
+    }
+    newTable += "</table>";
+    
+    return newTable;
+}
 
 
 function truncate(arr) {
@@ -453,11 +494,54 @@ function truncate(arr) {
 }
 
 
+function sumLists(a,b) {
+    var s = [];
+    for (var i=0 ; i<a.length ; i++) {
+        s.push( [ i, a[i][1]+b[i][1] ] );
+    }
+    return s;
+}
+
+
+function mRound(n) {
+    //Log( "n@mRound: " + n )
+    if ( typeof(n) != 'number' ) return;
+    return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
+}
+
+function average (nums) {
+    //var nlist = new Array(nums);
+    //return nums.reduce((a, b) => (a + b) / nums.length);
+    var total = 0;
+    for ( let i=0 ; i<nums.length ; i++ ) {
+        total += Number(nums[i]);
+    }
+    //Log( "nums length " + nums.length )
+    return (total/nums.length)
+}
+
+
+function stringToNumbers(str) {
+    var list = [];
+    list = str.split(' ');
+    list.forEach( n => Number(n) );
+    //Log( "list@strToNum: " + list );
+    return list   
+}
+
+
+function posW(part) {  // width
+    return part*canvas.width
+}
+
+
+function posH(part) {  // height
+    return part*canvas.height
+}
 
 
 
-// Objects //
-
+// OBJECTS //
 
 function Sine(hz) {
     this.hz = hz;
@@ -477,121 +561,11 @@ function Sine(hz) {
     }
 }
 
-function sumLists(a,b) {
-    var s = [];
-    for (var i=0 ; i<a.length ; i++) {
-        s.push( [ i, a[i][1]+b[i][1] ] );
-    }
-    return s;
-}
 
-
-var s1 = new Sine(1);
-var s2 = new Sine(2);
-var s3 = new Sine(1)
-s3.wave = sumLists( s1.wave , s2.wave )
-
-
-
-function posW(part) {  // width
-    return part*canvas.width
-}
-
-function posH(part) {  // height
-    return part*canvas.height
-}
-
-
-
-function mRound(n) {
-    //Log( "n@mRound: " + n )
-    if ( typeof(n) != 'number' ) return;
-    return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
-}
-
-
-function modeDFT() {
-    document.getElementById('dftMode').hidden = false;
-    document.getElementById('freqTable').hidden=false;
-    
-    document.getElementById('paintMode').hidden = true;
-    
-    clear(canvas);
-}
-function modeAnimate() {
-    document.getElementById('dftMode').hidden = true;
-    document.getElementById('freqTable').hidden=true
-    
-    document.getElementById('paintMode').hidden = true;
-    
-    animate();
-}
-function modePaint() {
-    document.getElementById('dftMode').hidden = true;
-    document.getElementById('freqTable').hidden=true
-    
-    document.getElementById('paintMode').hidden = false;
-    
-    clear(canvas);
-    //paint();
-}
-
-var user_dft = new DFT();
-function makeDFT() {
-
-    var dataString = document.getElementById('dftData').value;
-    //Log( 'dataString: ' + dataString );
-    var data = stringToNumbers(dataString);
-    //var user_dft = new DFT(data);
-    user_dft.data = data;
-    user_dft.build();
-    
-    user_dft.show(1);
-
-}
-
-function average (nums) {
-        //var nlist = new Array(nums);
-        //return nums.reduce((a, b) => (a + b) / nums.length);
-        var total = 0;
-        for ( let i=0 ; i<nums.length ; i++ ) {
-            total += Number(nums[i]);
-        }
-        //Log( "nums length " + nums.length )
-        return (total/nums.length)
-    }
-
-function stringToNumbers(str) {
-    var list = [];
-    list = str.split(' ');
-    list.forEach( n => Number(n) );
-    //Log( "list@strToNum: " + list );
-    return list   
-}
-
-
-function table(headers,data) {
-    var fullTable = headers.concat(data);
-    var newTable = "<table>";
-    for (let r=0 ; r<(1 + data.length/headers.length) && r<17 ; r++)
-    {
-        newTable += "<tr>";
-        for (let c=0 ; c<headers.length ; c++) {
-            newTable += "<td>";
-            newTable += fullTable[c+3*r];
-            newTable += "</td>";
-        }
-        newTable += "</tr>";
-    }
-    newTable += "</table>";
-    
-    return newTable;
-}
-
-
-
-function DFT(data=false)
+function DFT(data=false,resolution=100,axis=false)
 {
+    this.R = resolution/100;
+    this.axis = axis
     this.isDrawing = false;
     this.drawRequest = false;
     this.data = data;
@@ -616,7 +590,8 @@ function DFT(data=false)
         
         this.k_i = [];
         this.k_j = [];
-        for (var n = 0; n<this.N/2; n++) {
+        
+        for (var n = 0; n< this.N/2; n+=this.R) {
             ki = 0;
             kj = 0;
             for (var k = 0; k<this.N; k++) {
@@ -628,22 +603,27 @@ function DFT(data=false)
         }
         
         this.wave = [];
-        this.res = 5*TAU**2 //31*TAU;
+        this.res = 10*TAU**2 //31*TAU;
         
         this.zoom = 10;
-        this.widen = TAU/2; //Math.round(TAU);
-        this.lift = 1;
-        this.xStretch = this.widen * this.zoom
-        this.yStretch = this.lift * this.zoom
+        this.xStretch = TAU *this.zoom
+        this.yStretch = 1 *this.zoom
         
         var FX = 0;
         var FY = 0;
         var cH = canvas.height;
         var cW = canvas.width;
         
-        this.xPos = posW(1/8);
+        this.xPos = posW(1/10);
         this.yPos = posH(1/2);
         
+        
+        var correct = (this.axis) ? 1 : this.k_i[0];
+        
+        /*
+        if (this.axis=="x") { correct = posH(3/4) }
+        if (this.axis=="y") { correct = posH(1/4) }
+        */
         for (var x=0 ; x<this.res ; x++) {
             FY = 0;
             for (var n=0 ; n<this.N/2 ; n++) { 
@@ -652,30 +632,30 @@ function DFT(data=false)
                     this.k_j[n] * Math.sin( n * x / this.xStretch )
                 );
             }
-            this.wave.push( [ x , FY * this.lift - this.k_i[0] ] );
+            
+            this.wave.push( [ x , FY -correct ] );
         }
     }
     this.build()
     
     
     
-    this.show = async function(sleep=0) {
+    this.show = async function(sleep=0,doClear=true) {
         if (this.drawRequest == true) { return }
         if (this.isDrawing) { this.drawRequest = true }
         
         while (this.isDrawing) {
-            await delay( 1000*(sleep) );
+            await delay( 100*(sleep) );
         }
-        
+
+        this.drawRequest = false
         this.isDrawing = true;
         
-        clear(canvas);
+        if(doClear) { clear(canvas); }
         this.frequencyPlot();
         await this.trace(sleep);
                 
         this.isDrawing = false;
-        this.drawRequest = false;
-        
     }
     
     
@@ -687,13 +667,27 @@ function DFT(data=false)
         
         var fWidth = 30*(10 / this.N);
         
+        if (!this.axis) {
         if ( fWidth > 20 )
-        {
-            c.fillText(' HZ ', posW(3/5) - 30, posH(1/2) + 20 );
-            c.fillText(' COS ', posW(3/5) - 30, posH(1/2) + 2*20 );
-            c.fillText(' SIN ', posW(3/5) - 30, posH(1/2) + 3*20 );
+            {
+                c.fillText(' HZ ', posW(3/5) - 30, posH(1/2) + 20 );
+                c.fillText(' COS ', posW(3/5) - 30, posH(1/2) + 2*20 );
+                c.fillText(' SIN ', posW(3/5) - 30, posH(1/2) + 3*20 );
+            }
         }
         
+        
+        var yPlot;
+        
+        if (!this.axis) {
+            yPlot = posH(1/2);
+        } else if (this.axis == "x") {
+            yPlot = posH(3/5);
+        } else if (this.axis == "y") {
+            yPlot = posH(2/5);
+        }
+        
+
         var tHead = [' Hz ','cos','sin'];
         var tData = [];
         //var freqTable = document.getElementById('freqTable');
@@ -722,29 +716,30 @@ function DFT(data=false)
                 
                 if ( fWidth > 20 )
                 {
-                    c.fillText(  f, posW(3/5) + f*fWidth, posH(1/2) + 20 );
-                    c.fillText( ki, posW(3/5) + f*fWidth, posH(1/2)+ 2*20 );
-                    c.fillText( kj, posW(3/5) + f*fWidth, posH(1/2)+ 3*20 );
+                    c.fillText(  f, posW(3/5) + f*fWidth, yPlot +  20 );
+                    c.fillText( ki, posW(3/5) + f*fWidth, yPlot + 2*20 );
+                    c.fillText( kj, posW(3/5) + f*fWidth, yPlot + 3*20 );
                 }
             }
             
             
             c.beginPath();
-            c.moveTo( posW(3/5) + f*fWidth -2, posH(1/2) );
-            c.lineTo( posW(3/5) + f*fWidth -2, posH(1/2) - Math.abs( ki )*10 );
+            c.moveTo( posW(3/5) + f*fWidth -2, yPlot );
+            c.lineTo( posW(3/5) + f*fWidth -2, yPlot - /*Math.log(*/ Math.abs( ki ) );
             c.strokeStyle='#008080';
             c.stroke();
             
             c.beginPath();
-            c.moveTo( posW(3/5) + f*fWidth +2, posH(1/2) );
-            c.lineTo( posW(3/5) + f*fWidth +2, posH(1/2) - Math.abs( kj )*10 );
+            c.moveTo( posW(3/5) + f*fWidth +2, yPlot );
+            c.lineTo( posW(3/5) + f*fWidth +2, yPlot - /*Math.log(*/ Math.abs( kj ) );
             c.strokeStyle='#52acb7';
             c.stroke();
         }
         
         //var tbl = document.createElement('table');
         var freqTable = table(tHead,tData);
-        document.getElementById('freqTable').innerHTML = freqTable;
+        tableID = (this.axis == 'y') ? 'freqTable2' : 'freqTable';
+        document.getElementById(tableID).innerHTML = freqTable;
         
         //document.createElement('table');
         //var tbl = document.createTextNode
@@ -755,14 +750,17 @@ function DFT(data=false)
     this.trace = async function (sleep=false) {
         sleep = sleep ? sleep : 0;
         
+        var flatten = (this.axis) ? 10 : 1;
+        
         c.beginPath();
-        c.strokeStyle = 'white';
+        c.strokeStyle = (this.axis) ? (this.axis == 'y' ? '#511a1a' : 'blue') : 'white';
         c.lineWidth = 1;
-        c.moveTo( this.xPos, -this.wave[0][1] * this.yStretch + this.yPos );
+        c.moveTo( this.xPos, (-this.wave[0][1]/flatten) * this.yStretch + this.yPos );
+        
         
         for ( var t=0 ; t<(this.wave.length) ; t++ ) {
             sleep ? await delay(sleep) : 0;
-            c.lineTo( this.xPos +t, -this.wave[t][1] * this.yStretch + this.yPos );
+            c.lineTo( this.xPos +t, (-this.wave[t][1]/flatten) * this.yStretch + this.yPos);
             //Log( this.wave[t] );
             c.stroke()
         }
@@ -867,12 +865,132 @@ function Ball(
 }
 
 
+// INTERACT // 
+
+function makeDFT() {
+
+    var dataString = document.getElementById('dftData').value;
+    //Log( 'dataString: ' + dataString );
+    var data = stringToNumbers(dataString);
+    //var user_dft = new DFT(data);
+    //user_dft.data = data;
+    var res = document.getElementById('resolutionPick').value;
+    //user_dft.R = res;
+    //user_dft.build();
+    var user_dft = new DFT(data,res);
+    
+    user_dft.show(0.05);
+
+}
+
+
+function sizePicked() {
+    //activeSize = document.getElementById('sizePick').value;
+    pen.size = document.getElementById('sizePick').value;
+}
+
+function colorPicked() {
+    pen.color = document.getElementById('colorPick').value;
+}
+
+
+function resolutionPicked() {
+    R = document.getElementById('resolutionPick').value;
+}
+
+
+function modePicked() {
+    canvasMode = document.getElementById("canvasMode").value;
+    if ( canvasMode == 'modeDFT' )
+    {
+        showDFT();
+    }
+    else if ( canvasMode == 'modeAnimate' )
+    {
+        showAnimate();
+    }
+    else if ( canvasMode == 'modePaint' )
+    {
+        showPaint();
+    }
+}
+
+
+function showDFT() {
+    document.getElementById('dftMode').hidden = false;
+    document.getElementById('freqTable').hidden=false;
+    document.getElementById('freqTable2').hidden=false;
+    
+    document.getElementById('paintMode').hidden = true;
+    
+    clear(canvas);
+}
+function showAnimate() {
+    document.getElementById('dftMode').hidden = true;
+    document.getElementById('freqTable').hidden=true
+    document.getElementById('freqTable2').hidden=false;
+    
+    document.getElementById('paintMode').hidden = true;
+    
+    animate();
+}
+function showPaint() {
+    document.getElementById('dftMode').hidden = true;
+    document.getElementById('freqTable').hidden=true
+    document.getElementById('freqTable2').hidden=false;
+    
+    document.getElementById('paintMode').hidden = false;
+    
+    clear(canvas);
+    //paint();
+}
 
 
 
-/// Start ///
 
-//main()
+// MAIN //
+
+
+var ball_1 = new Ball(200,100,3,'blue',14,20);
+var ball_2 = new Ball(50,210,8,'red',24,10);
+var ball_3 = new Ball(20,100,12,'green',4,5);
+
+var items = [ball_1, ball_2, ball_3];
+
+var ball_4 = new Ball();
+var ball_5 = new Ball();
+var ball_6 = new Ball();
+
+var extra = [ball_4, ball_5, ball_6];
+
+items.concat(extra);
+
+for (let i=0; i<50; i++)
+{
+    items.push(new Ball());
+}
+//*/
+
+
+
+var drawn = [];
+
+animate();
+
+
+
+/*
+var s1 = new Sine(1);
+var s2 = new Sine(2);
+var s3 = new Sine(1)
+s3.wave = sumLists( s1.wave , s2.wave )
+*/
+
+//var user_dft = new DFT();
+
+
+
+
 
 
 

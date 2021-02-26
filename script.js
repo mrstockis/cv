@@ -6,11 +6,15 @@ function Log(thing)
     }
 
 
-function toggle_visibility(id)
+function toggle_visibility(id,state=false)
 {
     e = document.getElementById(id);
     
-    if (e.style.visibility == "hidden")
+    if (state)
+    {
+        e.style.visibility = state;
+    }
+    else if (e.style.visibility == "hidden")
     {
         e.style.visibility = "visible";
     } else {
@@ -42,6 +46,11 @@ function formatNumber(n)
     }
 }
 */
+
+
+
+
+
 
 function pf(from,to)
 {
