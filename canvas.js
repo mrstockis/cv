@@ -342,7 +342,7 @@ function DFT_2d(shape, ignore=false) {
     yDFT.show(0,doClear=false);
     var dftShape = [ initialShape[0] ];
     for (let p = 0; p < xDFT.wave.length; p++){
-        dftShape.push( [ xDFT.wave[p][1] + posW(8/9),yDFT.wave[p][1] + posH(1/2) ] );
+        dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(1/2) ] );
         //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
     }
     //dftShape.forEach(n => { Log(n) })
@@ -462,6 +462,25 @@ function delay(ms) {
 function table(headers,data) {
     toggle_visibility('formulas','hidden');
     var fullTable = headers.concat(data);
+    var newTable = "<table><tr style='font-weight: 700'>";
+    for (let c=0 ; c<headers.length ; c++) {
+        newTable += "<td>";
+        newTable += fullTable[c];
+        newTable += "</td>";
+    }
+    newTable += "</tr>";
+    for (let r=1 ; r<(1 + data.length/headers.length) && r<17 ; r++)
+    {
+        newTable += "<tr>";
+        for (let c=0 ; c<headers.length ; c++) {
+            newTable += "<td>";
+            newTable += fullTable[c+3*r];
+            newTable += "</td>";
+        }
+        newTable += "</tr>";
+    }
+    newTable += "</table>";
+    /*
     var newTable = "<table>";
     for (let r=0 ; r<(1 + data.length/headers.length) && r<17 ; r++)
     {
@@ -474,7 +493,7 @@ function table(headers,data) {
         newTable += "</tr>";
     }
     newTable += "</table>";
-    
+    */
     return newTable;
 }
 
@@ -620,6 +639,9 @@ function DFT(data=false,resolution=100,axis=false)
         
         var correct = (this.axis) ? 1 : this.k_i[0];
         
+        // Try flip the Y sinusoid correctly
+        let flipper = (this.axis == 'y') ? (-1) : 1;
+        
         /*
         if (this.axis=="x") { correct = posH(3/4) }
         if (this.axis=="y") { correct = posH(1/4) }
@@ -700,6 +722,9 @@ function DFT(data=false,resolution=100,axis=false)
         let maxPlotHeight = 80;
         let relativeFreq; // maxPlotHeight * ( freq_n / maxFreq ) 
         
+        // Try flip the Y sinusoid correctly
+        let flipper = (this.axis == 'y') ? (-1) : 1;
+        
         for (var f=0 ; f<this.N ; f++) {
             
             //var row = freqTable.insertRow(f);
@@ -710,7 +735,7 @@ function DFT(data=false,resolution=100,axis=false)
 
             if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )
             {
-                tData.push( f, ki, kj );
+                tData.push( f, flipper*ki, flipper*kj );
                 //tData.push( f, ki, kj );
                 //tData.push( f, mRound(this.k_i[f]), mRound(this.k_j[f]) );
                 //Log(tData)
@@ -756,19 +781,29 @@ function DFT(data=false,resolution=100,axis=false)
     }
     
     this.trace = async function (sleep=false) {
+        
+        // Scale the sinusoid to a specific measure to deal with change of canvas width
+        // by checking the current width of designated space
+        let space = posW(3/7) - posW(1/10)
+        let spaceScale = space / this.wave.length
+
+        let relativeFreq; // maxPlotHeight * ( freq_n / maxFreq ) 
+        
+        
         sleep = sleep ? sleep : 0;
         
         var flatten = (this.axis) ? 10 : 1;
+        let flipper = (this.axis == 'y') ? (-1) : 1;
         
         c.beginPath();
-        c.strokeStyle = (this.axis) ? (this.axis == 'y' ? '#511a1a' : 'blue') : 'white';
+        c.strokeStyle = (this.axis) ? (this.axis == 'y' ? 'rgba(150,20,20,.5)' : 'rgba(0,80,200,1)' ) : 'white';
         c.lineWidth = 1;
-        c.moveTo( this.xPos, (-this.wave[0][1]/flatten) * this.yStretch + this.yPos );
+        c.moveTo( this.xPos, flipper*(-this.wave[0][1]/flatten) * this.yStretch + this.yPos );
         
         
         for ( var t=0 ; t<(this.wave.length) ; t++ ) {
             sleep ? await delay(sleep) : 0;
-            c.lineTo( this.xPos +t, (-this.wave[t][1]/flatten) * this.yStretch + this.yPos);
+            c.lineTo( this.xPos +(t*spaceScale), flipper*(-this.wave[t][1]/flatten) * this.yStretch + this.yPos);
             //Log( this.wave[t] );
             c.stroke()
         }

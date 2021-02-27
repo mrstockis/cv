@@ -4,9 +4,9 @@
 body
 {
     font-family: arial, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     color: rgb(190,180,180);
-    background-color: rgb(0,45,50);
+    background-color: rgb(0,42,50);
     margin-left: 2%;
     margin-right: 2%;
 }
@@ -19,15 +19,17 @@ td
 }
 
 
-/*
-input
+/* Test */
+input,select
 {
     color: #ccc;
-    background: #333;
-    border: 1px solid rgba(0,0,0,.4);
-    border-radius: 2rem;
+    background: rgba(20,30,40,.9););
+    border: 1px solid rgba(00,00,00,.4);
+    border-radius: .2rem;
+    margin: 1px;
+    padding: 4px;
 }
-*/
+/**/
 
 ppop,p,ul
 {
@@ -85,10 +87,18 @@ output
 
 canvas
 {
-    /*border-radius: 2rem;*/
+    border-radius: 1rem;
     border: 1px solid black;
     background: rgba(10,30,40,1);
+    /*background-image: url("resources/pics/desmosWaves.jpeg");
+    background-size: 110%;*/
+    opacity: 1;
 }
+/*
+canvas:hover
+{
+}
+*/
 
 /*
 cg { color: green; }
@@ -125,13 +135,13 @@ ct { color: teal; }
 	color: lightgrey;
 }
 
-
+/*
 .btn {
 	background-color: lightgrey;
 	border-color: violet;
 	margin: 5%;
 }
-
+*/
 
 .sandbox
 {
@@ -151,6 +161,7 @@ ct { color: teal; }
 
 
 /* IDs */
+
 
 #freqTable
 {
@@ -180,11 +191,11 @@ ct { color: teal; }
 
 
 .avatar {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    background-image: url('https://source.unsplash.com/nKC772R_qog');
-    background-size: cover;
+    background-image: url('resources/pics/portrait.jpeg') ;/*url('https://source.unsplash.com/nKC772R_qog');*/
+    background-size: 120%; /*cover;*/
     background-position: center;
 }
 

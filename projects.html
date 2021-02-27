@@ -104,63 +104,87 @@
 
     <p id=sailing_showcase>
       <h3>Sailing Optimization</h3>
-      <p><strong id="sail_wave"> Sail </strong>
-      calculates the minimal speed required, to keep up</br>
-		  with any change of heading when tacking or gibing.</br>
-		  Wind data should be Apparent¹</p>
-	    
-		  <table>				
-			  <tr>
-				  <td><vars class="var">Boat Speed</vars> </td>
-				  <td>
-					  <input id="bs_in" value="" type="text" placeholder=" kts">
-				  </td>
-			  </tr>	
-			
-			  <tr>
-				  <td><vars class="var">Wind Speed</vars> </td>
-				  <td>
-					  <input id="rs_in" value="" type="text" placeholder=" kts">
-				  </td>
-			  </tr>
+      <table><tr><td>
+          <p><strong id="sail_wave"> Sail </strong>
+          calculates the minimal speed required, to keep up</br>
+	          with any change of heading when tacking or gibing.</br>
+	          Wind data should be Apparent¹</p>
+            
+	          <table>				
+		          <tr>
+			          <td><vars class="var">Boat Speed</vars> </td>
+			          <td>
+				          <input id="bs_in" value="" type="text" placeholder=" kts" oninput="sail()">
+			          </td>
+		          </tr>	
+		
+		          <tr>
+			          <td><vars class="var">Wind Speed</vars> </td>
+			          <td>
+				          <input id="rs_in" value="" type="text" placeholder=" kts" oninput="sail()">
+			          </td>
+		          </tr>
 
-			  <tr>
-				  <td><vars class="var">Wind Angle</vars> </td>
-				  <td>
-					  <input id="ra_in" value="" type="text" placeholder=" degrees">
-				  </td>
-			  </tr>
-			
-			  <tr>
-				  <td><vars class="var">Deviation</vars> </td>
-				  <td>
-					  <input id="de_in" value="" type="text" placeholder=" degrees">
-				  </td>
-		  </tr>
-			
-			  <tr>
-				  <td>
-					  <input class="btn" type="button" value="Minimum" onclick="sail()">
-				  </td>
-				  <td>
-					  <strong>
-					  <output id="sail_out" value=":)" type="text"></output>
-					  </strong>
-				  </td>
-			  </tr>
+		          <tr>
+			          <td><vars class="var">Wind Angle</vars> </td>
+			          <td>
+				          <input id="ra_in" value="" type="text" placeholder=" degrees" oninput="sail()">
+			          </td>
+		          </tr>
+		
+		          <tr>
+			          <td><vars class="var">Deviation</vars> </td>
+			          <td>
+				          <input id="de_in" value="" type="text" placeholder=" degrees" oninput="sail()">
+			          </td>
+	            </tr>
+		
+		          <tr>
+			          <td>
+				          <input class="btn" type="button" value="Minimum" onclick="sail()">
+			          </td>
+			          <td>
+				          <strong>
+				          <output id="sail_out" value=":)" type="text"></output>
+				          </strong>
+			          </td>
+		          </tr>
+	          </table>
+		      </td>
+		      <td>
+		        <p>
+		          $$
+              	v_{min}=v_0 {\cos(\alpha) \over \cos(\alpha+\sigma)}
+              $$
+              $$
+                \alpha := 
+                sin^{-1}
+                { v_0· sin(w_a) \over \sqrt{v_0^2+w_v^2-2v_0w_v\cos(w_a)}}
+              $$  
+		        </p>
+		      </td>
+		      <td>
+		        <table>   
+              <tr><td>\(v_0\)</td><td> initial velocity</td><tr>
+              <tr><td>\(\alpha\)</td><td> true wind angle</td><tr>
+              <tr><td>\(w_\alpha\)</td><td> apparent wind angle</td><tr>
+              <tr><td>\(w_v\)</td><td> apparent wind velocity</td><tr>
+              <tr><td>\(\sigma\)</td><td> change of heading</td><tr>
+            </table>
+          </td>
+	      </tr>
 		  </table>
-
 		  <p>
 			  <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
 		  </p>
 		
     </p>
     <hr>
-    <div class="avatar" data-tooltip=" CAT ! "></div>
+    <!--<div class="avatar" data-tooltip=" CAT ! "></div> -->
     
     <p id=fourier_showcase>
       
-      <h3>Fourier Transformation - DFT</h3>
+      <h3 id="dftTitle" onclick="toggle_visibility('formulas')">Fourier Transformation - DFT</h3>
       
       <table><tr>
         <td>
@@ -171,7 +195,7 @@
             <table id="freqTable">
             </table>
         </td>
-        <td>
+        <td id="freqTable2cell">
             <table id="freqTable2">
             </table>
         </td>
@@ -184,7 +208,7 @@
                 $$ F(x) = a_0 + {2 \over N} \sum_{n=0}^{N \over 2} (K_{in}cos(\tau x)+K_{jn}sin(\tau x) ) $$
               <p style="color:rgb(200,200,200);text-align:center">
                 where \( a_0 = -D_µ \) is the mean of the data, <br>
-                and the coefficients \(K_{in}\) and \(K_{jn}\) be defined as,
+                and the coefficients \(K_{in}\) and \(K_{jn}\) defined as,
               </p>
               <p>
                 $$
@@ -246,8 +270,10 @@
           value="Create DFT"
           onclick="makeDFT(); toggle_visibility('freqTable2','hidden')"
         ></input>
-        <lable for="resolutionPick"> Resolution(%) </lable>
+        <lable for="resolutionPick" hidden=true> Resolution(%) </lable>
         <input
+          hidden=true
+          
           id="resolutionPick"
           name="resolutionPick"
           type=range
@@ -278,7 +304,7 @@
     
     <hr>
     
-     <p id=misc_showcase>
+     <div id=misc_showcase style="all:unset">
         <table>
           <tr>
             <td>
@@ -338,7 +364,7 @@
             </td>
           </tr>
         </table>
-      </p>
+      </div>
     <hr>
     
     <!--
