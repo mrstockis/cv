@@ -178,45 +178,23 @@
         <td id="formulas">
           <table id="formulaTable">
             <tr>
-              
-                 $$ F(x) = a_0 + \frac{2}{N}\sum_{n=0}^{\frac{N}{2}} K_{in}cos(\tau x)+K_{jn}sin(\tau x) $$
-              
-            </tr>
-            
-            <tr>
+              <p style="color:rgb(200,200,200);text-align:center">
+                <span style="color: teal">The Discrete Fourier Transform (DFT)</span> of a dataset D, is
+              <p>
+                $$ F(x) = a_0 + {2 \over N} \sum_{n=0}^{N \over 2} (K_{in}cos(\tau x)+K_{jn}sin(\tau x) ) $$
+              <p style="color:rgb(200,200,200);text-align:center">
+                where \( a_0 = -D_µ \) is the mean of the data, <br>
+                and the coefficients \(K_{in}\) and \(K_{jn}\) be defined as,
+              </p>
+              <p>
                 $$
-	                \text {where,}
+                  K_{in}=\sum_{i=0}^{N-1}D_ncos(\frac{\tau in}{N})
                 $$
-            </tr>
-            
-            <tr>
-                $$ a_b^{f(c)x} dx $$
-            </tr>
-            
-            <p>
-                When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-                \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]
-            <p>
-            
-            <tr>
-              <maths id="formula">
-                $$ a_0 = -\frac{1}{N}\sum_{n=0}^{N-1} D_n $$
-              </maths>
-            </tr>
-            
-            <tr>
-              <maths id="formula">
+
                 $$
-	                K_{in}=\sum_{i=0}^{N-1}D_ncos(\frac{\tau in}{N})
+                  K_{jn}=\sum_{j=0}^{N-1}D_nsin(\frac{\tau in}{N})
                 $$
-              </maths>
-            </tr>
-            <tr>
-              <mathjax id="formula">
-                $$
-	                K_{jn}=\sum_{j=0}^{N-1}D_nsin(\frac{\tau in}{N})
-                $$
-              </mathjax>
+              </p>
             </tr>
           </table>
         </td>

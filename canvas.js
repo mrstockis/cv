@@ -682,15 +682,23 @@ function DFT(data=false,resolution=100,axis=false)
         if (!this.axis) {
             yPlot = posH(1/2);
         } else if (this.axis == "x") {
-            yPlot = posH(3/5);
+            yPlot = posH(5/6);
         } else if (this.axis == "y") {
-            yPlot = posH(2/5);
+            yPlot = posH(2/6);
         }
         
 
         var tHead = [' Hz ','cos','sin'];
         var tData = [];
         //var freqTable = document.getElementById('freqTable');
+        
+        // Scale the freqplot to a specific measure  (small one grows, big ones shrinks)
+        // by finding the largest freq coeff, and scale the rest relative to it.
+        let maxI = Math.max( ...this.k_i.map(Math.abs) );
+        let maxJ = Math.max( ...this.k_j.map(Math.abs) );
+        let maxFreq = ( maxI > maxJ ) ? maxI : maxJ ;
+        let maxPlotHeight = 80;
+        let relativeFreq; // maxPlotHeight * ( freq_n / maxFreq ) 
         
         for (var f=0 ; f<this.N ; f++) {
             
@@ -725,13 +733,13 @@ function DFT(data=false,resolution=100,axis=false)
             
             c.beginPath();
             c.moveTo( posW(3/5) + f*fWidth -2, yPlot );
-            c.lineTo( posW(3/5) + f*fWidth -2, yPlot - /*Math.log(*/ Math.abs( ki ) );
+            c.lineTo( posW(3/5) + f*fWidth -2, yPlot - /*Math.log(*/ maxPlotHeight * ( Math.abs( ki ) / maxFreq ) );
             c.strokeStyle='#008080';
             c.stroke();
             
             c.beginPath();
             c.moveTo( posW(3/5) + f*fWidth +2, yPlot );
-            c.lineTo( posW(3/5) + f*fWidth +2, yPlot - /*Math.log(*/ Math.abs( kj ) );
+            c.lineTo( posW(3/5) + f*fWidth +2, yPlot - /*Math.log(*/ maxPlotHeight * ( Math.abs( kj ) / maxFreq ) );
             c.strokeStyle='#52acb7';
             c.stroke();
         }
@@ -879,7 +887,7 @@ function makeDFT() {
     //user_dft.build();
     var user_dft = new DFT(data,res);
     
-    user_dft.show(0.05);
+    user_dft.show(0);
 
 }
 
