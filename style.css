@@ -7,6 +7,9 @@ body
     font-size: 16px;
     color: rgb(200,180,180);
     background-color: rgb(0,42,50);
+    margin: 0px;
+    padding-left: 2%;
+    padding-top: 0%;
     /*margin-left: 2%;
     margin-right: 2%;*/
 }
