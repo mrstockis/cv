@@ -9,6 +9,7 @@ body
     background-color: rgb(0,42,50);
     margin: 0px;
     padding-left: 2%;
+    padding-right: 2%;
     padding-top: 0%;
     /*margin-left: 2%;
     margin-right: 2%;*/
@@ -299,8 +300,9 @@ h4,h3,h2,output
     color: black;
 }
 
-body,p,ul,ol,ppop,li
+body,p,ul,ol,li,.pop
 {
+    opacity: 1;
     color: black;
     font-size: 16px;
     font-family: arial, sans-serif;
