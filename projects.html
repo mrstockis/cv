@@ -86,14 +86,16 @@
     
     <p id=gui_showcase>
       <h3>µTube</h3>
+      <p class=pop>
         here will be a showcase of µTube
+      </p>
     </p>
     
     <hr>
     
     <p id=terminal_showcase>
       <h3>WebSound</h3>
-      <p>
+      <p class=pop>
         here will be a showcase of WebSound
       </p>
       <a href="https://github.com/mrstockis/WebSound">GitHub page</a>
@@ -104,59 +106,63 @@
 
     <p id=sailing_showcase>
       <h3>Sailing Optimization</h3>
-      <table><tr><td>
-          <p><strong id="sail_wave"> Sail </strong>
-            calculates the minimal speed required, <br>
-            to keep up with any change of heading.</br>
-	          Wind data should be Apparent¹</p>
-            
-	          <table>				
-		          <tr>
-			          <td><vars class="var">Boat Speed</vars> </td>
-			          <td>
-				          <input id="bs_in" value="" type="text" placeholder=" kts" oninput="sail()">
-			          </td>
-		          </tr>	
-		
-		          <tr>
-			          <td><vars class="var">Wind Speed</vars> </td>
-			          <td>
-				          <input id="rs_in" value="" type="text" placeholder=" kts" oninput="sail()">
-			          </td>
-		          </tr>
-
-		          <tr>
-			          <td><vars class="var">Wind Angle</vars> </td>
-			          <td>
-				          <input id="ra_in" value="" type="text" placeholder=" degrees" oninput="sail()">
-			          </td>
-		          </tr>
-		
-		          <tr>
-			          <td><vars class="var">Deviation</vars> </td>
-			          <td>
-				          <input id="de_in" value="" type="text" placeholder=" degrees" oninput="sail()">
-			          </td>
-	            </tr>
-		
-		          <tr>
-			          <td>
-				          <input class="btn" type="button" value="Minimum" onclick="sail()">
-			          </td>
-			          <td>
-				          <strong>
-				          <output id="sail_out" value=":)" type="text"></output>
-				          </strong>
-			          </td>
-		          </tr>
-	          </table>
-            
-            <p>
-	            <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
+      <table>
+        <tr>
+          <td>
+            <p class=pop>
+              <strong id="sail_wave"> Sail </strong>
+              calculates the minimal speed required, <br>
+              to keep up with any change of heading.</br>
+              Wind data should be Apparent¹
+            </p>
+            <table>
+              
+              <tr>
+                <td>Boat Speed</td>
+                <td>
+                  <input id="bs_in" value="" type="text" placeholder=" kts" oninput="sail()">
+                </td>
+              </tr>
+              
+              <tr>
+                <td>Wind Speed</td>
+                <td>
+                  <input id="rs_in" value="" type="text" placeholder=" kts" oninput="sail()">
+                </td>
+              </tr>
+              
+              <tr>
+                <td>Wind Angle</td>
+                <td>
+                  <input id="ra_in" value="" type="text" placeholder=" degrees" oninput="sail()">
+                </td>
+              </tr>
+    
+              <tr>
+                <td>Deviation</td>
+                <td>
+                  <input id="de_in" value="" type="text" placeholder=" degrees" oninput="sail()">
+                </td>
+              </tr>
+    
+              <tr>
+                <td>
+                  <input class="btn" type="button" value="Minimum" onclick="sail()">
+                </td>
+                <td>
+                  <strong>
+                    <output id="sail_out" value=":)" type="text"></output>
+                  </strong>
+                </td>
+              </tr>
+            </table>
+          
+            <p class=pop>
+              <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
             </p>
 		      </td>
 		      <td>
-		        <p>
+		        <p class=pop>
 		          $$
               	v_{min}=v_0 {\cos(\alpha) \over \cos(\alpha+\sigma)}
               $$
@@ -176,10 +182,8 @@
               <tr><td>\(\sigma\)</td><td> change of heading</td><tr>
             </table>
           </td>
-	      </tr>
-		  </table>
-		  
-		
+        </tr>
+      </table>
     </p>
     <hr>
     <!--<div class="avatar" data-tooltip=" CAT ! "></div> -->
@@ -188,44 +192,49 @@
       
       <h3 id="dftTitle" onclick="toggle_visibility('formulas')">Fourier Transformation - DFT</h3>
       
-      <table><tr>
-        <td>
-          <canvas></canvas>
-          <script src="canvas.js"></script>
-        </td>
-        <td>
-            <table id="freqTable">
-            </table>
-        </td>
-        <td id="freqTable2cell">
-            <table id="freqTable2">
-            </table>
-        </td>
-        <td id="formulas">
-          <table id="formulaTable">
-            <tr>
-              <p style="color:rgb(200,200,200);text-align:center">
-                <span style="color: teal">The Discrete Fourier Transform (DFT)</span> of a dataset D, is
-              <p>
-                $$ F(x) = a_0 + {2 \over N} \sum_{n=0}^{N \over 2} (K_{in}cos(\tau x)+K_{jn}sin(\tau x) ) $$
-              <p style="color:rgb(200,200,200);text-align:center">
-                where \( a_0 = -D_µ \) is the mean of the data, <br>
-                and the coefficients \(K_{in}\) and \(K_{jn}\) defined as,
-              </p>
-              <p>
-                $$
-                  K_{in}=\sum_{i=0}^{N-1}D_ncos(\frac{\tau in}{N})
-                $$
+      <table>
+        <tr>
+          <td>
+            <canvas></canvas>
+            <script src="canvas.js"></script>
+          </td>
+          <td>
+              <table id="freqTable">
+              </table>
+          </td>
+          <td id="freqTable2cell">
+              <table id="freqTable2">
+              </table>
+          </td>
+          <td id="formulas">
+            <table id="formulaTable">
+              <tr>
+                <td>
+                  <p style="text-align:center">
+                    <span style="color: teal">The Discrete Fourier Transform (DFT)</span> of a dataset D, is
+                  </p>
+                  <p class=pop>
+                    $$ F(x) = a_0 + {2 \over N} \sum_{n=0}^{N \over 2} (K_{in}cos(\tau x)+K_{jn}sin(\tau x) ) $$
+                  </p>
+                  <p style="text-align:center">
+                    where \( a_0 \) is the mean of the data, and<br>
+                    the coefficients \(K_{in}\) and \(K_{jn}\) are defined as
+                  </p>
+                  <p class=pop>
+                    $$
+                      K_{in}=\sum_{i=0}^{N-1}D_ncos(\frac{\tau in}{N})
+                    $$
 
-                $$
-                  K_{jn}=\sum_{j=0}^{N-1}D_nsin(\frac{\tau in}{N})
-                $$
-              </p>
-            </tr>
-          </table>
-        </td>
-        
-      </tr></table>
+                    $$
+                      K_{jn}=\sum_{j=0}^{N-1}D_nsin(\frac{\tau in}{N})
+                    $$
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
       
       <br>
       <select id="canvasMode" name="cm" oninput="select_canvas()">
@@ -287,12 +296,12 @@
           onclick="resolutionPicked(); updateShape()"
           onchange="resolutionPicked(); updateShape()"
           onmouseup="resolutionPicked(); updateShape()"
-        >
-          <output
-            id="showResolution"
-            onchange="resolutionPicked(); updateShape()"
-            >100</output>%
-        </input>
+        ></input>
+        <span style="padding: 20px"></span>
+        <output
+          id="showResolution"
+          onchange="resolutionPicked(); updateShape()"
+        >100</output>%
       </div>
       
     </p>
@@ -314,13 +323,13 @@
     <hr>
     
      <div id=misc_showcase style="all:unset">
-        <table>
-          <tr>
-            <td>
-              <h3>
-                <a href="http://www.desmos.com">Desmos</a>
-              </h3>
-            </td>
+      <table>
+        <tr>
+          <td>
+            <h3>
+              <a href="http://www.desmos.com">Desmos</a>
+            </h3>
+          </td>
           <td>
             <h3> - Planets | Pythagoras
           </td>
@@ -373,7 +382,7 @@
             </td>
           </tr>
         </table>
-      </div>
+    </div>
     <hr>
     
     <!--
@@ -382,425 +391,7 @@
     </p>
     <hr>
     -->
-    
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    
-    <!--
-    <h3 id="comparison-of-mini-pcs-aud">Comparison of Mini PC&rsquo;s $AUD</h3>
-<h1 id="_1"></h1>
-<hr />
-<h1 id="_2"></h1>
-<pre><code>function sum(N) {  # takes sum  of N numbers
-    var total = 0;
-    for ( var n=0; n &lt; N; n++ ) {
-        total += n;
-    }
-    return total
-}
-</code></pre>
-<p><mathjax>$$ f(N) = \sum_{n=0}^{N-1}n $$</mathjax></p>
-<pre><code>function dotp(arr1,arr2) {  # Dot product of array 1 and 2
-    var total = 0;
-    var aL = arr1.length
-    for ( var n=0; n &lt; aL; n++ ) {
-        total += arr1[n] * arr2[n];
-    }
-    return total
-}
-</code></pre>
-<p><mathjax>$$ f(A,B) = \sum_{n=0}^{A_N-1}A_nB_n $$</mathjax></p>
-<h1 id="_3"></h1>
-<table>
-<thead>
-<tr>
-<th>index:</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>list0</td>
-<td>0</td>
-<td>2</td>
-<td>4</td>
-<td>6</td>
-<td>8</td>
-</tr>
-</tbody>
-</table>
-<h1 id="_4"></h1>
-<table>
-<thead>
-<tr>
-<th>&mdash;</th>
-<th>Col1</th>
-<th>Col2</th>
-<th>Col3</th>
-<th>Col4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Row1</td>
-<td>x</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Row2</td>
-<td></td>
-<td>x</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Row3</td>
-<td></td>
-<td></td>
-<td>x</td>
-<td></td>
-</tr>
-<tr>
-<td>Row4</td>
-<td></td>
-<td></td>
-<td></td>
-<td>x</td>
-</tr>
-</tbody>
-</table>
-<h5 id="table">Table</h5>
-<table>
-<thead>
-<tr>
-<th>Hm?</th>
-<th>UNIT</th>
-<th>RAM</th>
-<th>Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>?</td>
-<td>RPI4</td>
-<td>2</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>RPI4</td>
-<td>4</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>RPI4</td>
-<td>8</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>RPI400</td>
-<td>2</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>RPI400</td>
-<td>4</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>RPI400</td>
-<td>8</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Chuwi</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Larc</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Nuc</td>
-<td>6</td>
-<td>?</td>
-</tr>
-</tbody>
-</table>
-<h1 id="_5"></h1>
-<table>
-<thead>
-<tr>
-<th>Hm?</th>
-<th>CASE</th>
-<th>HDMI</th>
-<th>COOLING</th>
-<th>SATA</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>?</td>
-<td>RPi400 (0)</td>
-<td>micro (?)</td>
-<td>passive</td>
-<td>-</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Arg.One.V2</td>
-<td>standard</td>
-<td>passive</td>
-<td>x (?)</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Nuc</td>
-<td>?</td>
-<td>active (?)</td>
-<td>?</td>
-</tr>
-<tr>
-<td>?</td>
-<td>Chuw</td>
-<td>?</td>
-<td>active (?)</td>
-<td>?</td>
-</tr>
-</tbody>
-</table>
-<h1 id="_6"></h1>
-<table>
-<thead>
-<tr>
-<th>Things</th>
-<th>PCTech</th>
-<th>CoreInd.</th>
-<th>Amazon</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&mdash;Units&mdash;</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi4(2)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi4(4)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi4(8)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi400(2)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi400(4)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi400(8)</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Nuc</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Larc</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Chuwi</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>&mdash;Cases&mdash;</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi400</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Arg.One</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Arg.V2</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Arg.V2M</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>&mdash;HDMI&mdash;</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi400</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Arg.One</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Arg.V2</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Arg.V2M</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>&mdash;Power&mdash;</td>
-<td>If included</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi4</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>RPI400</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Nuc</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Larc</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Chuwi</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>&mdash;Wattage&mdash;</td>
-<td>Fans mainly</td>
-<td>&gt; battery?</td>
-<td></td>
-</tr>
-<tr>
-<td>Rpi4</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>RPI400</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Nuc</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Larc</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td>Chuwi</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-<tr>
-<td><strong>&mdash; &mdash; &mdash; &mdash;</strong></td>
-<td><strong>&mdash; &mdash; &mdash; &mdash;</strong></td>
-<td><strong>&mdash; &mdash; &mdash; &mdash;</strong></td>
-<td><strong>&mdash; &mdash; &mdash; &mdash;</strong></td>
-</tr>
-<tr>
-<td><strong>TOTAL</strong></td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr>
-</tbody>
-</table>
-    -->
+
     <hr>
     
   </body>

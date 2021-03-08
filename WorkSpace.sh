@@ -2,7 +2,7 @@
 if [ -z "$1" ]; then
     gedit index.html work.html projects.html style.css script.js canvas.js &
 else
-    gedit $@ & #script.js style.css index.html $@ &
+    geany $@ & #script.js style.css index.html $@ &
 fi
 
 mySite="file:///home/pi/Udemy_WebDev/HTML_PersonalSite/index.html"
