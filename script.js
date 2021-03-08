@@ -6,6 +6,31 @@ function Log(thing)
     }
 
 
+function select_profession(profession=false)
+{
+    let professions = [
+                        ".programming", ".maintenance", ".cleaning",
+                        ".transport", ".construction", ".logistics",
+                        ".basking", ".horticulture", ".misc"
+                    ];
+    
+    profession = (profession) ? profession : document.getElementById("professionMode").value;
+    
+    if (profession == '.all')
+    {
+        document.getElementById("areas_list").display = "block";
+        document.getElementById("out_profession").textContent = "";
+        professions.forEach( p => { document.querySelectorAll( p ).forEach( e => { e.style="display: block" } ) } );
+    } else {
+        document.getElementById("areas_list").display = "none";
+        document.getElementById("out_profession").innerHTML = profession.replace(".","") ;
+        professions.forEach( p => { document.querySelectorAll( p ).forEach( e => { e.style="display: none" } ) } );
+        document.querySelectorAll( profession ).forEach(e => { e.style="display: block" })
+    }
+}
+
+
+
 function toggle_visibility(id,state=false)
 {
     e = document.getElementById(id);
@@ -19,6 +44,23 @@ function toggle_visibility(id,state=false)
         e.style.visibility = "visible";
     } else {
         e.style.visibility = "hidden";
+    }
+}
+
+
+function toggle_display(id,state=false)
+{
+    e = document.getElementById(id);
+    
+    if (state)
+    {
+        e.style.display = state;
+    }
+    else if (e.style.display == "none")
+    {
+        e.style.display = "block";
+    } else {
+        e.style.display = "none";
     }
 }
 
@@ -46,9 +88,6 @@ function formatNumber(n)
     }
 }
 */
-
-
-
 
 
 
@@ -94,7 +133,6 @@ function pf(from,to)
     //Log(res)
     document.getElementById(to).textContent = res    
 }
-
 
 
 

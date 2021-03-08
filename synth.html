@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.12/Tone.js"></script>
+    <style>
+#container {
+  position: absolute;
+  height: 200px;
+  border: 5px solid black;
+  top: calc(50% - 100px);
+  left: calc(50% - 350px);
+  overflow: hidden;
+}
+.whitenote {
+  height: 100%;
+  width: 50px;
+  background: white;
+  float: left;
+  border-right: 1px solid black;
+  position: relative;
+}
+.blacknote {
+  position: absolute;
+  height: 65%;
+  width: 55%;
+  z-index: 1;
+  background: #555;
+  left: 68%;
+}
+    </style>
+    <title>Synth</title>
+  </head>
+  <body>
+    <div id=container>
+        
+    </div>
+    <script>
+var synth = new Tone.PolySynth().toMaster();
+var notes = ['C','D','E','F','G','A','B'];
+var html = "";
+
+for (var octave = 0; octave < 2; octave++ ) {
+  
+  for (var i = 0 ; i< notes.length; i++) {
+    var hasSharp = true;
+    var note = notes[i];
+    
+    if ( note == 'E' || note == 'B') {
+      hasSharp = false;
+    }
+    
+    html += `<div class='whitenote'
+    onmousedown='noteDown(this, false)'
+    onmouseup='noteUp(this,false)'
+    data-note='${ note + (octave+4) }'>`;
+    
+    if (hasSharp){
+      html += `<div class='blacknote'
+      onmousedown='noteDown(this, true)'
+      onmouseup='noteUp(this,true)'
+      data-note='${ note + "#" + (octave+4) }'></div>`;
+    }
+    
+    html += '</div>';
+    
+  }
+  
+}
+
+document.getElementById('container').innerHTML = html;
+
+
+function noteUp(elem, isSharp) {
+  elem.style.background = isSharp ? '#555': 'white';
+}
+
+function noteDown(elem, isSharp) {
+  var note = elem.dataset.note;
+  elem.style.background = isSharp ? 'black': '#ccc';
+  //alert(note);
+  synth.triggerAttackRelease(note, "16n");
+  event.stopPropagation();
+}
+    </script>
+  </body>
+</html>

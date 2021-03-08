@@ -14,8 +14,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap" rel="stylesheet">
   </head>
   
-  <body class="main">
-    <table> 
+  <body>
+    
+    <!-- <iframe src="menu.html" seamless width="100%" style="border: none"></iframe>  -->
+    
+    <table class="main-link-table"> 
       <tr>
         <td>
           <h2><a href="index.html"><span class="cap">C</span>over</a></h2>
@@ -67,23 +70,15 @@
 
     <!-- <h2 class=sub> Presentation</h2> -->
     <!--<h3> Contact</h3>-->
-    <!-- <br> -->
-    <ppop>
-      <!-- <h4 class='sub'> -->
-        022 465 0558 &nbsp; mickem90@gmail.com
-        <br>
-        <em>
-          84B Roche Street, Wanaka 9305, Otago
+    <p>022 465 0558 &nbsp; mickem90@gmail.com<br><em>25 Finch Street, Albert Town 9305, Otago</em>
           <!--
           <span onmouseover="document.getElementById('myimg').style.display='block';"
                 onmouseout="document.getElementById('myimg').style.display='none';">Otago
           </span>
           <img id="myimg" style="display:none" src="https://www.otago.ac.nz/cs/groups/public/@otagobulletineditor/documents/contributorimg/otago042431.jpg" />
           -->
-        </em>
       <!-- </h4> -->
-    </ppop>
-    
+    </p>
     <!--
     022 465 0558 &nbsp; mickem90@gmail.com <br>
     <em>
@@ -112,18 +107,39 @@
     
     Mikael Malmberg
     -->
-    
+    <div id=professionSelector>
+      <lable for="professionsMode"> Area </lable>
+      <select id="professionMode" oninput="select_profession()">
+        <option value=".all" selected>All</option>
+        <option value=".horticulture">Horticulture</option>
+        <option value=".construction">Construction</option>
+        <option value=".transport">Transport</option>
+        <option value=".logistics">Logistics</option>
+        <option value=".programming">Programming</option>
+        <option value=".maintenance">Maintenance</option>
+        <option value=".cleaning">Cleaning</option>
+        <option value=".basking">Basking</option>
+      </select>
+    </div>
+        
     <br>
+    
     <h3> Objective</h3>
 
     <!-- [Add details about the type of work, role and industry you would like] # short and concise -->
-    Looking for work within
-    <ul>
-      <li>repair and maintenance</li>
-      <li>logistics</li>
-      <li>programing</li>      
-      <li>transportation</li>
-    </ul>
+    Looking for work within <span id="out_profession"></span>
+    <div class="pdf-hide" id="areas_list">
+      <ul>
+        <li>horticulture</li>
+        <li>construction</li>
+        <li>transport</li>
+        <li>logistics</li>
+        <li>programming</li>
+        <li>repair and maintenance</li>
+        <li>cleaning</li>
+        
+      </ul>
+    </div>
     
     <br>
     
@@ -138,7 +154,7 @@
       
       <!-- ( Skip personal skills and just have these two paragraphs, 
         under the titel ’!Personal Statement’ ? ) -->
-      Used to work both alone and in a team; giving and taking orders; learning and teaching;<br>
+      Used to work both alone and in a team; giving and taking orders; learning and teaching.<br>
       I wish to be a useful addition to the workforce.
     </ppop>
     
@@ -147,15 +163,86 @@
     <h3> Skills</h3>
 
     <!-- [List technical skills relevant to the job you’re applying for. For example, invoicing, web development or food preparation] -->
-    <h4>Maintenance</h4>
-    <ul>
-      <li>painting walls and ceilings</li>
-      <li>sanding and varnishing benches and tables</li>
-      <li>window cleaning</li>
-      <li>sewing/stitching</li>
-      <li>polishing</li>
-    </ul>
-    
+    <div class="transport">
+      <h4>Transport</h4>
+      <ul>
+        <li>Comfortable driving manual/automatic and with trailer.</li>
+        <li>Certified skipper, handling +10GT sailing yachts.</li>
+        <li>Passed course for 10 different forklifts with 10T capacity</li>
+      </ul>
+    </div>
+    <div class="logistics">
+      <h4>Logistics</h4>
+      <ul>
+        <li>Passed course for 10 different forklifts with 10T capacity</li>
+      </ul>
+    </div>
+    <div class="programming">
+      <h4>Programming</h4>
+      <ul>
+        <li>This website, made with HTML,CSS and JS</li>
+        <li>Passed Full-Stack course on Udemy</li>
+        <li>Passed Java Course on SoloLearn</li>
+        <li>Made GUI and Terminal based media players in Python and Shell</li>
+        <li>Comfortable with Linux and Windows system</li>
+        <li>25 points on Project Euler</li>
+        <li>Small coding projects for mikrocontrollers in C</li>
+        <li>Dabbled in PowerShell, Haskell, C++,</li>
+      </ul>
+    </div>
+    <div class="horticulture">
+      <h4>Horticulture</h4>
+      <ul>
+        <li>planting, moving and correcting trees</li>
+        <li>installing irrigation - laying and connecting hoses and sprinklers</li>
+        <li>maintenance: such as pruning, sleeving, bud rubbing, fertilizing</li>
+        <li>instructing new workers on how to do the same</li>
+      </ul>
+    </div>    
+    <div class="construction">
+      <h4>Construction</h4>
+      <ul>
+        <li>painting walls and ceilings</li>
+        <li>sanding and varnishing benches and tables</li>
+        <li>window cleaning</li>
+        <li>sewing/stitching</li>
+        <li>polishing</li>
+      </ul>
+    </div>
+    <div class="maintenance cleaning">
+      <h4>Maintenance</h4>
+      <ul>
+        <li>painting walls and ceilings</li>
+        <li>sanding and varnishing benches and tables</li>
+        <li>window cleaning</li>
+        <li>sewing/stitching</li>
+        <li>polishing</li>
+      </ul>
+    </div>
+    <div class="cleaning">
+      <h4>Cleaning</h4>
+      <ul>
+        <li>painting walls and ceilings</li>
+        <li>sanding and varnishing benches and tables</li>
+        <li>window cleaning</li>
+        <li>sewing/stitching</li>
+        <li>polishing</li>
+      </ul>
+    </div>
+    <div class="basking misc">
+      <h4>Basking</h4>
+      <ul>
+        <li>guitar</li>
+        <li>cello</li>
+        <li>ukulele</li>
+        <li>harmonica</li>
+        <li>piano</li>
+        <li>beatbox</li>
+        <li>whistle</li>
+        <li>triangle</li>
+      </ul>
+    </div>
+      
     
     <!-- [List your personal skills – also called employability or transferable skills. The top skills employers value are: positive attitude, communication, teamwork, self-management, willingness to learn, thinking skills and . You can use these skills in your CV, or add others.] -->
     <h4>Management</h4>
@@ -179,7 +266,7 @@
       a good tolerance to stressful situations with sustained positive attitude.
     </p>
 
-    <br>
+    <br> <br>
     
     <h4>Other</h4>
     <p></p>
@@ -189,22 +276,22 @@
       <li>Swedish</li>
     </ul>
     
-    
+    <div class="programming">
     Well versed in
     <ul>
       <li>Windows, Linux, Mac</li>
       <li>Office, Pages, Excel</li>
-      <li>Python, Javascript, Bash/Scripting</li>
+      <li>Python, Javascript, Shell</li>
     </ul>
+    </div>
 
-    
-    
-    
 
+    <div class="programming">
     Familiar with
     <ul>
       <li>R, Java, C++, C, SQL, Haskell</li>
     </ul>
+    </div>
     
     
     <br>
@@ -212,10 +299,10 @@
     <h4>Licenses</h4>
     <ul>
         <li>Driver B/(Class 1 restricted), manual/automatic</li>
-        <li>Helmsman, Class 8 for boats up to 20\70 gross ton and 12 commercial passengers</li>
-        <li>Padi - Open water (active after a short refresher course)</li>
-        <li>Forklifts A1-A4, B1-B6, 10 ton</li>
-        <li>VHF</li>
+        <li class="transport">Helmsman, Class 8 for boats up to 20\70 gross ton and 12 commercial passengers</li>
+        <li class="misc">Padi - Open water (active after a short refresher course)</li>
+        <li class="logistics">Forklifts A1-A4, B1-B6, 10 ton</li>
+        <li class="transport">VHF</li>
     </ul>
 
 
@@ -226,19 +313,28 @@
      
     <!-- See ”Personal Statement” -->
 
+    <embed
+      id="embed_work"
+      type='text/html'
+      src="work.html"
+      width=770px
+      height=1900px>
+    </embed>
 
     <br><br><br>
     
     <hr>
     
-    <h3> Contact</h3>
-    <h4>
-      022 465 0558 &nbsp; mickem90@gmail.com
-      <br>
-      <em>
-        84B Roche Street, Wanaka 9305, Otago
-      </em>
-    </h4>
+    <div class="pdf-hide">
+      <h3> Contact</h3>
+      <h4>
+        022 465 0558 &nbsp; mickem90@gmail.com
+        <br>
+        <em>
+          25 Finch Street, Albert Town 9305, Otago
+        </em>
+      </h4>
+    </div>
 
     <br><br>
 
