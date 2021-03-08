@@ -165,20 +165,13 @@ keyPressed = {
 }
 
 
-///////////////////   TRY MAKE PEN OBJECT ||  ADD SIZE AS ELEMENT to eiterh pen or shape
 var pen = {
     size:1,
     color:"white",
     isPainting: false
 }
 
-/*
-function pen() {
-    this.test = "hi";
-    this.size = 1;
-    this.color = 'blue';
-}
-*/
+
 
 var canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth * 0.5;
@@ -259,7 +252,7 @@ function paintStart(event)
     shape = [activeColor];
     //*/
     
-    if ( canvasMode == "modeDFT" ) { clear(canvas); }
+    if ( canvasMode == "modeDFT" ) { clear(canvas); drawn = []}
     
     pen.isPainting = true;
     pen.color = document.getElementById('colorPick').value;    
@@ -306,21 +299,24 @@ function paintEnd(event)
 var initialShape
 function updateShape() {
     clear(canvas)
-    DFT_2d( initialShape, ignore=true );
+    if (drawn.length == 0) {
+        makeDFT();
+        return
+    }
+    DFT_2d( initialShape, formerShape=true );
     repaint(drawn)
 }
 
-function DFT_2d(shape, ignore=false) {
-    if (!ignore) {
+function DFT_2d(shape, formerShape=false) {
+    if (!formerShape) {
         initialShape = shape;  // for future reference
     }
     
-    toggle_visibility('freqTable2','visible');
+    toggle_display('freqTable2','block');
     
     var xs = [];
     var ys = [];
 
-    initialShape[0].color = "white";
     for (let i=1; i<initialShape.length; i++ ) {
         xs.push(initialShape[i][0]);
         ys.push(initialShape[i][1]);
@@ -340,16 +336,22 @@ function DFT_2d(shape, ignore=false) {
     
     xDFT.show(0,doClear=false);
     yDFT.show(0,doClear=false);
-    var dftShape = [ initialShape[0] ];
+    var dftShape = [ {color:"white"} ];
+    /* pen = { size:1, color:"white", isPainting: false }*/
+
     for (let p = 0; p < xDFT.wave.length; p++){
         dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(1/2) ] );
         //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
     }
     //dftShape.forEach(n => { Log(n) })
-    drawn = [dftShape];
+    
+    drawn[1] = dftShape;
+    //Log(drawn.length);
     //Log("2d made");
 
 }
+
+
 
 
 
@@ -414,14 +416,14 @@ function paint()
     }
 }
 
-async function repaint(drw){
+async function repaint(drw, sleep=0){
     for (var shp=0; shp<drw.length; shp++) {
         c.beginPath();
         c.strokeStyle = drw[shp][0].color;
         c.lineWidth = drw[shp][0].size;
         c.moveTo( drw[shp][1][0], drw[shp][1][1] )
         for (var pos=1; pos<drw[shp].length; pos++) {
-            await delay(2);
+            //await delay(sleep);
             var xy = drw[shp][pos] ;
             c.lineTo( xy[0], xy[1] );
             c.stroke();
@@ -464,14 +466,14 @@ function table(headers,data) {
     var fullTable = headers.concat(data);
     var newTable = "<table><tr style='font-weight: 700'>";
     for (let c=0 ; c<headers.length ; c++) {
-        newTable += "<td>";
+        newTable += "<td style='text-align:center'>";
         newTable += fullTable[c];
         newTable += "</td>";
     }
     newTable += "</tr>";
     for (let r=1 ; r<(1 + data.length/headers.length) && r<17 ; r++)
     {
-        newTable += "<tr>";
+        newTable += "<tr style='text-align:center'>";
         for (let c=0 ; c<headers.length ; c++) {
             newTable += "<td>";
             newTable += fullTable[c+3*r];
@@ -581,9 +583,9 @@ function Sine(hz) {
 }
 
 
-function DFT(data=false,resolution=100,axis=false)
+function DFT(data=false,filter=100,axis=false)
 {
-    this.R = resolution/100;
+    this.filter = 100-filter;
     this.axis = axis
     this.isDrawing = false;
     this.drawRequest = false;
@@ -610,16 +612,36 @@ function DFT(data=false,resolution=100,axis=false)
         this.k_i = [];
         this.k_j = [];
         
-        for (var n = 0; n< this.N/2; n+=this.R) {
+        // Do all weights
+        for (var n = 0; n< this.N/2; n++) {
             ki = 0;
             kj = 0;
             for (var k = 0; k<this.N; k++) {
                 ki += this.data[k] * Math.cos( (n * k) * TAU/this.N );
                 kj += this.data[k] * Math.sin( (n * k) * TAU/this.N );
             }
-            this.k_i.push( ki * (2/this.N) );
-            this.k_j.push( kj * (2/this.N) );
+            this.k_i.push( ki*(2/this.N) );
+            this.k_j.push( kj*(2/this.N) );
         }
+        
+        
+        // Figure max weight and scale filter accordingly
+        let maxI = Math.max( ...this.k_i.map(Math.abs) );
+        let maxJ = Math.max( ...this.k_j.map(Math.abs) );
+        let maxWeight = ( maxI > maxJ ) ? maxI : maxJ ;
+        let scaledFilter= maxWeight * (this.filter/100) ;
+        /*
+        Log( "maxWeight: " + maxWeight )
+        Log( "scaledFilter:" + scaledFilter )
+        */
+        
+        // Apply the filter
+        
+        for ( let k=0 ; k < this.N/2 ; k++ ){
+            this.k_i[k] = ( Math.abs(this.k_i[k]) > scaledFilter ) ? this.k_i[k] : 0 ;
+            this.k_j[k] = ( Math.abs(this.k_j[k]) > scaledFilter ) ? this.k_j[k] : 0 ;
+        }
+        
         
         this.wave = [];
         this.res = 10*TAU**2 //31*TAU;
@@ -654,8 +676,7 @@ function DFT(data=false,resolution=100,axis=false)
                     this.k_j[n] * Math.sin( n * x / this.xStretch )
                 );
             }
-            
-            this.wave.push( [ x , FY -correct ] );
+             this.wave.push( [ x , FY -correct ] );
         }
     }
     this.build()
@@ -921,7 +942,7 @@ function makeDFT() {
     //user_dft.R = res;
     //user_dft.build();
     var user_dft = new DFT(data,res);
-    
+    drawn=[];
     user_dft.show(0);
 
 }
@@ -942,7 +963,7 @@ function resolutionPicked() {
 }
 
 
-function modePicked() {
+function select_canvas() {
     canvasMode = document.getElementById("canvasMode").value;
     if ( canvasMode == 'modeDFT' )
     {
@@ -1039,7 +1060,10 @@ s3.wave = sumLists( s1.wave , s2.wave )
 
 
 
-
+/*
+ * When resolution is updated, KEEP initial grey shape as well
+ * 
+ */
 
 
 

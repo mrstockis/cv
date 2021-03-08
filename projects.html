@@ -106,8 +106,8 @@
       <h3>Sailing Optimization</h3>
       <table><tr><td>
           <p><strong id="sail_wave"> Sail </strong>
-          calculates the minimal speed required, to keep up</br>
-	          with any change of heading when tacking or gibing.</br>
+            calculates the minimal speed required, <br>
+            to keep up with any change of heading.</br>
 	          Wind data should be Apparent¹</p>
             
 	          <table>				
@@ -150,6 +150,10 @@
 			          </td>
 		          </tr>
 	          </table>
+            
+            <p>
+	            <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
+            </p>
 		      </td>
 		      <td>
 		        <p>
@@ -159,7 +163,7 @@
               $$
                 \alpha := 
                 sin^{-1}
-                { v_0· sin(w_a) \over \sqrt{v_0^2+w_v^2-2v_0w_v\cos(w_a)}}
+                { v_0 · sin(w_a) \over \sqrt{v_0^2+w_v^2-2v_0w_v\cos(w_a)}}
               $$  
 		        </p>
 		      </td>
@@ -174,9 +178,7 @@
           </td>
 	      </tr>
 		  </table>
-		  <p>
-			  <em>¹ wind(speed,angle) experienced when sailing, as affected by boat speed</em>
-		  </p>
+		  
 		
     </p>
     <hr>
@@ -226,7 +228,7 @@
       </tr></table>
       
       <br>
-      <select id="canvasMode" name="cm" oninput="modePicked()">
+      <select id="canvasMode" name="cm" oninput="select_canvas()">
         <option value="modeDFT" selected>DFT</option>
         <option value="modeAnimate">Animation</option>
         <option value="modePaint">Paint</option>
@@ -268,22 +270,29 @@
           type=button
           id='dftBtn'
           value="Create DFT"
-          onclick="makeDFT(); toggle_visibility('freqTable2','hidden')"
+          onclick="makeDFT(); toggle_display('freqTable2','none')"
         ></input>
-        <lable for="resolutionPick" hidden=true> Resolution(%) </lable>
+        
+        <lable for="resolutionPick" hidden=true> Filter </lable>
         <input
-          hidden=true
           
+          class=slider
           id="resolutionPick"
           name="resolutionPick"
           type=range
           value=100
-          min=1
+          min=0
           max=100
           oninput="showResolution.value=resolutionPick.value"
           onclick="resolutionPicked(); updateShape()"
-        ></input>
-        <output id="showResolution"></output>
+          onchange="resolutionPicked(); updateShape()"
+          onmouseup="resolutionPicked(); updateShape()"
+        >
+          <output
+            id="showResolution"
+            onchange="resolutionPicked(); updateShape()"
+            >100</output>%
+        </input>
       </div>
       
     </p>
@@ -298,7 +307,7 @@
       type="number"
       width="10"
       placeholder=" Number to factor"
-      oninput="pf('product','factors')">
+      oninput="pf('product','factors'); pf2('product','factorsJAX')">
       <output id="factors"></output>
     </p>
     
