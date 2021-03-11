@@ -8,21 +8,25 @@ function Log(thing)
 
 function select_profession(profession=false)
 {
+    /*
     let professions = [
                         ".programming", ".maintenance", ".cleaning",
                         ".transport", ".construction", ".logistics",
                         ".basking", ".horticulture", ".misc"
                     ];
+    */
+    let professions = [];
+    new Array(...document.getElementById("professionMode").options).forEach(o => { professions.push(o.value)})
     
     profession = (profession) ? profession : document.getElementById("professionMode").value;
     
     if (profession == '.all')
     {
-        document.getElementById("areas_list").display = "block";
+        document.getElementById("areas_list").style.display = "block";
         document.getElementById("out_profession").textContent = "";
         professions.forEach( p => { document.querySelectorAll( p ).forEach( e => { e.style="display: block" } ) } );
     } else {
-        document.getElementById("areas_list").display = "none";
+        document.getElementById("areas_list").style.display = "none";
         document.getElementById("out_profession").innerHTML = profession.replace(".","") ;
         professions.forEach( p => { document.querySelectorAll( p ).forEach( e => { e.style="display: none" } ) } );
         document.querySelectorAll( profession ).forEach(e => { e.style="display: block" })

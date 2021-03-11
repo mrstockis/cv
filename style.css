@@ -98,13 +98,12 @@ canvas
 .pop
 {
     color: rgb(200,200,200);
-    opacity: .8;
+    opacity: .85;
     -webkit-transition: .2s;
     transition: opacity .2s;
 }
 .pop:hover
 {
-    color: rgb(200,200,200);
     /*font-weight: 500;*/
     opacity: 1;
 }
