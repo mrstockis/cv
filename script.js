@@ -17,6 +17,7 @@ function select_profession(profession=false)
     */
     let professions = [];
     new Array(...document.getElementById("professionMode").options).forEach(o => { professions.push(o.value)})
+    professions.push(".misc")
     
     profession = (profession) ? profession : document.getElementById("professionMode").value;
     

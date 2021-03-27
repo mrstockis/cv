@@ -312,7 +312,7 @@ function DFT_2d(shape, formerShape=false) {
         initialShape = shape;  // for future reference
     }
     
-    toggle_display('freqTable2','block');
+    
     
     var xs = [];
     var ys = [];
@@ -336,9 +336,14 @@ function DFT_2d(shape, formerShape=false) {
     
     xDFT.show(0,doClear=false);
     yDFT.show(0,doClear=false);
+
+//    document.getElementById("freqTable1").childNodes[0].style="color: rgb(100,100,200);"  // change cosinge header to blue
+    document.getElementById("freqTable1").getElementsByTagName('thead')[0].style="color: rgba(100,100,200,.9);"  // change cosinge header to blue
+    toggle_display('freqTable2','block');
+
+
     var dftShape = [ {color:"white"} ];
     /* pen = { size:1, color:"white", isPainting: false }*/
-
     for (let p = 0; p < xDFT.wave.length; p++){
         dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(1/2) ] );
         //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
@@ -464,13 +469,13 @@ function delay(ms) {
 function table(headers,data) {
     toggle_visibility('formulas','hidden');
     var fullTable = headers.concat(data);
-    var newTable = "<table><tr style='font-weight: 700'>";
+    var newTable = "<table><thead><tr>";
     for (let c=0 ; c<headers.length ; c++) {
         newTable += "<td style='text-align:center'>";
         newTable += fullTable[c];
         newTable += "</td>";
     }
-    newTable += "</tr>";
+    newTable += "<tr></thead>";
     for (let r=1 ; r<(1 + data.length/headers.length) && r<17 ; r++)
     {
         newTable += "<tr style='text-align:center'>";
@@ -733,7 +738,7 @@ function DFT(data=false,filter=100,axis=false)
 
         var tHead = [' Hz ','cos','sin'];
         var tData = [];
-        //var freqTable = document.getElementById('freqTable');
+        //var freqTable = document.getElementById('freqTable1');
         
         // Scale the freqplot to a specific measure  (small one grows, big ones shrinks)
         // by finding the largest freq coeff, and scale the rest relative to it.
@@ -792,7 +797,7 @@ function DFT(data=false,filter=100,axis=false)
         
         //var tbl = document.createElement('table');
         var freqTable = table(tHead,tData);
-        tableID = (this.axis == 'y') ? 'freqTable2' : 'freqTable';
+        tableID = (this.axis == 'y') ? 'freqTable2' : 'freqTable1';
         document.getElementById(tableID).innerHTML = freqTable;
         
         //document.createElement('table');
@@ -982,7 +987,7 @@ function select_canvas() {
 
 function showDFT() {
     document.getElementById('dftMode').hidden = false;
-    document.getElementById('freqTable').hidden=false;
+    document.getElementById('freqTable1').hidden=false;
     document.getElementById('freqTable2').hidden=false;
     
     document.getElementById('paintMode').hidden = true;
@@ -991,7 +996,7 @@ function showDFT() {
 }
 function showAnimate() {
     document.getElementById('dftMode').hidden = true;
-    document.getElementById('freqTable').hidden=true
+    document.getElementById('freqTable1').hidden=true
     document.getElementById('freqTable2').hidden=false;
     
     document.getElementById('paintMode').hidden = true;
@@ -1000,7 +1005,7 @@ function showAnimate() {
 }
 function showPaint() {
     document.getElementById('dftMode').hidden = true;
-    document.getElementById('freqTable').hidden=true
+    document.getElementById('freqTable1').hidden=true
     document.getElementById('freqTable2').hidden=false;
     
     document.getElementById('paintMode').hidden = false;

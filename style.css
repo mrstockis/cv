@@ -15,6 +15,11 @@ body
     margin-right: 2%;*/
 }
 
+thead
+{
+    font-weight: 700;
+}
+
 td
 {
     padding-left: 10px;
@@ -184,9 +189,21 @@ canvas
 /* IDs */
 
 
-#freqTable
+#freqTable1,
+#freqTable2
 {
     text-align: top;
+}
+/*
+#freqTable1 thead
+{
+    color: rgb(100,100,200);
+}
+*/
+
+#freqTable2 thead
+{
+    color: rgba(200,50,50,.9);
 }
 
 #sail_wave {

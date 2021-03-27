@@ -1,8 +1,8 @@
 
 if [ -z "$1" ]; then
-    geany index.html work.html projects.html style.css script.js canvas.js &
+    gedit index.html work.html projects.html style.css script.js canvas.js &
 else
-    geany $@ & #script.js style.css index.html $@ &
+    gedit $@ & #script.js style.css index.html $@ &
 fi
 
 mySite="file:///home/pi/Udemy_WebDev/cv/index.html"
