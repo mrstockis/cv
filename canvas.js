@@ -439,8 +439,44 @@ async function repaint(drw, sleep=0){
 
 
 
+/*
+function resolutionPicked() {
+    R = document.getElementById('resolutionPick').value;
+}
+
+var initialShape
+function updateShape() {
+    clear(canvas)
+    if (drawn.length == 0) {
+        makeDFT();
+        return
+    }
+    DFT_2d( initialShape, formerShape=true );
+    repaint(drawn)
+}
+*/
 
 
+//onchange="resolutionPicked(); updateShape()"
+
+function playResolutions()
+{
+    
+    if (drawn.length == 0) {
+        return
+    }
+    
+    var allDrawn = [];
+    
+    for ( var i=0; i<=100; i++ )
+    {
+           document.getElementById('resolutionPick').value = i;
+           resolutionPicked();
+           updateShape();
+           document.getElementById( "showResolution" ).innerHTML = i;
+           //await delay(100);
+    }
+}
 
 
 
