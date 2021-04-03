@@ -267,6 +267,7 @@
       </div>
       
       <div id='dftMode'>
+        <div>
         <input 
           type=text
           value="1 3 5 7 8 6 2 0"
@@ -281,10 +282,21 @@
           value="Create DFT"
           onclick="makeDFT(); toggle_display('freqTable2','none')"
         ></input>
+        </div>
+        
+        <!--
+        <input class="slider"
+          type="button"
+          name="playResolutions"
+          value="ᐅ"
+          placeholder="default_placeholder"
+          id="playResBtn"
+          onclick="playResolutions()"
+          style="position: relative; width:25px; height:25px;font-size:15px;color:white;"
+        />
         
         <lable for="resolutionPick" hidden=true> Filter </lable>
         <input
-          
           class=slider
           id="resolutionPick"
           name="resolutionPick"
@@ -302,9 +314,68 @@
           id="showResolution"
           onchange="resolutionPicked(); updateShape()"
         >100</output>%
+        -->
+        
+        
+        <div>
+          <lable for="hideInitial"> Hide original </lable>
+          <input
+            type="checkbox"
+            name="initialHide"
+            tooltip="Hide initial shape"
+            id="hideInitial"
+            onclick="updateShape()"
+            all="unset"
+          />
+          
+          <span style="padding: 25px"></span>
+          
+          <lable for="hideInitial"> Add millisecond </lable>
+          <input
+            type="number"
+            name="playSpeed"
+            placeholder="delay"
+            id="playSpeed"
+            style="width:40px"
+          />
+          
+          <span style="padding: 25px"></span>
+          
+          <input
+            class="slider"
+            type="button"
+            name="playResolutions"
+            value="ᐅ"
+            placeholder="default_placeholder"
+            id="playResBtn"
+            onclick="playResolutions()"
+            style="position: relative; width:25px; height:25px;font-size:15px;color:white;"
+          />
+          <lable for="resolutionPick"> Frequencies </lable>
+          <input
+            class=slider
+            id="resolutionPick"
+            name="resolutionPick"
+            type=range
+            value=100
+            min=0
+            max=100
+            oninput="showResolution.value=resolutionPick.value"
+            onclick="resolutionPicked(); updateShape()"
+            onchange="resolutionPicked(); updateShape()"
+            onmouseup="resolutionPicked(); updateShape()"
+          ></input>
+          <span style="padding: 25px"></span>
+          <output
+            id="showResolution"
+            onchange="resolutionPicked(); updateShape()"
+          >100</output>%
+            
+        </div>
+        
       </div>
       
-      <input type="button" name="playResolutions" value="»»»" placeholder="default_placeholder" id="playResBtn" onclick="playResolutions()"/>
+
       
       
     </p>

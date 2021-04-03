@@ -303,15 +303,15 @@ function updateShape() {
         makeDFT();
         return
     }
-    DFT_2d( initialShape, formerShape=true );
+    DFT_2d( initialShape, formerShape=false );
     repaint(drawn)
 }
 
-function DFT_2d(shape, formerShape=false) {
+function DFT_2d(shape, formerShape=false, hideInitial=false) {
+
     if (!formerShape) {
         initialShape = shape;  // for future reference
     }
-    
     
     
     var xs = [];
@@ -350,7 +350,12 @@ function DFT_2d(shape, formerShape=false) {
     }
     //dftShape.forEach(n => { Log(n) })
     
-    drawn[1] = dftShape;
+    
+    if (hideInitial) {
+        drawn = [dftShape]
+    } else {
+        drawn[1] = dftShape;
+    }
     //Log(drawn.length);
     //Log("2d made");
 
@@ -422,7 +427,9 @@ function paint()
 }
 
 async function repaint(drw, sleep=0){
-    for (var shp=0; shp<drw.length; shp++) {
+    let doHide = document.getElementById("hideInitial").checked;
+    let start = doHide ? 1 : 0 ;
+    for (var shp=start; shp<drw.length; shp++) {
         c.beginPath();
         c.strokeStyle = drw[shp][0].color;
         c.lineWidth = drw[shp][0].size;
@@ -439,42 +446,24 @@ async function repaint(drw, sleep=0){
 
 
 
-/*
-function resolutionPicked() {
-    R = document.getElementById('resolutionPick').value;
-}
-
-var initialShape
-function updateShape() {
-    clear(canvas)
-    if (drawn.length == 0) {
-        makeDFT();
-        return
-    }
-    DFT_2d( initialShape, formerShape=true );
-    repaint(drawn)
-}
-*/
-
-
-//onchange="resolutionPicked(); updateShape()"
-
-function playResolutions()
+async function playResolutions()
 {
-    
-    if (drawn.length == 0) {
-        return
-    }
-    
-    var allDrawn = [];
-    
-    for ( var i=0; i<=100; i++ )
+    let oldRes = 0
+    let speed = document.getElementById("playSpeed").value;
+    let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
+    for ( var i=1; i<=100; i++ )
     {
-           document.getElementById('resolutionPick').value = i;
-           resolutionPicked();
-           updateShape();
-           document.getElementById( "showResolution" ).innerHTML = i;
-           //await delay(100);
+        newRes = rounder( 2 + 100*(1-1/i) );
+        
+        if (newRes > oldRes) {
+            oldRes = newRes + 1;
+            document.getElementById('resolutionPick').value = newRes;
+            document.getElementById( "showResolution" ).innerHTML = newRes;
+            resolutionPicked();
+            updateShape();
+            
+            await delay(speed); // milliseconds
+        }
     }
 }
 
