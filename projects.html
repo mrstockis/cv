@@ -195,7 +195,7 @@
       <table>
         <tr>
           <td>
-            <canvas></canvas>
+            <canvas id="myCanvas"></canvas>
             <script src="canvas.js"></script>
           </td>
           <td>
@@ -318,6 +318,11 @@
         
         
         <div>
+          
+          <input type="button" name="dft_of_canvas" value="DoC" placeholder="default_placeholder" id="dft_of_canvas" onclick="dftOfCanvas()" />
+
+          <span style="padding: 25px"></span>
+                    
           <lable for="hideInitial"> Hide original </lable>
           <input
             type="checkbox"

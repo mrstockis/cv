@@ -1,116 +1,70 @@
-;
-;
+
 // Try draw;
 // Reference https://bearnithi.com/2019/12/12/understanding-canvas-draw-a-line-in-canvas-using-mouse-and-touch-events-in-javascript/;
-;
+
+
 /*;
 const canvasEle = document.getElementById('drawContainer');;
 const context = canvasEle.getContext('2d');;
-;
-// To draw a static line.;
-context.beginPath();;
-context.lineWidth = '5'; // width of the line;
-context.strokeStyle = 'red'; // color of the line;
-context.moveTo(50,50); // begins a new sub-path based on the given x and y values.;
-context.lineTo(50, 100); // used to create a pointer based on x and y  ;
-context.stroke(); // this is where the actual drawing happens.;
-;
-;
+
+
 let startPosition = {x: 0, y: 0};;
 let lineCoordinates = {x: 0, y: 0};;
 let isDrawStart = false;;
-;
+
+
 const getClientOffset = (event) => {;
     const {pageX, pageY} = event.touches ? event.touches[0] : event;;
     const x = pageX - canvasEle.offsetLeft;;
     const y = pageY - canvasEle.offsetTop;;
-;
+
     return {;
        x,;
        y;
     } ;
-};
-;
+}
+
+
 const drawLine = () => {;
    context.beginPath();;
    context.moveTo(startPosition.x, startPosition.y);;
    context.lineTo(lineCoordinates.x, lineCoordinates.y);;
    context.stroke();;
-};
-;
+}
+
 const mouseDownListener = (event) => {;
    startPosition = getClientOffset(event);;
    isDrawStart = true;;
-};
-;
+}
+
 const mouseMoveListener = (event) => {;
   if(!isDrawStart) return;;
   ;
   lineCoordinates = getClientOffset(event);;
   clearCanvas();;
   drawLine();;
-};
-;
+}
+
 const mouseupListener = (event) => {;
   isDrawStart = false;;
 };
 ;
 const clearCanvas = () => {;
    context.clearRect(0, 0, canvasEle.width, canvasEle.height);;
-};
-;
+}
+
 canvasEle.addEventListener('mousedown', mouseDownListener);;
 canvasEle.addEventListener('mousemove', mouseMoveListener);;
 canvasEle.addEventListener('mouseup', mouseupListener);;
-;
+
 canvasEle.addEventListener('touchstart', mouseDownListener);;
 canvasEle.addEventListener('touchmove', mouseMoveListener);;
 canvasEle.addEventListener('touchend', mouseupListener);;
-;
-*/;
-;
-;
 
-;
-;
-/* Two rectangles //;
-c.fillRect(20,40,100,100);
-c.fillStyle= 'rgba(20,30,50,.5)';
-c.fillRect(400,80,10,20);
-//*/;
-;
-;
-;
-// Line;
-/*;
-c.strokeStyle = "rgb(100,90,50)";
-;
-c.beginPath();
-c.moveTo(10, canvas.height / 2);
-c.lineTo(canvas.width-10, canvas.height / 2);
-c.stroke();
-;
-c.beginPath();
-c.moveTo(canvas.width-10, canvas.height / 2);
-c.lineTo(canvas.width / 2, canvas.height / 2 - 50);
-c.strokeStyle = "rgba(100,150,100,.5)";
-c.stroke();
-*/;
-;
-;
-/*;
-c.beginPath();
-c.strokeStyle = 'rgb(0,0,0)';
-c.moveTo(10, canvas.height / 2);
-;
-var amp = 10;
-for (var i=0; i<canvas.width-20; i++);
-{;
-    //Log( Math.sin(i) );
-    c.lineTo(10+i, (canvas.height / 2) - Math.sin(i/10) * amp  );
-};
-c.stroke();
 */
+
+
+
 
 
 /*
@@ -140,11 +94,6 @@ for (i=0; i<range; i++);
 
 // DECLARATIONS & ASSIGNEMENTS //
 
-/*
-var activeSize;  // pen width
-var activeColor;
-var isPainting = false;
-*/
 
 var TAU = Math.PI * 2;
 var R = 100;  //  DFT resolution %
@@ -183,6 +132,18 @@ var c = canvas.getContext('2d');
 
 // EVENTS //
 
+
+document.addEventListener('touchstart',
+    function (e) {
+        e.preventDefault()
+    }
+)
+
+document.addEventListener('touchmove',
+    function (e) {
+        e.preventDefault()
+    }
+)
 
 // KEYS
 
@@ -453,10 +414,10 @@ async function playResolutions()
     let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
     for ( var i=1; i<=100; i++ )
     {
-        newRes = rounder( 2 + 100*(1-1/i) );
+        newRes = rounder( 1 + 100*(1-1/i) );
         
         if (newRes > oldRes) {
-            oldRes = newRes + 1;
+            oldRes = newRes;
             document.getElementById('resolutionPick').value = newRes;
             document.getElementById( "showResolution" ).innerHTML = newRes;
             resolutionPicked();
@@ -468,7 +429,82 @@ async function playResolutions()
 }
 
 
+function getPixels(imgdata, mode="avg")
+{
+    //pixs = [{ vmax: _ , vmin: _ }]
+    return
+    /*
+    if ( mode == "avg" ) {
+        let ws = [];
+        
+        for ( let i = 0, n = imgdata.length ; i<n ; i+=4 ) 
+        {
+            ws.push( average( [ pixs[i],pixs[i+1],pixs[i+2] ] ) );
+        }
+        
+        let wdft = DFT( ws );
+        
+        pixs.[0].vmax = Math.max(ws);
+        pixs.[0].vmin = Math.min(ws);
+        // scale
+            
+    } else if ( mode == "rgb" ) {
+        let 
+            rs = [];
+            gs = [];
+            bs = [];
+            
+        for ( let i = 0, n = imgdata.length ; i<n ; i+=4 ) 
+        {
+            rs.push( pixs[i  ] );
+            gs.push( pixs[i+1] );
+            bs.push( pixs[i+2] );
+        }
+        
+        let 
+            rdft = DFT( rs );
+            gdft = DFT( gs );
+            bdft = DFT( bs );
+            
+    } else if ( mode == "rgba" ) {
+    
+        let 
+            rs = [];
+            gs = [];
+            bs = [];
+            as = [];
+            
+        for ( let i = 0, n = imgdata.length ; i<n ; i+=4 ) 
+        {
+            rs.push( pixs[i  ] );
+            gs.push( pixs[i+1] );
+            bs.push( pixs[i+2] );
+            as.push( pixs[i+3] );
+        }
+        
+        let 
+            rdft = DFT( rs );
+            gdft = DFT( gs );
+            bdft = DFT( bs );
+            adft = DFT( as );
+    }
+    
+    */
+}
 
+
+function dftOfCanvas()
+{
+    let 
+        cantext = document.getElementById("myCanvas").getContext('2d');
+        imgd = cantext.getImageData(0,0,canvas.width,canvas.height);
+        pixs = imgd.data;
+        ws = []; //rs = [], gs = [], bs = []
+    
+    
+    
+    Log(w_dft.wave);
+}
 
 
 
