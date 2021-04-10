@@ -133,16 +133,19 @@ var c = canvas.getContext('2d');
 // EVENTS //
 
 
-document.addEventListener('touchstart',
+var canvasPhone = document.getElementById('myCanvas');
+
+canvasPhone.addEventListener('touchstart',
     function (e) {
         e.preventDefault()
-    }
+    }, false
 )
 
-document.addEventListener('touchmove',
+
+canvasPhone.addEventListener('touchmove',
     function (e) {
         e.preventDefault()
-    }
+    }, false
 )
 
 // KEYS
