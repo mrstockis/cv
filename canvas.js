@@ -161,8 +161,8 @@ canvas.addEventListener('touchmove',
             left: canvas.getBoundingClientRect().left,
             top: canvas.getBoundingClientRect().top
         }
-        mouse.x = event[0].x - canvasPos.left;
-        mouse.y = event[0].y - canvasPos.top ;
+        mouse.x = event[0].pageX - canvasPos.left;
+        mouse.y = event[0].pageY - canvasPos.top ;
     }
 )
 
@@ -174,8 +174,8 @@ function paintStart(event)
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    mouse.x = event[0].x - canvasPos.left;
-    mouse.y = event[0].y - canvasPos.top;
+    mouse.x = event[0].pageX - canvasPos.left;
+    mouse.y = event[0].pageY - canvasPos.top;
     
     /*
     isPainting = true;
@@ -207,8 +207,8 @@ function paintEnd(event)
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    mouse.x = event[0].x - canvasPos.left;
-    mouse.y = event[0].y - canvasPos.top;
+    mouse.x = event[0].pageX - canvasPos.left;
+    mouse.y = event[0].pageY - canvasPos.top;
 
     c.stroke();
 
