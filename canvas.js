@@ -145,12 +145,17 @@ var canvasPhone = document.getElementById('myCanvas');
 canvasPhone.addEventListener('touchstart',
     function (e) {
         e.preventDefault();
-    }, false
+    }
 )
 canvasPhone.addEventListener('touchmove',
     function (e) {
         e.preventDefault();
-    }, false
+    }
+)
+canvasPhone.addEventListener('touchend',
+    function (e) {
+        e.preventDefault();
+    }
 )
 
 
@@ -161,22 +166,24 @@ canvas.addEventListener('touchmove',
             left: canvas.getBoundingClientRect().left,
             top: canvas.getBoundingClientRect().top
         }
-        mouse.x = event[0].pageX - canvasPos.left;
-        mouse.y = event[0].pageY - canvasPos.top ;
-    }
+        mouse.x = event.touches[0].pageX - canvasPos.left;
+        mouse.y = event.touches[0].pageY - canvasPos.top ;
+        //shape.push( [mouse.x,mouse.y] )
+        //Log(event)
+    }, false
 )
 
 
-canvas.addEventListener('touchstart',paintStart);
+canvas.addEventListener('touchstart',paintStart,false);
 function paintStart(event)
 {
     let canvasPos = {
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    mouse.x = event[0].pageX - canvasPos.left;
-    mouse.y = event[0].pageY - canvasPos.top;
-    
+    //mouse.x = event.touches[0].pageX - canvasPos.left;
+    //mouse.y = event.touches[0].pageY - canvasPos.top;
+    Log(event)
     /*
     isPainting = true;
     activeColor = document.getElementById('colorPick').value;
@@ -196,19 +203,20 @@ function paintStart(event)
     
     if (!keyPressed.ctrl) c.beginPath();
     c.lineTo(mouse.x,mouse.y);
-    shape.push( [mouse.x,mouse.y] ) 
+    //shape.push( [mouse.x,mouse.y] )
 }
 
 
-canvas.addEventListener('touchend',paintEnd);
+canvas.addEventListener('touchend',paintEnd,false);
 function paintEnd(event)
 {
     let canvasPos = {
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    mouse.x = event[0].pageX - canvasPos.left;
-    mouse.y = event[0].pageY - canvasPos.top;
+    Log(event)
+    mouse.x = event.touches[0].pageX - canvasPos.left;
+    mouse.y = event.touches[0].pageY - canvasPos.top;
 
     c.stroke();
 
@@ -221,6 +229,7 @@ function paintEnd(event)
     
     //*
     if (canvasMode == "modeDFT") {
+        shape = removeNaN(shape);
         let tshape = truncate(shape);
         DFT_2d( tshape );
         //clear(canvas)
@@ -366,8 +375,13 @@ function updateShape() {
     repaint(drawn)
 }
 
+
+
 function DFT_2d(shape, formerShape=false, hideInitial=false) {
 
+    shape = removeNaN(shape);
+    shape = truncate(shape);
+    
     if (!formerShape) {
         initialShape = shape;  // for future reference
     }
@@ -479,9 +493,12 @@ function paint()
 {
     if (pen.isPainting)
     {
-        c.lineTo(mouse.x,mouse.y);
-        shape.push( [mouse.x,mouse.y] );
-        c.stroke();
+        if ( !isNaN(mouse.x) ) {
+            c.lineTo(mouse.x,mouse.y);
+            shape.push( [mouse.x,mouse.y] );
+            Log( [mouse.x,mouse.y] );
+            c.stroke();
+        }
     }
 }
 
@@ -662,6 +679,18 @@ function table(headers,data) {
     newTable += "</table>";
     */
     return newTable;
+}
+
+function removeNaN(zhape)
+{
+    var filteredShape = [ zhape[0] ];
+    for (let i=1; i<shape.length; i++)
+    {
+        if (!isNaN(zhape[i][0])) {
+            filteredShape.push(zhape[i])
+        }
+    }
+    return filteredShape;
 }
 
 
