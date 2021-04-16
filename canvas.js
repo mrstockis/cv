@@ -122,12 +122,17 @@ var pen = {
 
 
 
+/*
 var canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth * 0.5;
 canvas.height = 400;
 var c = canvas.getContext('2d');
+*/
 
-
+var canvas = document.getElementById('myCanvas');
+canvas.width = window.innerWidth * 0.5;
+canvas.height = canvas.width * 9/16;
+var c = canvas.getContext('2d');
 
 
 // EVENTS //
@@ -255,7 +260,13 @@ function paintEnd(event)
         let tshape = truncate(shape);
         DFT_2d( tshape );
         //clear(canvas)
-        repaint(drawn)
+        
+        let doPlay = document.getElementById('alwaysPlayRes').checked;
+        if (doPlay) {
+            playResolutions();
+        } else {
+            repaint(drawn)
+        }
     }
     //*/
 }
@@ -412,17 +423,18 @@ async function repaint(drw, sleep=0){
 
 async function playResolutions()
 {
-    let oldRes = 0
+    let oldRes = 0;
     let speed = document.getElementById("playSpeed").value;
     let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
-    for ( var i=1; i<=100; i++ )
+    
+    for ( let i=1; i<=100; i++ )
     {
-        newRes = rounder( 1 + 100*(1-1/i) );
+        let newRes = rounder( 1 + 100*(1-1/i) );
         
         if (newRes > oldRes) {
             oldRes = newRes;
             document.getElementById('resolutionPick').value = newRes;
-            document.getElementById( "showResolution" ).innerHTML = newRes;
+            document.getElementById('showResolution').innerHTML = newRes;
             resolutionPicked();
             updateShape();
             

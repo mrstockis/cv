@@ -12,4 +12,4 @@ course="https://www.udemy.com/home/my-courses/learning/"
 links="https://www.appbrewery.co/p/web-development-course-resources/"
 stack="https://stackoverflow.com/"
 
-chromium-browser $myProj $course &
+chromium-browser $myProj & # $course &
