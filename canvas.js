@@ -137,14 +137,14 @@ var canvasPhone = document.getElementById('myCanvas');
 
 canvasPhone.addEventListener('touchstart',
     function (e) {
-        e.preventDefault()
+        e.preventDefault();
     }, false
 )
 
 
 canvasPhone.addEventListener('touchmove',
     function (e) {
-        e.preventDefault()
+        e.preventDefault();
     }, false
 )
 
