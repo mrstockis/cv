@@ -138,6 +138,8 @@ var c = canvas.getContext('2d');
 // EVENTS //
 
 
+// TOUCH
+
 var canvasPhone = document.getElementById('myCanvas');
 
 canvasPhone.addEventListener('touchstart',
@@ -145,13 +147,95 @@ canvasPhone.addEventListener('touchstart',
         e.preventDefault();
     }, false
 )
-
-
 canvasPhone.addEventListener('touchmove',
     function (e) {
         e.preventDefault();
     }, false
 )
+
+
+canvas.addEventListener('touchmove',
+    function(event)
+    {
+        let canvasPos = {
+            left: canvas.getBoundingClientRect().left,
+            top: canvas.getBoundingClientRect().top
+        }
+        mouse.x = event.x - canvasPos.left;
+        mouse.y = event.y - canvasPos.top ;
+    }
+)
+
+
+canvas.addEventListener('touchstart',paintStart);
+function paintStart(event)
+{
+    let canvasPos = {
+        left: canvas.getBoundingClientRect().left,
+        top: canvas.getBoundingClientRect().top
+    }
+    mouse.x = event.x - canvasPos.left;
+    mouse.y = event.y - canvasPos.top;
+    
+    /*
+    isPainting = true;
+    activeColor = document.getElementById('colorPick').value;
+    c.strokeStyle = activeColor;
+    c.lineWidth = activeSize;
+    shape = [activeColor];
+    //*/
+    
+    if ( canvasMode == "modeDFT" ) { clear(canvas); drawn = []}
+    
+    pen.isPainting = true;
+    pen.color = document.getElementById('colorPick').value;    
+    c.strokeStyle = pen.color;
+    c.lineWidth = pen.size;
+    let currentPen = {size:pen.size, color:pen.color};
+    shape = [currentPen];
+    
+    if (!keyPressed.ctrl) c.beginPath();
+    c.lineTo(mouse.x,mouse.y);
+    shape.push( [mouse.x,mouse.y] ) 
+}
+
+
+canvas.addEventListener('touchend',paintEnd);
+function paintEnd(event)
+{
+    let canvasPos = {
+        left: canvas.getBoundingClientRect().left,
+        top: canvas.getBoundingClientRect().top
+    }
+    mouse.x = event.x - canvasPos.left;
+    mouse.y = event.y - canvasPos.top;
+
+    c.stroke();
+
+    if (!keyPressed.ctrl) {
+        //isPainting = false;
+        pen.isPainting = false;
+        //drawn.push(shape);
+        drawn.push( truncate(shape) );
+    }
+    
+    //*
+    if (canvasMode == "modeDFT") {
+        let tshape = truncate(shape);
+        DFT_2d( tshape );
+        //clear(canvas)
+        
+        let doPlay = document.getElementById('alwaysPlayRes').checked;
+        if (doPlay) {
+            playResolutions();
+        } else {
+            repaint(drawn)
+        }
+    }
+    //*/
+}
+
+
 
 // KEYS
 
