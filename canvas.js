@@ -495,15 +495,15 @@ function paint()
         if ( !isNaN(mouse.x) ) {
             c.lineTo(mouse.x,mouse.y);
             shape.push( [mouse.x,mouse.y] );
-            Log( [mouse.x,mouse.y] );
+            //Log( [mouse.x,mouse.y] );
             c.stroke();
         }
     }
 }
 
 async function repaint(drw, sleep=0){
-    let doHide = document.getElementById("hideInitial").checked;
-    let start = doHide ? 1 : 0 ;
+    let doShow = document.getElementById("showInitial").checked;
+    let start = doShow ? 0 : 1 ;
     for (var shp=start; shp<drw.length; shp++) {
         c.beginPath();
         c.strokeStyle = drw[shp][0].color;
@@ -529,8 +529,11 @@ async function playResolutions()
     
     for ( let i=1; i<=100; i++ )
     {
+        if (pen.isPainting){
+            return 
+        }
         let newRes = rounder( 1 + 100*(1-1/i) );
-        
+
         if (newRes > oldRes) {
             oldRes = newRes;
             document.getElementById('resolutionPick').value = newRes;
@@ -888,40 +891,50 @@ function DFT(data=false,filter=100,axis=false)
         this.isDrawing = true;
         
         if(doClear) { clear(canvas); }
-        this.frequencyPlot();
-        await this.trace(sleep);
+        this.frequencplot_yPos();
+        
+        if(!axis) { await this.trace(sleep); }
                 
         this.isDrawing = false;
     }
     
     
-    this.frequencyPlot = function() {
+    this.frequencplot_yPos = function() {
         c.font = '12px Times';
         c.fillStyle = 'white';
         c.textAlign = 'center';
         c.lineWidth = 2;
         
-        var fWidth = 30*(10 / this.N);
         
+        
+        
+        var
+            plot_xPos = posW(6/10)
+            plot_yPos = posH(1/2)
+        ;
+        
+        if (this.axis == "x") {
+            plot_xPos = posW(1/10);
+            plot_yPos = posH(6/8);
+            
+        } else if (this.axis == "y") {
+            plot_xPos = posW(11/20);
+            plot_yPos = posH(6/8);
+        }
+        
+        var fWidth = 70*(10 / this.N);
+        
+        /*
         if (!this.axis) {
-        if ( fWidth > 20 )
+            if ( fWidth > 15 )
             {
-                c.fillText(' HZ ', posW(3/5) - 30, posH(1/2) + 20 );
-                c.fillText(' COS ', posW(3/5) - 30, posH(1/2) + 2*20 );
-                c.fillText(' SIN ', posW(3/5) - 30, posH(1/2) + 3*20 );
+                c.fillText(' HZ ', plot_xPos - 30, plot_yPos + 20 );
+                c.fillText(' COS ', plot_xPos - 30, plot_yPos + 2*20 );
+                c.fillText(' SIN ', plot_xPos - 30, plot_yPos + 3*20 );
             }
         }
+        */
         
-        
-        var yPlot;
-        
-        if (!this.axis) {
-            yPlot = posH(1/2);
-        } else if (this.axis == "x") {
-            yPlot = posH(5/6);
-        } else if (this.axis == "y") {
-            yPlot = posH(2/6);
-        }
         
 
         var tHead = [' Hz ','cos','sin'];
@@ -963,22 +976,22 @@ function DFT(data=false,filter=100,axis=false)
                 
                 if ( fWidth > 20 )
                 {
-                    c.fillText(  f, posW(3/5) + f*fWidth, yPlot +  20 );
-                    c.fillText( ki, posW(3/5) + f*fWidth, yPlot + 2*20 );
-                    c.fillText( kj, posW(3/5) + f*fWidth, yPlot + 3*20 );
+                    c.fillText(  f, plot_xPos + f*fWidth, plot_yPos +  20 );
+                    c.fillText( ki, plot_xPos + f*fWidth, plot_yPos + 2*20 );
+                    c.fillText( kj, plot_xPos + f*fWidth, plot_yPos + 3*20 );
                 }
             }
             
             
             c.beginPath();
-            c.moveTo( posW(3/5) + f*fWidth -2, yPlot );
-            c.lineTo( posW(3/5) + f*fWidth -2, yPlot - /*Math.log(*/ maxPlotHeight * ( Math.abs( ki ) / maxFreq ) );
+            c.moveTo( plot_xPos + f*fWidth -2, plot_yPos );
+            c.lineTo( plot_xPos + f*fWidth -2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( ki ) / maxFreq ) );
             c.strokeStyle='#008080';
             c.stroke();
             
             c.beginPath();
-            c.moveTo( posW(3/5) + f*fWidth +2, yPlot );
-            c.lineTo( posW(3/5) + f*fWidth +2, yPlot - /*Math.log(*/ maxPlotHeight * ( Math.abs( kj ) / maxFreq ) );
+            c.moveTo( plot_xPos + f*fWidth +2, plot_yPos );
+            c.lineTo( plot_xPos + f*fWidth +2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( kj ) / maxFreq ) );
             c.strokeStyle='#52acb7';
             c.stroke();
         }
