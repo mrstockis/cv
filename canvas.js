@@ -350,8 +350,8 @@ function paintEnd(event)
     
     //*
     if (canvasMode == "modeDFT") {
-        let tshape = truncate(shape);
-        DFT_2d( tshape );
+        //let tshape = truncate(shape);
+        DFT_2d( shape );
         //clear(canvas)
         
         let doPlay = document.getElementById('alwaysPlayRes').checked;
@@ -379,8 +379,7 @@ function updateShape() {
 
 function DFT_2d(shape, formerShape=false, hideInitial=false) {
 
-    shape = removeNaN(shape);
-    shape = truncate(shape);
+    shape = truncate( removeNaN(shape) );
     
     if (!formerShape) {
         initialShape = shape;  // for future reference
@@ -684,7 +683,7 @@ function table(headers,data) {
 function removeNaN(zhape)
 {
     var filteredShape = [ zhape[0] ];
-    for (let i=1; i<shape.length; i++)
+    for (let i=1; i<zhape.length; i++)
     {
         if (!isNaN(zhape[i][0])) {
             filteredShape.push(zhape[i])
