@@ -271,7 +271,7 @@
         <input 
           type=text
           value="1 3 5 7 8 6 2 0"
-          size='90%'
+          size='20'
           id='dftData'
           placeholder="Data, seperated by space"
           oninput="makeDFT()"
@@ -282,7 +282,7 @@
           value="Create DFT"
           onclick="makeDFT(); toggle_display('freqTable2','none')"
         ></input>
-        </div>
+        <!--</div>-->
         
         <!--
         <input class="slider"
@@ -317,11 +317,12 @@
         -->
         
         
-        <div>
-          
+        <!--<div>-->
+          <!--
           <input type="button" name="dft_of_canvas" value="DoC" placeholder="default_placeholder" id="dft_of_canvas" onclick="dftOfCanvas()" />
-
-          <span style="padding: 25px"></span>
+          -->
+          
+          <span style="padding: 10px"></span>
                     
           <lable for="hideInitial"> Hide original </lable>
           <input
@@ -333,7 +334,7 @@
             all="unset"
           />
           
-          <span style="padding: 25px"></span>
+          <span style="padding: 10px"></span>
           
           <lable for="playSpeed"> Add millisecond </lable>
           <input
@@ -344,7 +345,7 @@
             style="width:40px"
           />
           
-          <span style="padding: 25px"></span>
+          <span style="padding: 10px"></span>
           
           <input
             type="checkbox"
@@ -378,7 +379,7 @@
             onchange="resolutionPicked(); updateShape()"
             onmouseup="resolutionPicked(); updateShape()"
           ></input>
-          <span style="padding: 25px"></span>
+          <span style="padding: 10px"></span>
           <output
             id="showResolution"
             onchange="resolutionPicked(); updateShape()"

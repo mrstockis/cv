@@ -130,7 +130,7 @@ var c = canvas.getContext('2d');
 */
 
 var canvas = document.getElementById('myCanvas');
-canvas.width = window.innerWidth * 0.5;
+canvas.width = 880;
 canvas.height = canvas.width * 9/16;
 var c = canvas.getContext('2d');
 
