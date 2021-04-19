@@ -417,7 +417,7 @@ function DFT_2d(shape, formerShape=false, hideInitial=false) {
     var dftShape = [ {color:"white"} ];
     /* pen = { size:1, color:"white", isPainting: false }*/
     for (let p = 0; p < xDFT.wave.length; p++){
-        dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(1/2) ] );
+        dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(4/9) ] );
         //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
     }
     //dftShape.forEach(n => { Log(n) })
@@ -905,28 +905,28 @@ function DFT(data=false,filter=100,axis=false)
         c.textAlign = 'center';
         c.lineWidth = 2;
         
-        
+        doAlt = document.getElementById("doAlternate").checked;
         
         
         var
-            plot_xPos = posW(6/10)
+            plot_xPos = doAlt ? posW(7/10) : posW(6/10);
             plot_yPos = posH(1/2)
         ;
         
         if (this.axis == "x") {
-            plot_xPos = posW(1/10);
+            plot_xPos = doAlt ? posW(2/7) : posW(1/10);
             plot_yPos = posH(6/8);
             
         } else if (this.axis == "y") {
-            plot_xPos = posW(11/20);
+            plot_xPos = doAlt ? posW(5/7) : posW(11/20);
             plot_yPos = posH(6/8);
         }
         
-        var fWidth = 70*(10 / this.N);
+        var fWidth = 70*(10 / this.N) * (doAlt ? 0.5 : 1) ;
         
         /*
         if (!this.axis) {
-            if ( fWidth > 15 )
+            if ( fWidth > 30 )
             {
                 c.fillText(' HZ ', plot_xPos - 30, plot_yPos + 20 );
                 c.fillText(' COS ', plot_xPos - 30, plot_yPos + 2*20 );
@@ -934,6 +934,7 @@ function DFT(data=false,filter=100,axis=false)
             }
         }
         */
+        
         
         
 
@@ -956,13 +957,15 @@ function DFT(data=false,filter=100,axis=false)
             
             //var row = freqTable.insertRow(f);
             
-            var ki = mRound(this.k_i[f]);
-            var kj = mRound(this.k_j[f]);
+            fWidth *= (doAlt) ? (-1) : 1;
+            
+            var ki = flipper* mRound(this.k_i[f]);
+            var kj = flipper* mRound(this.k_j[f]);
             
 
-            if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )
+            if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )  // ?
             {
-                tData.push( f, flipper*ki, flipper*kj );
+                tData.push( f, ki, kj );
                 //tData.push( f, ki, kj );
                 //tData.push( f, mRound(this.k_i[f]), mRound(this.k_j[f]) );
                 //Log(tData)
@@ -974,12 +977,14 @@ function DFT(data=false,filter=100,axis=false)
                 cell1.innerHTML = this.k_i[f];
                 cell2.innerHTML = this.k_j[f];*/
                 
-                if ( fWidth > 20 )
+                
+                if ( Math.abs(fWidth) > 20 )
                 {
                     c.fillText(  f, plot_xPos + f*fWidth, plot_yPos +  20 );
                     c.fillText( ki, plot_xPos + f*fWidth, plot_yPos + 2*20 );
                     c.fillText( kj, plot_xPos + f*fWidth, plot_yPos + 3*20 );
                 }
+                
             }
             
             
@@ -1257,19 +1262,6 @@ s3.wave = sumLists( s1.wave , s2.wave )
 */
 
 //var user_dft = new DFT();
-
-
-
-
-
-
-
-
-
-/*
- * When resolution is updated, KEEP initial grey shape as well
- * 
- */
 
 
 
