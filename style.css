@@ -122,7 +122,7 @@ canvas
     border-radius: .5rem;
     position: absolute;
     height: 16px;
-    width: 120px;
+    width: 100px;
     background: grey;
     outline: none;
     opacity: 0.5;
@@ -154,7 +154,7 @@ canvas
 }
 #resolutionPick
 {
-    position: absolute;
+    /*position: absolute;*/
     font-size: 20px;
     text-align: center;
 }

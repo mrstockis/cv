@@ -267,7 +267,6 @@
       </div>
       
       <div id='dftMode'>
-        <div>
         <input 
           type=text
           value="1 3 5 7 8 6 2 0"
@@ -282,7 +281,6 @@
           value="Create DFT"
           onclick="makeDFT(); toggle_display('freqTable2','none')"
         ></input>
-        <!--</div>-->
         
         <!--
         <input class="slider"
@@ -332,7 +330,6 @@
             tooltip="Show initial shape"
             id="showInitial"
             onclick="updateShape()"
-            all="unset"
           />
           <lable for="showInitial"> City </lable>
           <input
@@ -342,7 +339,6 @@
             tooltip="Alternate freq. representation"
             id="doAlternate"
             onclick="updateShape()"
-            all="unset"
           />
           
           <span style="padding: 10px"></span>
@@ -364,7 +360,6 @@
             tooltip="Allways play after drawn"
             id="alwaysPlayRes"
             checked=True
-            all="unset"
           />
           <input
             class="slider"
@@ -374,9 +369,10 @@
             placeholder="default_placeholder"
             id="playResBtn"
             onclick="playResolutions()"
-            style="position: relative; width:25px; height:25px;font-size:15px;color:white;"
+            style="position: static; width:25px; height:25px;font-size:15px;color:white;"
           />
           <lable for="resolutionPick"> Frequencies </lable>
+          
           <input
             class=slider
             id="resolutionPick"
@@ -386,20 +382,21 @@
             min=0
             max=100
             oninput="showResolution.value=resolutionPick.value"
-            onclick="resolutionPicked(); updateShape()"
             onchange="resolutionPicked(); updateShape()"
             onmouseup="resolutionPicked(); updateShape()"
+            style="margin:0; z-index:10"
           ></input>
-          <span style="padding: 10px"></span>
+          <!--
+            onclick="resolutionPicked(); updateShape()"
+          -->
+          
           <output
             id="showResolution"
+            style="display:inline-block; width:25px; position: relative; left: 35px; text-align:right"
             onchange="resolutionPicked(); updateShape()"
-          >100</output>%
-            
-        </div>
+          >100</output><span style="position:relative; left:38px">%</span>
         
       </div>
-      
 
       
       

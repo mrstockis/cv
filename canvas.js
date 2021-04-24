@@ -371,63 +371,76 @@ function updateShape() {
         makeDFT();
         return
     }
-    DFT_2d( initialShape, formerShape=false );
+    DFT_2d( drawn[0], true );
     repaint(drawn)
 }
 
 
 
-function DFT_2d(shape, formerShape=false, hideInitial=false) {
+function DFT_2d(shape, justUpdate=false) {  // formerShape=false
 
-    shape = truncate( removeNaN(shape) );
-    
-    if (!formerShape) {
-        initialShape = shape;  // for future reference
-    }
-    
-    
-    var xs = [];
-    var ys = [];
+    if (!justUpdate)
+    {
+        shape = truncate( removeNaN(shape) );
+        
+        /*
+        if (!formerShape) {
+            initialShape = shape;  // for future reference
+        }
+        */
+        
+        var xs = [];
+        var ys = [];
 
-    for (let i=1; i<initialShape.length; i++ ) {
-        xs.push(initialShape[i][0]);
-        ys.push(initialShape[i][1]);
-    }
-    // Zero  average xs -> for n in xs ; n - average
-    let mx = average(xs)
-    let my = average(ys)
-    for (let n=0 ; n < xs.length ; n++) {
-        xs[n] = xs[n] - mx;
-        ys[n] = ys[n] - my;
+        for (let i=1; i<shape.length; i++ ) {  // initalShape.length
+            xs.push(shape[i][0]);   // initialShape[i][0]
+            ys.push(shape[i][1]);   // initialShape[i][1]    
+        }
+        // Zero  average xs -> for n in xs ; n - average
+        let mx = average(xs)
+        let my = average(ys)
+        for (let n=0 ; n < xs.length ; n++) {
+            xs[n] = xs[n] - mx;
+            ys[n] = ys[n] - my;
+        }
+        
+        xDFT.data = xs;
+        yDFT.data = ys;
+        //Log("2d data made")
     }
     
     let res = document.getElementById('resolutionPick').value;
     
+    /*
     var xDFT = new DFT( xs, res, "x" );
     var yDFT = new DFT( ys, res, "y" );
+    */
+    xDFT.setFilter(res); xDFT.build(justUpdate)
+    yDFT.setFilter(res); yDFT.build(justUpdate)
     
     xDFT.show(0,doClear=false);
     yDFT.show(0,doClear=false);
 
-//    document.getElementById("freqTable1").childNodes[0].style="color: rgb(100,100,200);"  // change cosinge header to blue
-    document.getElementById("freqTable1").getElementsByTagName('thead')[0].style="color: rgba(100,100,200,.9);"  // change cosinge header to blue
+    document.getElementById("freqTable1").getElementsByTagName('thead')[0].style="color: rgba(100,100,200,.9);"  // change cosine header to blue
     toggle_display('freqTable2','block');
 
 
     var dftShape = [ {color:"white"} ];
     /* pen = { size:1, color:"white", isPainting: false }*/
     for (let p = 0; p < xDFT.wave.length; p++){
-        dftShape.push( [ xDFT.wave[p][1] + posW(1/2),yDFT.wave[p][1] + posH(4/9) ] );
+        dftShape.push( [ xDFT.wave[p][1] + posH(1/2),yDFT.wave[p][1] + posV(4/9) ] );
         //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
     }
     //dftShape.forEach(n => { Log(n) })
     
-    
+    /*
     if (hideInitial) {
         drawn = [dftShape]
     } else {
         drawn[1] = dftShape;
     }
+    */
+    drawn[1] = dftShape;
     //Log(drawn.length);
     //Log("2d made");
 
@@ -747,12 +760,12 @@ function stringToNumbers(str) {
 }
 
 
-function posW(part) {  // width
+function posH(part) {  // width
     return part*canvas.width
 }
 
 
-function posH(part) {  // height
+function posV(part) {  // height
     return part*canvas.height
 }
 
@@ -772,7 +785,7 @@ function Sine(hz) {
         c.beginPath();
         c.moveTo(0,canvas.height/2);
         for ( var t=0 ; t<this.wave.length ; t++ ) {
-            c.lineTo( t, - this.wave[t][1] + posH(1/2) );
+            c.lineTo( t, - this.wave[t][1] + posV(1/2) );
         }
         c.stroke();
     }
@@ -782,6 +795,9 @@ function Sine(hz) {
 function DFT(data=false,filter=100,axis=false)
 {
     this.filter = 100-filter;
+    this.maxWeight = 0;
+    this.filteredKI = []
+    this.filteredKJ = []
     this.axis = axis
     this.isDrawing = false;
     this.drawRequest = false;
@@ -795,48 +811,54 @@ function DFT(data=false,filter=100,axis=false)
 
     //this.a0 = average(this.data);
     
-    this.build = function () {
+    this.build = function (justUpdate=false) {
 
         if (!this.data) {return};
         
-        this.N = this.data.length;
-        
-        this.a0 = average(this.data);
-        //Log( " a0@build " + this.a0 );
-        //Log( "set " + this.data )
-        
-        this.k_i = [];
-        this.k_j = [];
-        
-        // Do all weights
-        for (var n = 0; n< this.N/2; n++) {
-            ki = 0;
-            kj = 0;
-            for (var k = 0; k<this.N; k++) {
-                ki += this.data[k] * Math.cos( (n * k) * TAU/this.N );
-                kj += this.data[k] * Math.sin( (n * k) * TAU/this.N );
+        if (!justUpdate)
+        {
+            this.N = this.data.length;
+            
+            this.a0 = average(this.data);
+            //Log( " a0@build " + this.a0 );
+            //Log( "set " + this.data )
+            
+            this.k_i = [];
+            this.k_j = [];
+            
+            // Do all weights
+            for (var n = 0; n< this.N/2; n++) {
+                ki = 0;
+                kj = 0;
+                for (var k = 0; k<this.N; k++) {
+                    ki += this.data[k] * Math.cos( (n * k) * TAU/this.N );
+                    kj += this.data[k] * Math.sin( (n * k) * TAU/this.N );
+                }
+                this.k_i.push( ki*(2/this.N) );
+                this.k_j.push( kj*(2/this.N) );
             }
-            this.k_i.push( ki*(2/this.N) );
-            this.k_j.push( kj*(2/this.N) );
+            
+            // Figure max weight and scale filter accordingly
+            let maxI = Math.max( ...this.k_i.map(Math.abs) );
+            let maxJ = Math.max( ...this.k_j.map(Math.abs) );
+            this.maxWeight = ( maxI > maxJ ) ? maxI : maxJ ;
+            //Log(this.axis + '-axis re-weighed')
+            //Log(this.maxWeight)
         }
-        
-        
-        // Figure max weight and scale filter accordingly
-        let maxI = Math.max( ...this.k_i.map(Math.abs) );
-        let maxJ = Math.max( ...this.k_j.map(Math.abs) );
-        let maxWeight = ( maxI > maxJ ) ? maxI : maxJ ;
-        let scaledFilter= maxWeight * (this.filter/100) ;
+
+        var scaledFilter = this.maxWeight * (this.filter/100) ;
         /*
         Log( "maxWeight: " + maxWeight )
         Log( "scaledFilter:" + scaledFilter )
         */
-        
-        // Apply the filter
-        
+        this.filteredKI = []
+        this.filteredKJ = []
+        // Create new filtered weights
         for ( let k=0 ; k < this.N/2 ; k++ ){
-            this.k_i[k] = ( Math.abs(this.k_i[k]) > scaledFilter ) ? this.k_i[k] : 0 ;
-            this.k_j[k] = ( Math.abs(this.k_j[k]) > scaledFilter ) ? this.k_j[k] : 0 ;
+            this.filteredKI[k] = ( Math.abs(this.k_i[k]) > scaledFilter ) ? this.k_i[k] : 0 ;
+            this.filteredKJ[k] = ( Math.abs(this.k_j[k]) > scaledFilter ) ? this.k_j[k] : 0 ;
         }
+
         
         
         this.wave = [];
@@ -851,33 +873,41 @@ function DFT(data=false,filter=100,axis=false)
         var cH = canvas.height;
         var cW = canvas.width;
         
-        this.xPos = posW(1/10);
-        this.yPos = posH(1/2);
+        this.xPos = posH(1/10);
+        this.yPos = posV(1/2);
         
         
-        var correct = (this.axis) ? 1 : this.k_i[0];
+        var correct = (this.axis) ? 0 : this.k_i[0];  // WHY any number BUT 0 ??
         
         // Try flip the Y sinusoid correctly
         let flipper = (this.axis == 'y') ? (-1) : 1;
         
         /*
-        if (this.axis=="x") { correct = posH(3/4) }
-        if (this.axis=="y") { correct = posH(1/4) }
+        if (this.axis=="x") { correct = posV(3/4) }
+        if (this.axis=="y") { correct = posV(1/4) }
         */
         for (var x=0 ; x<this.res ; x++) {
             FY = 0;
             for (var n=0 ; n<this.N/2 ; n++) { 
                 FY += (
+                    this.filteredKI[n] * Math.cos( n * x / this.xStretch ) +
+                    this.filteredKJ[n] * Math.sin( n * x / this.xStretch )
+                    /* Former
                     this.k_i[n] * Math.cos( n * x / this.xStretch ) +
                     this.k_j[n] * Math.sin( n * x / this.xStretch )
+                    */
                 );
             }
              this.wave.push( [ x , FY -correct ] );
         }
     }
+    
     this.build()
     
-    
+    this.setFilter = function(filter)
+    {
+        this.filter = 100-filter;
+    }
     
     this.show = async function(sleep=0,doClear=true) {
         if (this.drawRequest == true) { return }
@@ -909,17 +939,17 @@ function DFT(data=false,filter=100,axis=false)
         
         
         var
-            plot_xPos = doAlt ? posW(7/10) : posW(6/10);
-            plot_yPos = posH(1/2)
+            plot_xPos = doAlt ? posH(7/10) : posH(6/10);
+            plot_yPos = posV(1/2)
         ;
         
         if (this.axis == "x") {
-            plot_xPos = doAlt ? posW(2/7) : posW(1/10);
-            plot_yPos = posH(6/8);
+            plot_xPos = doAlt ? posH(2/7) : posH(1/10);
+            plot_yPos = posV(9/10);
             
         } else if (this.axis == "y") {
-            plot_xPos = doAlt ? posW(5/7) : posW(11/20);
-            plot_yPos = posH(6/8);
+            plot_xPos = doAlt ? posH(5/7) : posH(11/20);
+            plot_yPos = posV(9/10);
         }
         
         var fWidth = 70*(10 / this.N) * (doAlt ? 0.5 : 1) ;
@@ -944,10 +974,12 @@ function DFT(data=false,filter=100,axis=false)
         
         // Scale the freqplot to a specific measure  (small one grows, big ones shrinks)
         // by finding the largest freq coeff, and scale the rest relative to it.
+        /* Already done at this.maxWeight ?
         let maxI = Math.max( ...this.k_i.map(Math.abs) );
         let maxJ = Math.max( ...this.k_j.map(Math.abs) );
         let maxFreq = ( maxI > maxJ ) ? maxI : maxJ ;
-        let maxPlotHeight = 80;
+        */
+        let maxPlotHeight = 110;
         let relativeFreq; // maxPlotHeight * ( freq_n / maxFreq ) 
         
         // Try flip the Y sinusoid correctly
@@ -959,11 +991,17 @@ function DFT(data=false,filter=100,axis=false)
             
             fWidth *= (doAlt) ? (-1) : 1;
             
+            ki = flipper* mRound(this.filteredKI[f]);
+            kj = flipper* mRound(this.filteredKJ[f]);
+            
+            /*
             var ki = flipper* mRound(this.k_i[f]);
             var kj = flipper* mRound(this.k_j[f]);
+            */
             
 
-            if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )  // ?
+            //if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )  // ?
+            if ( Math.abs( this.filteredKI[f] ) + Math.abs( this.filteredKJ[f] ) > 0.1 )  // ?
             {
                 tData.push( f, ki, kj );
                 //tData.push( f, ki, kj );
@@ -990,14 +1028,14 @@ function DFT(data=false,filter=100,axis=false)
             
             c.beginPath();
             c.moveTo( plot_xPos + f*fWidth -2, plot_yPos );
-            c.lineTo( plot_xPos + f*fWidth -2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( ki ) / maxFreq ) );
-            c.strokeStyle='#008080';
+            c.lineTo( plot_xPos + f*fWidth -2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( Math.abs(ki) ) / this.maxWeight ) );
+            c.strokeStyle= (ki > 0) ? '#008080' : '#5c168e';
             c.stroke();
             
             c.beginPath();
             c.moveTo( plot_xPos + f*fWidth +2, plot_yPos );
-            c.lineTo( plot_xPos + f*fWidth +2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( kj ) / maxFreq ) );
-            c.strokeStyle='#52acb7';
+            c.lineTo( plot_xPos + f*fWidth +2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( Math.abs(kj) ) / this.maxWeight ) );
+            c.strokeStyle= (kj > 0) ? '#52acb7' : '#861667';
             c.stroke();
         }
         
@@ -1016,7 +1054,7 @@ function DFT(data=false,filter=100,axis=false)
         
         // Scale the sinusoid to a specific measure to deal with change of canvas width
         // by checking the current width of designated space
-        let space = posW(3/7) - posW(1/10)
+        let space = posH(3/7) - posH(1/10)
         let spaceScale = space / this.wave.length
 
         let relativeFreq; // maxPlotHeight * ( freq_n / maxFreq ) 
@@ -1249,6 +1287,11 @@ for (let i=0; i<50; i++)
 
 
 var drawn = [];
+
+
+var tDFT = new DFT( [], 100 );
+var xDFT = new DFT( [], 100, "x" );
+var yDFT = new DFT( [], 100, "y" );
 
 animate();
 
