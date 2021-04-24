@@ -195,7 +195,11 @@
       <table>
         <tr>
           <td>
-            <canvas id="myCanvas"></canvas>
+            <canvas id="myCanvas" style="position:relative">
+                
+            </canvas>
+            <img id='imgTemp' src="#" width=800px style="margin:0; position:absolute;right:200px; z-index:-10">
+            
             <script src="canvas.js"></script>
           </td>
           <td>
@@ -316,9 +320,9 @@
         
         
         <!--<div>-->
-          <!--
+          <!-- Dft Of Canvas -->
           <input type="button" name="dft_of_canvas" value="DoC" placeholder="default_placeholder" id="dft_of_canvas" onclick="dftOfCanvas()" />
-          -->
+          <!---->
           
           <span style="padding: 10px"></span>
                     
@@ -395,6 +399,9 @@
             style="display:inline-block; width:25px; position: relative; left: 35px; text-align:right"
             onchange="resolutionPicked(); updateShape()"
           >100</output><span style="position:relative; left:38px">%</span>
+          
+          <input id="upTemp" type=file></input>
+          <br>
         
       </div>
 

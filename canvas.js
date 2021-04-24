@@ -137,6 +137,28 @@ var c = canvas.getContext('2d');
 
 // EVENTS //
 
+var templateLoaded = false
+window.addEventListener('load', function() {
+    document.querySelector('input[type="file"]').addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            var img = document.getElementById('imgTemp');
+            img.onload = () => {
+                URL.revokeObjectURL(img.src);  // no longer needed, free memory
+            }
+            img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+            
+            var background = new Image(100,100);
+            background.src = img.src
+            background.onload = function() {
+                //c.drawImage(background,0,0);
+                templateLoaded = true;
+            }
+        }
+    });
+});
+
+
+
 
 // TOUCH
 
@@ -192,7 +214,9 @@ function paintStart(event)
     shape = [activeColor];
     //*/
     
-    if ( canvasMode == "modeDFT" ) { clear(canvas); drawn = []}
+    if ( canvasMode == "modeDFT" ) {
+        clear(canvas) ; drawn = []
+    }
     
     pen.isPainting = true;
     pen.color = document.getElementById('colorPick').value;    
@@ -351,8 +375,9 @@ function paintEnd(event)
     //*
     if (canvasMode == "modeDFT") {
         //let tshape = truncate(shape);
+        clear(canvas)
         DFT_2d( shape );
-        //clear(canvas)
+        
         
         let doPlay = document.getElementById('alwaysPlayRes').checked;
         if (doPlay) {
@@ -376,7 +401,7 @@ function updateShape() {
 }
 
 
-
+var background
 function DFT_2d(shape, justUpdate=false) {  // formerShape=false
 
     if (!justUpdate)
@@ -633,9 +658,11 @@ function dftOfCanvas()
         ws = []; //rs = [], gs = [], bs = []
     
     
-    
-    Log(w_dft.wave);
+    Log(pixs)
+    //Log(w_dft.wave);
 }
+
+
 
 
 
@@ -1025,7 +1052,6 @@ function DFT(data=false,filter=100,axis=false)
                 
             }
             
-            
             c.beginPath();
             c.moveTo( plot_xPos + f*fWidth -2, plot_yPos );
             c.lineTo( plot_xPos + f*fWidth -2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( Math.abs(ki) ) / this.maxWeight ) );
@@ -1037,6 +1063,7 @@ function DFT(data=false,filter=100,axis=false)
             c.lineTo( plot_xPos + f*fWidth +2, plot_yPos - /*Math.log(*/ maxPlotHeight * ( ( Math.abs(kj) ) / this.maxWeight ) );
             c.strokeStyle= (kj > 0) ? '#52acb7' : '#861667';
             c.stroke();
+            
         }
         
         //var tbl = document.createElement('table');

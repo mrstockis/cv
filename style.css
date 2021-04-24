@@ -90,9 +90,13 @@ canvas
     border-radius: 1rem;
     border: 1px solid black;
     background: rgba(10,30,40,1);
-    /*background-image: url("resources/pics/desmosWaves.jpeg");
-    background-size: 110%;*/
+    /*background-image: url("resources/pics/desmosWaves.jpeg");*/
+    background-size: 100%;
     /*opacity: 1;*/
+}
+canvas:hover
+{
+    background: rgba(10,30,40,.9);
 }
 
 
