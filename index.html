@@ -11,7 +11,12 @@
       console.log('Script and stylesheet loaded')
     </script>
     
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    
   </head>
   
   <body>
@@ -21,10 +26,13 @@
     <table class="main-link-table"> 
       <tr>
         <td>
-          <h2><a href="index.html"><span class="cap">C</span>over</a></h2>
+          <h2><a href="index.html"><span class="cap">H</span>ome</a></h2>
         </td>
         <td>
-          <h2><a href="work.html"><span class="cap">W</span>ork</a></h2>
+          <h2><a href="cover.html"><span class="">C</span>over</a></h2>
+        </td>
+        <td>
+          <h2><a href="work.html"><span class="">W</span>ork</a></h2>
         </td>
         <td
           id="projects"
@@ -55,316 +63,81 @@
     
     <hr size="3" noshade>
     
-    <table>
-      <tr>
-        <td style='{text-align: left}'>
-          <h1>
-              <span>CV </span>
-          </h1>
-        </td>
-        <td>
-            <h2 class=sub> Mikael Malmberg</h2>
-        </td>
-      </tr>
-    </table>
-
-    <!-- <h2 class=sub> Presentation</h2> -->
-    <!--<h3> Contact</h3>-->
-    <p>022 465 0558 &nbsp; mickem90@gmail.com<br><em>25 Finch Street, Albert Town 9305, Otago</em>
-          <!--
-          <span onmouseover="document.getElementById('myimg').style.display='block';"
-                onmouseout="document.getElementById('myimg').style.display='none';">Otago
-          </span>
-          <img id="myimg" style="display:none" src="https://www.otago.ac.nz/cs/groups/public/@otagobulletineditor/documents/contributorimg/otago042431.jpg" />
-          -->
-      <!-- </h4> -->
-    </p>
-    <!--
-    022 465 0558 &nbsp; mickem90@gmail.com <br>
-    <em>
-      84B Roche Street, Wanaka 9305,
-      <span onmouseover="document.getElementById('myimg').style.display='block';"
-            onmouseout="document.getElementById('myimg').style.display='none';">Otago
-      </span>
-      <img id="myimg" style="display:none" src="https://www.otago.ac.nz/cs/groups/public/@otagobulletineditor/documents/contributorimg/otago042431.jpg" />        
-    </em>
-    -->
+    <div class="avatar" data-tooltip=" HI ! "></div>
+    
+    <div style="
+        display: inline-block; 
+        width: 190px; 
+        margin: 0 auto 0 20%;
+        position: static;
+    ">
+      <h1 class="" style="text-align: center;">
+          <span class="welcome0" >Hi, I'm Mikael</span><br>
+          <span class="welcome1" >a programmer</span>
+      </h1>
+      
+    </div><br>
     
     
-    <hr size="3">
+    
     
     <!--
     <img
-      src="https://www.otago.ac.nz/cs/groups/public/@otagobulletineditor/documents/contributorimg/otago042431.jpg"
-      alt="otago sample picture"
-      title="Dunedin University"
-      width='200'
-      border='1px'
+      alt="cloud"
+      style="
+        width: 50%;
+        position: absolute;
+        right: 2%;
+      "
+      src="resources/pics/cloud.png"
+    >
+    -->
+      
+      
+    <img
+      id="clouds"
+      alt="clouds"
+      src="resources/pics/clouds2.png"
     >
     
-    <img src="resources/pics/otago.jpg" width="100" height="80">
-    
-    
-    Mikael Malmberg
-    -->
-    <div id=professionSelector>
-      <lable for="professionsMode"> Area </lable>
-      <select id="professionMode" oninput="select_profession()">
-        <option value=".all" selected>All</option>
-        <option value=".horticulture">Horticulture</option>
-        <option value=".construction">Construction</option>
-        <option value=".transport">Transport</option>
-        <option value=".logistics">Logistics</option>
-        <option value=".programming">Programming</option>
-        <option value=".maintenance">Maintenance</option>
-        <option value=".cleaning">Cleaning</option>
-      </select>
-    </div>
-        
-    <br>
-    
-    
-    <h3> Objective</h3>
-    <div class=pop>
-    <!-- [Add details about the type of work, role and industry you would like] # short and concise -->
-    Looking for work within <span id="out_profession"></span>
-    <div id="areas_list">
-      <ul class=pop>
-        <li>horticulture</li>
-        <li>construction</li>
-        <li>transport</li>
-        <li>logistics</li>
-        <li>programming</li>
-        <li>repair and maintenance</li>
-        <li>cleaning</li>
-      </ul>
-    </div>
-    </div>
-    
-    <br>
-    
-    <h3> Personal Statement</h3>
-
-    <!-- [Add a personal statement. It should include your career goals and show an employer why they should hire you] -->
-    <p class=pop>
-      Friendly and optimistic person, that’s curious about the task at hand.<br>
-      Previously working as charter skipper, with some years break studying; and<br>
-      more recently as a labourer in horticulture.
-      <br><br>
-      
-      <!-- ( Skip personal skills and just have these two paragraphs, 
-        under the titel ’!Personal Statement’ ? ) -->
-      Used to work both alone and in a team; giving and taking orders; learning and teaching.<br>
-      I wish to be a useful addition to the workforce.
-    </p>
-    
-    
-    <br>
-    
-    <!-- <div class=pop> -->
-        
-    <h3> Skills</h3>
-
-    <!-- [List technical skills relevant to the job you’re applying for. For example, invoicing, web development or food preparation] -->
-    <div class="transport pop">
-      <h4>Transport</h4>
-      <ul class=pop>
-        <li>Comfortable driving manual or automatic, and with trailer.</li>
-        <li>Comfortable driving long hours</li>
-        <li>Certified skipper, for boats up to 12 meters, 20 tons and 12 paying customers.</li>
-        <li>Driven a few forklifts</li>
-      </ul>
-    </div>
-    <div class="logistics pop">
-      <h4>Logistics</h4>
-      <ul class=pop>
-        <li>Passed course covering 10 different forklifts with 10T capacity</li>
-      </ul>
-    </div>
-    <div class="programming pop">
-      <h4>Programming</h4>
-      <ul class=pop>
-        <li>This website, made with HTML,CSS and JS (..bootstrap)</li>
-        <li>Completed two Full-Stack courses on Udemy</li>
-        <li>Completed Java, Python, JS, C on SoloLearn</li>
-        <li>Made GUI and Terminal based media players in Python and Shell</li>
-        <li>Comfortable with Linux and Windows system</li>
-        <li>Dabbled in
-            <ul>
-                <li>Windows PowerShell</li>
-                <li>Small coding projects for micro controllers in C</li>
-                <li>functional programming such as Haskell</li>
-            </ul>
-        </li>
-        <li>25 points on Project Euler</li>
-        <li>Some <a href="projects.html">projects</a></li>
-      </ul>
-    </div>
-    <div class="horticulture pop">
-      <h4>Horticulture</h4>
-      <ul class=pop>
-        <li>planting, moving and correcting trees</li>
-        <li>installing irrigation - laying and connecting hoses and sprinklers</li>
-        <li>maintenance: such as pruning, sleeving, bud rubbing, fertilizing</li>
-        <li>instructing new workers on how to do the same</li>
-      </ul>
-    </div>    
-    <div class="construction pop">
-      <h4>Construction</h4>
-      <ul class=pop>
-        <li>renovated a roof; changing roofing felt, wooden ribs, and roofing tiles</li>
-        <li>insulated a container home with custom styro foam plates, and foam</li>
-        <li>sanded and varnished benches, tables and decks</li>
-        <li>painted walls and ceilings</li>
-      </ul>
-    </div>
-    <div class="maintenance cleaning pop">
-      <h4>Maintenance</h4>
-      <ul class=pop>
-        <li>painting walls and ceilings</li>
-        <li>sanding and varnishing benches and tables</li>
-        <li>window cleaning</li>
-        <li>sewing/stitching</li>
-        <li>polishing</li>
-      </ul>
-    </div>
-    <div class="cleaning pop">
-      <h4>Cleaning</h4>
-      <ul class=pop>
-        <li>painting walls and ceilings</li>
-        <li>sanding and varnishing benches and tables</li>
-        <li>window cleaning</li>
-        <li>sewing/stitching</li>
-        <li>polishing</li>
-      </ul>
-    </div>
-    
-    <!-- </div> -->
-    
-    <!-- [List your personal skills – also called employability or transferable skills. The top skills employers value are: positive attitude, communication, teamwork, self-management, willingness to learn, thinking skills and . You can use these skills in your CV, or add others.] -->
-    <div class=pop>
-    <h4>Management</h4>
-    <p>
-      Informed people of different nationalities about options, boundaries, safety<br>
-      Instructed and taught newcomers to then work together at the task at hand
-    </p>
-    </div>
-
-    <div class=pop>
-    <h4>Initiative</h4>
-    <p>
-      Accustomed to be flexible to changes and improvising new strategies<br>
-      Constantly curious on how to improve/effectivise work performance<br>
-      Will seek advice if necessary, but happy to figure stuff out myself
-    </p>
-    </div>
-
-    <div class=pop>
-    <h4>Reliability</h4>
-    <p>
-      Comfortable with working alone, long shifts, and<br>
-      a good tolerance to stressful or otherwise strenuous situations.
-    </p>
-    </div>
-    
-    <br> <br>
-    
-    <div class=pop>
-    
-    <h4>Other</h4>
-    <p></p>
-    Fluent in
-    <ul class=pop>
-      <li>English</li>
-      <li>Swedish</li>
-    </ul>
-    
-    <div class="programming">
-    Well versed in
-    <ul class=pop>
-      <li>Windows, Linux, Mac</li>
-      <li>Office, Pages, Excel</li>
-      <li>Python, Javascript, Shell</li>
-    </ul>
-    </div>
-
-    
-    <div class="programming">
-    Familiar with
-    <ul class=pop>
-      <li>R, Java, C++, C, SQL, Haskell</li>
-    </ul>
-    </div>
-    
-    </div>
-    
-    <br>
-    
-    <div class=pop>
-    <h4>Licenses</h4>
-    <ul class=pop>
-        <li>Driver B/(Class 1 restricted), manual/automatic</li>
-        <li class="transport">Helmsman, Class 8 for boats up to 20\70 gross ton and 12 commercial passengers</li>
-        <li class="misc">Padi - Open water (active after a short refresher course)</li>
-        <li class="logistics">Forklifts A1-A4, B1-B6, 10 ton</li>
-        <li class="transport">VHF</li>
-    </ul>
-    </div>
-
-
-    <!-- Personal Skills
-    <!-- [List your personal skills – also called employability or transferable skills. The top skills employers value are: positive attitude, communication, teamwork, self-management, willingness to learn, thinking skills and . You can use these skills in your CV, or add others.] -->
-     
-     
-    <!-- See ”Personal Statement” -->
+    <img
+      id="mountain"
+      alt="mountain"
+      style="
+        width: 110%;
+        position: absolute;
+        right:2%;
+        left:0%;
+      "
+      src="resources/pics/mountain01.png"
+    >
     
     
     
-    <div id=script_embed_work>
-        <!-- WORK -->
-    </div>
     
-    <!--
-    <iframe
-      id="embed_work"
-      type='text/html'
-      src="work.html"
-      width=770px
-      height=1900px>
-    </iframe>
-    -->
     
-    <!--
-    <iframe id=iframe_work src="work.html" seamless height="100%" width="100%" style="border: none"></iframe>
-    <!-- Move script to header if working --
-    <script>
-        // Get work body; title menu will be ignored later when treated the same
-        let content = document.getElementById("iframe_work");
-        document.getElementById("script_embed_work").innerHTML = content;
-    </script>
-    <!---->
+    <br><br>
     
-    <embed
-      id="embed_work"
-      type='text/html'
-      src="work.html"
-      width=770px
-      height=1900px>
-    </embed>
     
-    <br><br><br>
-    
-    <hr>
-    
-    <div class="pdf-hide">
+    <div class="pdf-hide" style="
+      position: absolute;
+    ">
       <h3> Contact</h3>
+      <p>
+        <span class="pop">022 465 0558</span> &nbsp; <span class="pop">mickem90@gmail.com</span><br>
+        <em><span class="pop">25 Finch Street, Albert Town 9305, Otago</span></em>
+      </p>
+      
+      <!--
       <h4>
-        022 465 0558 &nbsp; mickem90@gmail.com
+        <span class="pop">022 465 0558</span> &nbsp; <span class="pop">mickem90@gmail.com</span>
         <br>
         <em>
-          25 Finch Street, Albert Town 9305, Otago
+           <span class="pop">25 Finch Street, Albert Town 9305, Otago</span>
         </em>
       </h4>
+      -->
+      
     </div>
 
     <br><br>

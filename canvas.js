@@ -159,6 +159,12 @@ window.addEventListener('load', function() {
 
 
 
+let backg = new Image();
+backg.onload = function() {
+    c.drawImage(backg,0,0,canvas.width,canvas.height);
+}
+backg.src = "resources/pics/fourier.jpeg"
+
 
 // TOUCH
 

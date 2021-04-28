@@ -1,6 +1,6 @@
 
 if [ -z "$1" ]; then
-    gedit index.html work.html projects.html style.css script.js canvas.js &
+    gedit index.html cover.html work.html projects.html style.css script.js canvas.js &
 else
     gedit $@ & #script.js style.css index.html $@ &
 fi
