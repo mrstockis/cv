@@ -276,25 +276,57 @@ canvas:hover
 }
 
 
-#clouds
+#cloud1
 {
-    opacity: 1;
+    opacity: .9;
     z-index: 1;
     
-    padding-left:100%;
-    width: 50%;
+    padding-left: 200px;
+    width: 350px;
+    padding-right: 0;
     position: absolute;
-    right: 27%;
+    /*right: 40%;*/
     top: 100px;
     -webkit-transition: .5s;
-    transition: right opacity .5s;
+    transition: padding opacity .5s;
 }
-#clouds:hover
+#cloud1:hover
 {
-    opacity: .6;
-    right: 12%;
+    opacity: 0;
+    padding-left: 400px;
 }
 
+#cloud2
+{
+    opacity: .9;
+    z-index: -1;
+    
+    /*padding-left:100%;*/
+    width: 20%;
+    position: absolute;
+    right: 30%;
+    top: 250px;
+}
+
+#cloud3
+{
+    opacity: .9;
+    z-index: -1;
+    
+    /*padding-left:100%;*/
+    width: 10%;
+    position: absolute;
+    right: 55%;
+    top: 320px;
+}
+
+#mountain
+{
+    width: 100%;
+    position: absolute;
+    right:0%;
+    left:0%;
+}
 
 
 /* css */
