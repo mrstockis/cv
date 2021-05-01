@@ -1,9 +1,29 @@
 
 /* Tags */
 
+/* Font (/-family/-size) persistancy */
+body, p, table, thead, td, input, output, select
+{
+    font-family: arial, sans-serif;
+    font-size: 16px;
+}
+
+h1,h2,h3,h4,h5
+{
+    font-family: 'Ubuntu Mono', monospace;
+    /*font-size: 16px;*/
+}
+
+
 body
 {
     font-family: arial, sans-serif;
+    /*font-family: times, sans-serif;*/
+    /*font-family: 'Nanum Pen Script', cursive;*/
+    /*font-family: 'Ubuntu Mono', monospace;*/
+    /*font-family: 'New Tegomin', serif;*/
+    
+    
     font-size: 16px;
     color: rgb(200,180,180);
     /*background-color: rgb(0,42,50);*/
@@ -88,17 +108,22 @@ output
 
 canvas
 {
+    opacity: 1;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    
     border-radius: 1rem;
     border: 1px solid black;
-    background: rgba(10,30,40,1);
+    background: rgb(10,30,40);
     /*background-image: url("resources/pics/fourier.jpeg");*/
     /*background-size: 50%;*/
     /*opacity: 1;*/
 }
 canvas:hover
 {
-    background: rgba(10,30,40,.9);
-    background-image: unset;
+    opacity: 0.8;
+    background: rgb(10,30,40);
+    /*background-image: unset;*/
 }
 
 
@@ -180,6 +205,22 @@ canvas:hover
     /*color: rgba(150,50,30,.8);*/
 }
 
+
+
+.avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background-image: url('resources/pics/self2.jpeg'); /*url('https://source.unsplash.com/nKC772R_qog');*/
+    background-size: 120%; /*cover;*/
+    background-position: 60% 50%;
+    /*background-position: 60% 40% ; /*self1*/
+    margin: 10px; 
+    position: absolute;
+}
+
+
+
 .welcome0
 {
     /*
@@ -228,6 +269,7 @@ canvas:hover
 
 
 
+
 .sub
 {
     color: grey;
@@ -245,11 +287,49 @@ canvas:hover
 
 /* IDs */
 
+#main-link-table
+{
+    position: fixed;
+    z-index: 100;
+    background-image: linear-gradient( #002b36, #002b36, rgba(0,0,0,0) );
+    border: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-right: 100%;
+    border-radius: 0%;
+}
+
+#main-link-table-space
+{
+    padding: 35px;
+}
+
+#dft_formula
+{
+    display: block;
+    text-align: center;
+    margin: auto 0 auto 0;
+    top: 20px;
+    left: 20px;
+}
+
+
+#dft_info
+{
+    font-family: 'New Tegomin', serif;
+    display: inline-block;
+    width: 300px;
+    position: absolute;
+    left: 550px;
+    top: 110px;
+}
+
 
 #freqTable1,
 #freqTable2
 {
-    text-align: top;
+    /*text-align: top;*/
+    top: 20px;
 }
 /*
 #freqTable1 thead
@@ -262,6 +342,21 @@ canvas:hover
 {
     color: rgba(200,50,50,.9);
 }
+
+#freqTable1
+{
+    position: absolute;
+    left: 25px;
+}
+
+
+#freqTable2
+{
+    position: absolute;
+    left: 740px;
+}
+
+
 
 #sail_wave {
     color: #105870;
@@ -343,18 +438,6 @@ canvas:hover
 }
 */
 
-
-.avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-image: url('resources/pics/self2.jpeg') ;/*url('https://source.unsplash.com/nKC772R_qog');*/
-    background-size: 120%; /*cover;*/
-    background-position: 60% 50% ;
-    /*background-position: 60% 40% ; /*self1*/
-    margin: 10px; 
-    position: absolute;
-}
 
 
 

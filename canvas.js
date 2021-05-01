@@ -452,8 +452,11 @@ function DFT_2d(shape, justUpdate=false) {  // formerShape=false
     xDFT.show(0,doClear=false);
     yDFT.show(0,doClear=false);
 
-    document.getElementById("freqTable1").getElementsByTagName('thead')[0].style="color: rgba(100,100,200,.9);"  // change cosine header to blue
-    toggle_display('freqTable2','block');
+    if ( document.getElementById("checkFreqTable").checked )
+    {
+        document.getElementById("freqTable1").getElementsByTagName('thead')[0].style="color: rgba(100,100,200,.9);"  // change cosine header to blue
+        toggle_display('freqTable2','block');
+    }
 
 
     var dftShape = [ {color:"white"} ];
@@ -481,7 +484,7 @@ function DFT_2d(shape, justUpdate=false) {  // formerShape=false
 
 
 
-var animateTimes = 000;
+var animateTimes = 0;
 var animateCount = 0;
 function animate()
 {
@@ -692,7 +695,7 @@ function delay(ms) {
 
 
 function table(headers,data) {
-    toggle_visibility('formulas','hidden');
+    //toggle_visibility('dft_formula','hidden');
     var fullTable = headers.concat(data);
     var newTable = "<table><thead><tr>";
     for (let c=0 ; c<headers.length ; c++) {
@@ -1001,7 +1004,7 @@ function DFT(data=false,filter=100,axis=false)
         
         
 
-        var tHead = [' Hz ','cos','sin'];
+        var tHead = ( document.getElementById("checkFreqTable").checked ) ? [' Hz ','cos','sin'] : [];
         var tData = [];
         //var freqTable = document.getElementById('freqTable1');
         
@@ -1034,28 +1037,32 @@ function DFT(data=false,filter=100,axis=false)
             
 
             //if ( Math.abs( this.k_i[f] ) + Math.abs( this.k_j[f] ) > 0.1 )  // ?
-            if ( Math.abs( this.filteredKI[f] ) + Math.abs( this.filteredKJ[f] ) > 0.1 )  // ?
+            
+            if ( document.getElementById("checkFreqTable").checked )
             {
-                tData.push( f, ki, kj );
-                //tData.push( f, ki, kj );
-                //tData.push( f, mRound(this.k_i[f]), mRound(this.k_j[f]) );
-                //Log(tData)
-                /*var cell0 = row.insertCell(0);
-                var cell1 = row.insertCell(1);
-                var cell2 = row.insertCell(2);
-                
-                cell0.innerHTML = f;
-                cell1.innerHTML = this.k_i[f];
-                cell2.innerHTML = this.k_j[f];*/
-                
-                
-                if ( Math.abs(fWidth) > 20 )
+                if ( Math.abs( this.filteredKI[f] ) + Math.abs( this.filteredKJ[f] ) > 0.1 )  // ?
                 {
-                    c.fillText(  f, plot_xPos + f*fWidth, plot_yPos +  20 );
-                    c.fillText( ki, plot_xPos + f*fWidth, plot_yPos + 2*20 );
-                    c.fillText( kj, plot_xPos + f*fWidth, plot_yPos + 3*20 );
+                    tData.push( f, ki, kj );
+                    //tData.push( f, ki, kj );
+                    //tData.push( f, mRound(this.k_i[f]), mRound(this.k_j[f]) );
+                    //Log(tData)
+                    /*var cell0 = row.insertCell(0);
+                    var cell1 = row.insertCell(1);
+                    var cell2 = row.insertCell(2);
+                    
+                    cell0.innerHTML = f;
+                    cell1.innerHTML = this.k_i[f];
+                    cell2.innerHTML = this.k_j[f];*/
+                    
+                    
+                    if ( Math.abs(fWidth) > 20 )
+                    {
+                        c.fillText(  f, plot_xPos + f*fWidth, plot_yPos +  20 );
+                        c.fillText( ki, plot_xPos + f*fWidth, plot_yPos + 2*20 );
+                        c.fillText( kj, plot_xPos + f*fWidth, plot_yPos + 3*20 );
+                    }
+                    
                 }
-                
             }
             
             c.beginPath();
@@ -1073,10 +1080,12 @@ function DFT(data=false,filter=100,axis=false)
         }
         
         //var tbl = document.createElement('table');
+        
+        
         var freqTable = table(tHead,tData);
         tableID = (this.axis == 'y') ? 'freqTable2' : 'freqTable1';
         document.getElementById(tableID).innerHTML = freqTable;
-        
+    
         //document.createElement('table');
         //var tbl = document.createTextNode
         //Log(tData);

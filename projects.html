@@ -13,6 +13,10 @@
     
     <script type='text/javascript' src='script.js'></script>
     
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap" rel="stylesheet">
+    
     <!--
     <script type="text/javascript"
         src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -26,9 +30,9 @@
 
   </head>
   
-  <body class=main>
+  <body>
     
-    <table>
+    <table id="main-link-table">
       <tr>
         <td>
           <h2><a href="index.html"><span class="">H</span>ome</a></h2>
@@ -51,7 +55,8 @@
         -->
       </tr>
     </table>
-    <hr size="3" noshade>
+    <div id="main-link-table-space"></div>
+    
     
     <h2> Projects</h2>
     
@@ -192,39 +197,73 @@
     <hr>
     <!--<div class="avatar" data-tooltip=" CAT ! "></div> -->
     
-    <p id=fourier_showcase>
+    <p id=fourier_showcase >
       
-      <h3 id="dftTitle" onclick="toggle_visibility('formulas')">Fourier Transformation - DFT</h3>
+      <h3 id="dftTitle" onclick="toggle_display('dft_formula')">Fourier Transformation - DFT</h3>
+  
+      
+      
+      <div style="position: relative;">
+          <table id="freqTable1">
+          </table>
+          <table id="freqTable2">
+          </table>
+      </div>
+
+      
       
       <table>
         <tr>
           <td>
-            <canvas id="myCanvas" style="position:relative">
-                
-            </canvas>
-            <img id='imgTemp' src="#" alt="" width=800px style="margin:0; position:absolute;left:5%; padding-top:45px; z-index:-10">
+            <!--<span style="position: relative">-->
+            <img id='imgTemp' src="#" alt="" style="
+              margin:0; 
+              position:absolute;
+              left:120px; 
+              padding-top:45px; 
+              z-index:-10;
+              max-height:400px;
+              max-width: 800px;
+              "
+            >
             
+            
+            
+            <canvas
+              id="myCanvas"
+            ></canvas>
+            <!--
+            onmousedown="
+              toggle_visibility('dft_formula','hidden')
+              "
+            ontouchstart="
+              toggle_visibility('dft_formula','hidden')
+              "
+            -->
             <script src="canvas.js"></script>
+            
           </td>
-          <td>
+          <!----
+          <td style="position: relative;">
               <table id="freqTable1">
               </table>
           </td>
-          <td id="freqTable2cell">
+          <td style="position: relative;" id="freqTable2cell">
               <table id="freqTable2">
               </table>
           </td>
-          <td id="formulas">
+          <!---->
+          <td id="dft_formula">
             <table id="formulaTable">
               <tr>
                 <td>
-                  <p style="text-align:center">
+                  <p style="text-align: center">
                     <span style="color: teal">The Discrete Fourier Transform (DFT)</span> of a dataset D, is
                   </p>
                   <p class=pop>
                     $$ F(x) = a_0 + {2 \over N} \sum_{n=0}^{N \over 2} (K_{in}cos(\tau x)+K_{jn}sin(\tau x) ) $$
                   </p>
-                  <p style="text-align:center">
+                  <p style="text-align: center">
                     where \( a_0 \) is the mean of the data, and<br>
                     the coefficients \(K_{in}\) and \(K_{jn}\) are defined as
                   </p>
@@ -241,15 +280,19 @@
               </tr>
             </table>
           </td>
+          <!---->
         </tr>
       </table>
       
-      <br>
+      <!-- <br> -->
+      
+      <!--
       <select id="canvasMode" name="cm" oninput="select_canvas()">
         <option value="modeDFT" selected>DFT</option>
         <option value="modeAnimate">Animation</option>
         <option value="modePaint">Paint</option>
       </select>
+      -->
       
       <div id="paintMode" hidden=true>
         <lable for="colorPick"> Pallete </lable>
@@ -275,6 +318,8 @@
       </div>
       
       <div id='dftMode'>
+        
+        <!--
         <input 
           type=text
           value="1 3 5 7 8 6 2 0"
@@ -289,6 +334,7 @@
           value="Create DFT"
           onclick="makeDFT(); toggle_display('freqTable2','none')"
         ></input>
+        -->
         
         <!--
         <input class="slider"
@@ -324,34 +370,46 @@
         
         
         <!--<div>-->
-          <!-- Dft Of Canvas -->
+          <!-- Dft Of Canvas --
           <input type="button" name="dft_of_canvas" value="DoC" placeholder="default_placeholder" id="dft_of_canvas" onclick="dftOfCanvas()" />
           <!---->
           
-          <span style="padding: 10px"></span>
+          <span style="padding: 5px"></span>
                     
           <lable for="showInitial"> Original </lable>
           <input
             type="checkbox"
             name="initialShow"
-            checked=True
             tooltip="Show initial shape"
             id="showInitial"
             onclick="updateShape()"
+            
+            checked
           />
           <lable for="showInitial"> City </lable>
           <input
             type="checkbox"
             name="doAlternate"
-            checked=True
             tooltip="Alternate freq. representation"
             id="doAlternate"
             onclick="updateShape()"
+            
+            checked
+          />
+          <lable for="checkFreqTable"> Table </lable>
+          <input
+            type="checkbox"
+            name="checkFreqTable"
+            tooltip="Show frequency table"
+            id="checkFreqTable"
+            onclick="updateShape()"
+            
+            
           />
           
-          <span style="padding: 10px"></span>
+          <span style="padding: 5px"></span>
           
-          <lable for="playSpeed"> Add millisecond </lable>
+          <lable for="playSpeed"> Add ms </lable>
           <input
             type="number"
             name="playSpeed"
@@ -360,8 +418,9 @@
             style="width:40px"
           />
           
-          <span style="padding: 10px"></span>
+          <span style="padding: 5px"></span>
           
+          Auto
           <input
             type="checkbox"
             name="alwaysPlayRes"
@@ -369,6 +428,7 @@
             id="alwaysPlayRes"
             checked=True
           />
+          Play
           <input
             class="slider"
             type="button"
@@ -379,8 +439,9 @@
             onclick="playResolutions()"
             style="position: static; width:25px; height:25px;font-size:15px;color:white;"
           />
-          <lable for="resolutionPick"> Frequencies </lable>
+          <!--<lable for="resolutionPick"> Frequencies </lable>-->
           
+          Frequencies
           <input
             class=slider
             id="resolutionPick"
@@ -397,12 +458,14 @@
           <!--
             onclick="resolutionPicked(); updateShape()"
           -->
-          
+
           <output
             id="showResolution"
             style="display:inline-block; width:25px; position: relative; left: 35px; text-align:right"
             onchange="resolutionPicked(); updateShape()"
           >100</output><span style="position:relative; left:38px">%</span>
+          
+          
           <br>
           <input id="upTemp" type=file></input>
           <br>
