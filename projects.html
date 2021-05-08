@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <!---->
-    <meta name="viewport" content="width=device-width,inital-scale=1.0">
+    <meta name="viewport" content="width=device-width">  <!-- ,inital-scale=1.0"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!---->
     <link rel="stylesheet" href="style.css">
@@ -17,11 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Princess+Sofia&display=swap" rel="stylesheet">
     
-    <!--
-    <script type="text/javascript"
-        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-    -->
+    
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
@@ -374,9 +370,10 @@
           <input type="button" name="dft_of_canvas" value="DoC" placeholder="default_placeholder" id="dft_of_canvas" onclick="dftOfCanvas()" />
           <!---->
           
-          <span style="padding: 5px"></span>
-                    
-          <lable for="showInitial"> Original </lable>
+          <span style="padding: 50px"></span>
+          
+          <span class=pop style="padding-right: 10px">
+          <lable for="showInitial"> Original</lable>
           <input
             type="checkbox"
             name="initialShow"
@@ -385,8 +382,10 @@
             onclick="updateShape()"
             
             checked
-          />
-          <lable for="showInitial"> City </lable>
+          /> </span>
+          
+          <span class=pop style="padding-right: 10px">
+          <lable for="doAlternate"> City</lable>
           <input
             type="checkbox"
             name="doAlternate"
@@ -395,8 +394,21 @@
             onclick="updateShape()"
             
             checked
-          />
-          <lable for="checkFreqTable"> Table </lable>
+          /> </span>
+          
+          <span class=pop style="padding-right: 10px">
+          <lable for="doAlign"> Align</lable>
+          <input
+            type="checkbox"
+            name="doAlign"
+            tooltip=""
+            id="doAlign"
+            onclick="updateShape()"
+
+          /> </span>
+          
+          <span class=pop style="padding-right: 10px">
+          <lable for="checkFreqTable"> Table</lable>
           <input
             type="checkbox"
             name="checkFreqTable"
@@ -404,31 +416,36 @@
             id="checkFreqTable"
             onclick="updateShape()"
             
-            
-          />
+          /> </span>
           
-          <span style="padding: 5px"></span>
+          <span style="padding: 20px"></span>
           
-          <lable for="playSpeed"> Add ms </lable>
+          <!--
+          <lable for="playRes"> Precision</lable>
           <input
             type="number"
-            name="playSpeed"
+            name="playRes"
             placeholder="delay"
-            id="playSpeed"
-            style="width:40px"
-          />
+            value=0
+            min=0
+            max=5
+            id="playRes"
+            style="width:15px; text-align:center"
+          /> <span style="padding: 5px"></span>
+          -->
           
-          <span style="padding: 5px"></span>
-          
-          Auto
+          <span class=pop style="padding-right: 5px">
+          <lable for="resolutionPick"> Auto</lable>
           <input
             type="checkbox"
             name="alwaysPlayRes"
             tooltip="Allways play after drawn"
             id="alwaysPlayRes"
             checked=True
-          />
-          Play
+          /> </span>
+          
+          <span class=pop style="padding-right: 5px">
+          <lable for="resolutionPick"> Play</lable>
           <input
             class="slider"
             type="button"
@@ -438,37 +455,50 @@
             id="playResBtn"
             onclick="playResolutions()"
             style="position: static; width:25px; height:25px;font-size:15px;color:white;"
-          />
-          <!--<lable for="resolutionPick"> Frequencies </lable>-->
+          /> </span>
           
-          Frequencies
-          <input
-            class=slider
-            id="resolutionPick"
-            name="resolutionPick"
-            type=range
-            value=100
-            min=0
-            max=100
-            oninput="showResolution.value=resolutionPick.value"
-            onchange="resolutionPicked(); updateShape()"
-            onmouseup="resolutionPicked(); updateShape()"
-            style="margin:0; z-index:10"
-          ></input>
-          <!--
-            onclick="resolutionPicked(); updateShape()"
-          -->
+          <div class="pop" style="display: inline-block">
+          
+            <lable for="resolutionPick"> Frequencies</lable>
+            <input
+              class=slider
+              id="resolutionPick"
+              name="resolutionPick"
+              type=range
+              value=100
+              min=0
+              max=100
+              oninput="showResolution.value=resolutionPick.value"
+              onchange="resolutionPicked(); updateShape()"
+              onmouseup="resolutionPicked(); updateShape()"
+              style="margin:0; z-index:10"
+            />
 
-          <output
-            id="showResolution"
-            style="display:inline-block; width:25px; position: relative; left: 35px; text-align:right"
-            onchange="resolutionPicked(); updateShape()"
-          >100</output><span style="position:relative; left:38px">%</span>
+            <output
+              id="showResolution"
+              style="display:inline-block; width:25px; position: relative; left: 35px; text-align:right"
+              onchange="resolutionPicked(); updateShape()"
+            >100</output><span style="position:relative; left:38px">%</span>
+            
+            <span style="position:relative; left: 70px; ">
+            <input
+              type="number"
+              name="playRes"
+              placeholder="0"
+              value=0
+              min=0
+              max=5
+              id="playRes"
+              style="width:20px; text-align:center"
+            /> </span>
+            
+          </div>
           
-          
+          <!----
           <br>
           <input id="upTemp" type=file></input>
           <br>
+          <!---->
         
       </div>
 

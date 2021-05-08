@@ -66,32 +66,6 @@ canvasEle.addEventListener('touchend', mouseupListener);;
 
 
 
-
-/*
-var range = 100;
-var r = 50;
-var g = 100;
-var b = 120;
-;
-// colorShiftScaling //;
-var cSS = Math.min(r,g,b) / range;
-var maxSize = 30;
-;
-for (i=0; i<range; i++);
-{;
-    var color = 'rgb('.concat(r-i*cSS,",", g-i*cSS,",", b-i*cSS,')');
-    c.strokeStyle = color;
-    var rx = Math.random()*canvas.width;
-    var ry = Math.random()*canvas.height;
-    var rs = Math.random()*maxSize;
-    c.beginPath();
-    c.arc(rx,ry,Math.random()*maxSize,0, TAU, false);;
-    c.stroke();
-};
-*/
-
-
-
 // DECLARATIONS & ASSIGNEMENTS //
 
 
@@ -113,7 +87,6 @@ keyPressed = {
     ctrl: false
 }
 
-
 var pen = {
     size:1,
     color:"white",
@@ -122,21 +95,24 @@ var pen = {
 
 
 
-/*
-var canvas = document.querySelector('canvas');
-canvas.width = window.innerWidth * 0.5;
-canvas.height = 400;
-var c = canvas.getContext('2d');
-*/
+
 
 var canvas = document.getElementById('myCanvas');
 canvas.width = 880;
 canvas.height = canvas.width * 9/16;
 var c = canvas.getContext('2d');
 
+let backg = new Image();
+backg.onload = function() {
+    c.drawImage(backg,0,0,canvas.width,canvas.height);
+}
+backg.src = "resources/pics/fourier.jpeg"
+
+
 
 // EVENTS //
 
+/*
 var templateLoaded = false
 window.addEventListener('load', function() {
     document.querySelector('input[type="file"]').addEventListener('change', function() {
@@ -156,14 +132,7 @@ window.addEventListener('load', function() {
         }
     });
 });
-
-
-
-let backg = new Image();
-backg.onload = function() {
-    c.drawImage(backg,0,0,canvas.width,canvas.height);
-}
-backg.src = "resources/pics/fourier.jpeg"
+*/
 
 
 // TOUCH
@@ -190,14 +159,16 @@ canvasPhone.addEventListener('touchend',
 canvas.addEventListener('touchmove',
     function(event)
     {
+        //Log(event)
+        //Log( event.touches[0] )
+    
         let canvasPos = {
             left: canvas.getBoundingClientRect().left,
             top: canvas.getBoundingClientRect().top
         }
-        mouse.x = event.touches[0].pageX - canvasPos.left;
-        mouse.y = event.touches[0].pageY - canvasPos.top ;
-        //shape.push( [mouse.x,mouse.y] )
-        //Log(event)
+        mouse.x = event.touches[0].clientX - canvasPos.left;
+        mouse.y = event.touches[0].clientY - canvasPos.top ;
+        
     }, false
 )
 
@@ -209,16 +180,6 @@ function paintStart(event)
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    //mouse.x = event.touches[0].pageX - canvasPos.left;
-    //mouse.y = event.touches[0].pageY - canvasPos.top;
-    Log(event)
-    /*
-    isPainting = true;
-    activeColor = document.getElementById('colorPick').value;
-    c.strokeStyle = activeColor;
-    c.lineWidth = activeSize;
-    shape = [activeColor];
-    //*/
     
     if ( canvasMode == "modeDFT" ) {
         clear(canvas) ; drawn = []
@@ -244,18 +205,13 @@ function paintEnd(event)
         left: canvas.getBoundingClientRect().left,
         top: canvas.getBoundingClientRect().top
     }
-    Log(event)
-    mouse.x = event.touches[0].pageX - canvasPos.left;
-    mouse.y = event.touches[0].pageY - canvasPos.top;
-
+    
+    mouse.x = event.touches[0].screenX - 0*canvasPos.left;
+    mouse.y = event.touches[0].screenY - 0*canvasPos.top;
+    
     c.stroke();
 
-    if (!keyPressed.ctrl) {
-        //isPainting = false;
-        pen.isPainting = false;
-        //drawn.push(shape);
-        drawn.push( truncate(shape) );
-    }
+    
     
     //*
     if (canvasMode == "modeDFT") {
@@ -336,13 +292,6 @@ function paintStart(event)
     mouse.x = event.x - canvasPos.left;
     mouse.y = event.y - canvasPos.top;
     
-    /*
-    isPainting = true;
-    activeColor = document.getElementById('colorPick').value;
-    c.strokeStyle = activeColor;
-    c.lineWidth = activeSize;
-    shape = [activeColor];
-    //*/
     
     if ( canvasMode == "modeDFT" ) { clear(canvas); drawn = []}
     
@@ -389,21 +338,22 @@ function paintEnd(event)
         if (doPlay) {
             playResolutions();
         } else {
-            repaint(drawn)
+            repaint(drawn);
         }
     }
     //*/
 }
 
-var initialShape
-function updateShape() {
-    clear(canvas)
+
+var initialShape;
+function updateShape(justUpdate=true) {
+    clear(canvas);
     if (drawn.length == 0) {
         makeDFT();
-        return
+        return;
     }
-    DFT_2d( drawn[0], true );
-    repaint(drawn)
+    DFT_2d( drawn[0], justUpdate );
+    repaint(drawn);
 }
 
 
@@ -427,25 +377,31 @@ function DFT_2d(shape, justUpdate=false) {  // formerShape=false
             xs.push(shape[i][0]);   // initialShape[i][0]
             ys.push(shape[i][1]);   // initialShape[i][1]    
         }
-        // Zero  average xs -> for n in xs ; n - average
-        let mx = average(xs)
-        let my = average(ys)
-        for (let n=0 ; n < xs.length ; n++) {
-            xs[n] = xs[n] - mx;
-            ys[n] = ys[n] - my;
-        }
         
+        //let doShow = document.getElementById("showInitial").checked;
+        //let doAlign = document.getElementById("doAlign").checked;
+        //let align = doShow && doAlign ? {x:xDFT.a0,y:yDFT.a0} : {x:0,y:0};
+        
+        // Zero  average xs -> for n in xs ; n - average
+        /*let mx = average(xs); //doAlign ? 0 : average(xs) ;
+        let my = average(ys); //doAlign ? 0 : average(ys) ;
+        
+        if (document.getElementById("doAlign").checked){
+            mx *= 0.5;
+            my *= 0.5;
+        }
+        for (let n=0 ; n < xs.length ; n++) {
+            xs[n] = xs[n]// - mx;
+            ys[n] = ys[n]// - my;
+        }
+        */
         xDFT.data = xs;
         yDFT.data = ys;
-        //Log("2d data made")
+        //Log("mx: "+ mx+"\n"+ "my: "+my)
     }
     
     let res = document.getElementById('resolutionPick').value;
     
-    /*
-    var xDFT = new DFT( xs, res, "x" );
-    var yDFT = new DFT( ys, res, "y" );
-    */
     xDFT.setFilter(res); xDFT.build(justUpdate)
     yDFT.setFilter(res); yDFT.build(justUpdate)
     
@@ -462,21 +418,21 @@ function DFT_2d(shape, justUpdate=false) {  // formerShape=false
     var dftShape = [ {color:"white"} ];
     /* pen = { size:1, color:"white", isPainting: false }*/
     for (let p = 0; p < xDFT.wave.length; p++){
-        dftShape.push( [ xDFT.wave[p][1] + posH(1/2),yDFT.wave[p][1] + posV(4/9) ] );
-        //dftShape.push( [ xDFT.wave[p][1],yDFT.wave[p][1] ] );
-    }
-    //dftShape.forEach(n => { Log(n) })
     
-    /*
-    if (hideInitial) {
-        drawn = [dftShape]
-    } else {
-        drawn[1] = dftShape;
+        if ( document.getElementById("doAlign").checked ) {
+            dftShape.push( [
+              xDFT.wave[p][1] - xDFT.a0 ,
+              yDFT.wave[p][1] - yDFT.a0]
+            );
+        } else {
+            dftShape.push( [
+              xDFT.wave[p][1] - 2*xDFT.a0 + posH(1/2),
+              yDFT.wave[p][1] - 2*yDFT.a0 + posV(4/9) ]
+            );
+        }
     }
-    */
+    
     drawn[1] = dftShape;
-    //Log(drawn.length);
-    //Log("2d made");
 
 }
 
@@ -550,16 +506,18 @@ function paint()
 
 async function repaint(drw, sleep=0){
     let doShow = document.getElementById("showInitial").checked;
+    //let doAlign = document.getElementById("doAlign").checked;
+    //let align = doShow && doAlign ? {x:xDFT.a0,y:yDFT.a0} : {x:0,y:0};
     let start = doShow ? 0 : 1 ;
     for (var shp=start; shp<drw.length; shp++) {
         c.beginPath();
         c.strokeStyle = drw[shp][0].color;
-        c.lineWidth = drw[shp][0].size;
+        c.lineWidth = 1;//drw[shp][0].size;
         c.moveTo( drw[shp][1][0], drw[shp][1][1] )
         for (var pos=1; pos<drw[shp].length; pos++) {
-            //await delay(sleep);
+            //if (shp > 0) { await delay(sleep); }
             var xy = drw[shp][pos] ;
-            c.lineTo( xy[0], xy[1] );
+            c.lineTo( xy[0], xy[1]);
             c.stroke();
         }
     }
@@ -571,24 +529,32 @@ async function repaint(drw, sleep=0){
 async function playResolutions()
 {
     let oldRes = 0;
-    let speed = document.getElementById("playSpeed").value;
-    let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
+    let res = document.getElementById("playRes").value;
+    //let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
+    Log(res)
+    res = ( res ) ? res : 0 ;
     
-    for ( let i=1; i<=100; i++ )
+    for ( let i=1; i<= 100*10**res; i++ )
     {
+        //i = i/decimals; //i / (10**decimals);
+        
         if (pen.isPainting){
             return 
         }
-        let newRes = rounder( 1 + 100*(1-1/i) );
-
+        let newRes = mRound( 1/(10**res) + 100*(1-1/i) , res );
+        /*let newRes =  sumList( xDFT.filteredKI ) + sumList( xDFT.filteredKJ ) +
+                      sumList( yDFT.filteredKI ) + sumList( yDFT.filteredKJ )
+        */
         if (newRes > oldRes) {
             oldRes = newRes;
             document.getElementById('resolutionPick').value = newRes;
             document.getElementById('showResolution').innerHTML = newRes;
             resolutionPicked();
+            //if( xDFT.new_weights || yDFT.new_weights ) {
             updateShape();
+            //}
             
-            await delay(speed); // milliseconds
+            await delay(""); // milliseconds
         }
     }
 }
@@ -666,7 +632,6 @@ function dftOfCanvas()
         pixs = imgd.data;
         ws = []; //rs = [], gs = [], bs = []
     
-    
     Log(pixs)
     //Log(w_dft.wave);
 }
@@ -703,7 +668,7 @@ function table(headers,data) {
         newTable += fullTable[c];
         newTable += "</td>";
     }
-    newTable += "<tr></thead>";
+    newTable += "</tr></thead>";
     for (let r=1 ; r<(1 + data.length/headers.length) && r<17 ; r++)
     {
         newTable += "<tr style='text-align:center'>";
@@ -715,30 +680,18 @@ function table(headers,data) {
         newTable += "</tr>";
     }
     newTable += "</table>";
-    /*
-    var newTable = "<table>";
-    for (let r=0 ; r<(1 + data.length/headers.length) && r<17 ; r++)
-    {
-        newTable += "<tr>";
-        for (let c=0 ; c<headers.length ; c++) {
-            newTable += "<td>";
-            newTable += fullTable[c+3*r];
-            newTable += "</td>";
-        }
-        newTable += "</tr>";
-    }
-    newTable += "</table>";
-    */
+
     return newTable;
 }
 
-function removeNaN(zhape)
+
+function removeNaN(_shape)
 {
-    var filteredShape = [ zhape[0] ];
-    for (let i=1; i<zhape.length; i++)
+    var filteredShape = [ _shape[0] ];
+    for (let i=1; i<_shape.length; i++)
     {
-        if (!isNaN(zhape[i][0])) {
-            filteredShape.push(zhape[i])
+        if ( !isNaN( _shape[i][0] ) ) {
+            filteredShape.push(_shape[i])
         }
     }
     return filteredShape;
@@ -760,6 +713,16 @@ function truncate(arr) {
 }
 
 
+
+function sumList(a) {
+    var s = 0;
+    for (var i=0 ; i<a.length ; i++) {
+        s += a[i][1] ;
+    }
+    return s;
+}
+
+
 function sumLists(a,b) {
     var s = [];
     for (var i=0 ; i<a.length ; i++) {
@@ -769,21 +732,19 @@ function sumLists(a,b) {
 }
 
 
-function mRound(n) {
-    //Log( "n@mRound: " + n )
+function mRound(n,decimals=1) {
     if ( typeof(n) != 'number' ) return;
-    return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
+    return Math.round( n * 10**decimals ) / 10**decimals
+    //return Math.round(n) == n.toFixed(2) ? Math.round(n) : n.toFixed(1);
 }
 
+
 function average (nums) {
-    //var nlist = new Array(nums);
-    //return nums.reduce((a, b) => (a + b) / nums.length);
     var total = 0;
     for ( let i=0 ; i<nums.length ; i++ ) {
         total += Number(nums[i]);
     }
-    //Log( "nums length " + nums.length )
-    return (total/nums.length)
+    return (total/nums.length);
 }
 
 
@@ -791,18 +752,18 @@ function stringToNumbers(str) {
     var list = [];
     list = str.split(' ');
     list.forEach( n => Number(n) );
-    //Log( "list@strToNum: " + list );
+
     return list   
 }
 
 
-function posH(part) {  // width
-    return part*canvas.width
+function posH(part) {  // horizontal position
+    return part*canvas.width;
 }
 
 
-function posV(part) {  // height
-    return part*canvas.height
+function posV(part) {  // vertical position
+    return part*canvas.height;
 }
 
 
@@ -831,15 +792,25 @@ function Sine(hz) {
 function DFT(data=false,filter=100,axis=false)
 {
     this.filter = 100-filter;
+    this.filteredKI = [];
+    this.filteredKJ = [];
     this.maxWeight = 0;
-    this.filteredKI = []
-    this.filteredKJ = []
-    this.axis = axis
+    this.axis = axis;
+    this.a0 = 0;
+    //this.new_weights = false;
     this.isDrawing = false;
     this.drawRequest = false;
     this.data = data;
     this.example = [ 10, -2.9, 0, 2.9, -10, -17.1, 0, 17.1 ];  // 10cos(1hz) + 10sin(2hz)
 
+    this.res = 10*TAU**2 //31*TAU;
+        
+    this.zoom = 10;
+    this.xStretch = TAU *this.zoom
+    this.yStretch = 1 *this.zoom
+    this.xPos = posH(1/10);
+    this.yPos = posV(1/2);
+    
     this.k_i = [];
     this.k_j = [];
     var ki;
@@ -851,11 +822,13 @@ function DFT(data=false,filter=100,axis=false)
 
         if (!this.data) {return};
         
+        
+        // Don't rebuild weights, when dealing with the same data
         if (!justUpdate)
         {
             this.N = this.data.length;
             
-            this.a0 = average(this.data);
+            this.a0 = average(this.data);  // either the average or just k_i[0]
             //Log( " a0@build " + this.a0 );
             //Log( "set " + this.data )
             
@@ -874,46 +847,61 @@ function DFT(data=false,filter=100,axis=false)
                 this.k_j.push( kj*(2/this.N) );
             }
             
-            // Figure max weight and scale filter accordingly
-            let maxI = Math.max( ...this.k_i.map(Math.abs) );
+            // Figure max weight to properly scale filter later
+            // Slice() removes a0, so that the dominant y-shift is not included
+            let maxI = Math.max( ...this.k_i.slice(1).map(Math.abs) );
             let maxJ = Math.max( ...this.k_j.map(Math.abs) );
             this.maxWeight = ( maxI > maxJ ) ? maxI : maxJ ;
-            //Log(this.axis + '-axis re-weighed')
-            //Log(this.maxWeight)
         }
 
         var scaledFilter = this.maxWeight * (this.filter/100) ;
+
         /*
-        Log( "maxWeight: " + maxWeight )
-        Log( "scaledFilter:" + scaledFilter )
+        let oldAverageKI = average(this.filteredKI);
+        let oldAverageKJ = average(this.filteredKJ);
         */
-        this.filteredKI = []
-        this.filteredKJ = []
+        this.filteredKI = [];
+        this.filteredKJ = [];
+        /*let oldKI,
+            oldKJ,
+            equal = 1;*/
+            
         // Create new filtered weights
         for ( let k=0 ; k < this.N/2 ; k++ ){
+            /*oldKI = this.filteredKI[k];
+            oldKJ = this.filteredKJ[k];*/
             this.filteredKI[k] = ( Math.abs(this.k_i[k]) > scaledFilter ) ? this.k_i[k] : 0 ;
             this.filteredKJ[k] = ( Math.abs(this.k_j[k]) > scaledFilter ) ? this.k_j[k] : 0 ;
+            /*
+            Log( this.filteredKI[k] - oldKI );
+            Log( this.filteredKJ[k] - oldKJ );
+            oldKI = ( oldKI == this.filteredKI[k] )? 1 : 0;
+            oldKJ = ( oldKJ == this.filteredKJ[k] )? 1 : 0;
+            equal = equal * oldKI * oldKJ;*/
         }
 
+        // Don't rebuild the wave, if no change was made to the weights
+        /* But is this even slower ?
+        if ( oldAverageKI == average(this.filteredKI) && oldAverageKJ == average(this.filteredKJ) ) {
+          //Log("No change in weights");
+          //this.new_weights = false;
+          return;  
+        }
         
+        Log("Change in weights");
+        this.new_weights = true;
+        */
         
         this.wave = [];
-        this.res = 10*TAU**2 //31*TAU;
         
-        this.zoom = 10;
-        this.xStretch = TAU *this.zoom
-        this.yStretch = 1 *this.zoom
         
         var FX = 0;
         var FY = 0;
         var cH = canvas.height;
         var cW = canvas.width;
         
-        this.xPos = posH(1/10);
-        this.yPos = posV(1/2);
         
-        
-        var correct = (this.axis) ? 0 : this.k_i[0];  // WHY any number BUT 0 ??
+        var correct = (this.axis) ? 0 : this.k_i[0];
         
         // Try flip the Y sinusoid correctly
         let flipper = (this.axis == 'y') ? (-1) : 1;
@@ -937,21 +925,24 @@ function DFT(data=false,filter=100,axis=false)
              this.wave.push( [ x , FY -correct ] );
         }
     }
-    
     this.build()
+    
     
     this.setFilter = function(filter)
     {
         this.filter = 100-filter;
     }
     
+    
     this.show = async function(sleep=0,doClear=true) {
         if (this.drawRequest == true) { return }
         if (this.isDrawing) { this.drawRequest = true }
         
+        /*
         while (this.isDrawing) {
             await delay( 100*(sleep) );
         }
+        */
 
         this.drawRequest = false
         this.isDrawing = true;
@@ -971,24 +962,24 @@ function DFT(data=false,filter=100,axis=false)
         c.textAlign = 'center';
         c.lineWidth = 2;
         
-        doAlt = document.getElementById("doAlternate").checked;
+        doAlternate = document.getElementById("doAlternate").checked;
         
         
         var
-            plot_xPos = doAlt ? posH(7/10) : posH(6/10);
+            plot_xPos = doAlternate ? posH(7/10) : posH(6/10);
             plot_yPos = posV(1/2)
         ;
         
         if (this.axis == "x") {
-            plot_xPos = doAlt ? posH(2/7) : posH(1/10);
+            plot_xPos = doAlternate ? posH(2/7) : posH(1/10);
             plot_yPos = posV(9/10);
             
         } else if (this.axis == "y") {
-            plot_xPos = doAlt ? posH(5/7) : posH(11/20);
+            plot_xPos = doAlternate ? posH(5/7) : posH(11/20);
             plot_yPos = posV(9/10);
         }
         
-        var fWidth = 70*(10 / this.N) * (doAlt ? 0.5 : 1) ;
+        var fWidth = 70*(10 / this.N) * (doAlternate ? 0.5 : 1) ;
         
         /*
         if (!this.axis) {
@@ -1021,11 +1012,11 @@ function DFT(data=false,filter=100,axis=false)
         // Try flip the Y sinusoid correctly
         let flipper = (this.axis == 'y') ? (-1) : 1;
         
-        for (var f=0 ; f<this.N ; f++) {
+        for (var f=1 ; f<this.N ; f++) {   // count from 1 to dodge dominant a0
             
             //var row = freqTable.insertRow(f);
             
-            fWidth *= (doAlt) ? (-1) : 1;
+            fWidth *= (doAlternate) ? (-1) : 1;
             
             ki = flipper* mRound(this.filteredKI[f]);
             kj = flipper* mRound(this.filteredKJ[f]);
@@ -1081,7 +1072,6 @@ function DFT(data=false,filter=100,axis=false)
         
         //var tbl = document.createElement('table');
         
-        
         var freqTable = table(tHead,tData);
         tableID = (this.axis == 'y') ? 'freqTable2' : 'freqTable1';
         document.getElementById(tableID).innerHTML = freqTable;
@@ -1114,13 +1104,14 @@ function DFT(data=false,filter=100,axis=false)
         
         
         for ( var t=0 ; t<(this.wave.length) ; t++ ) {
-            sleep ? await delay(sleep) : 0;
+            await delay(sleep);
             c.lineTo( this.xPos +(t*spaceScale), flipper*(-this.wave[t][1]/flatten) * this.yStretch + this.yPos);
             //Log( this.wave[t] );
             c.stroke()
         }
     }
 }
+
 
 
 function Ball(
@@ -1306,6 +1297,7 @@ function showPaint() {
 // MAIN //
 
 
+/*
 var ball_1 = new Ball(200,100,3,'blue',14,20);
 var ball_2 = new Ball(50,210,8,'red',24,10);
 var ball_3 = new Ball(20,100,12,'green',4,5);
@@ -1329,7 +1321,6 @@ for (let i=0; i<50; i++)
 
 
 var drawn = [];
-
 
 var tDFT = new DFT( [], 100 );
 var xDFT = new DFT( [], 100, "x" );

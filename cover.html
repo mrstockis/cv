@@ -19,7 +19,7 @@
     
     <!-- <iframe src="menu.html" seamless width="100%" style="border: none"></iframe>  -->
     
-    <table id="main-link-table"> 
+    <table id="main-link-table" class=pdf-hide> 
       <tr>
         <td>
           <h2><a href="index.html"><span class="">H</span>ome</a></h2>
@@ -57,7 +57,7 @@
       </tr>
     </table>
     <!-- <hr size="3" noshade> -->
-    <div id="main-link-table-space"></div>
+    <div id="main-link-table-space" class=pdf-hide></div>
     
     
     <table>
@@ -112,7 +112,7 @@
     
     Mikael Malmberg
     -->
-    <div id=professionSelector>
+    <div id=professionSelector class="">
       <!--<lable for="professionsMode"> Area </lable>-->
       <select id="professionMode" oninput="select_profession()">
         <option value=".all" selected>All</option>
@@ -129,22 +129,23 @@
     <br>
     
     
-    
-    <h3> Objective</h3>
-    <div class=pop>
-    <!-- [Add details about the type of work, role and industry you would like] # short and concise -->
-    Looking for work within <span id="out_profession"></span>
-    <div id="areas_list">
-      <ul class=pop>
-        <li>horticulture</li>
-        <li>construction</li>
-        <li>transport</li>
-        <li>logistics</li>
-        <li>programming</li>
-        <li>repair and maintenance</li>
-        <li>cleaning</li>
-      </ul>
-    </div>
+    <div id="objective_div" class="pdf-hide">
+      <h3> Objective</h3>
+      <div class=pop>
+        <!-- [Add details about the type of work, role and industry you would like] # short and concise -->
+        Looking for work within <span id="out_profession"></span>
+        <div id="areas_list">
+          <ul class=pop>
+            <li>horticulture</li>
+            <li>construction</li>
+            <li>transport</li>
+            <li>logistics</li>
+            <li>programming</li>
+            <li>repair and maintenance</li>
+            <li>cleaning</li>
+          </ul>
+        </div>
+      </div>
     </div>
     
     <br>
@@ -273,7 +274,7 @@
     </p>
     </div>
     
-    <br> <br>
+    <br> <!-- <br> -->
     
     <div class=pop>
     
@@ -304,7 +305,7 @@
     
     </div>
     
-    <br>
+    <!-- <br> -->
     
     <div class=pop>
     <h4>Licenses</h4>
