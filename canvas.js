@@ -215,9 +215,9 @@ function paintEnd(event)
     
     //*
     if (canvasMode == "modeDFT") {
-        shape = removeNaN(shape);
-        let tshape = truncate(shape);
-        DFT_2d( tshape );
+        //shape = removeNaN(shape);
+        //let tshape = shape;  // truncate() ?
+        DFT_2d( shape );
         //clear(canvas)
         
         let doPlay = document.getElementById('alwaysPlayRes').checked;
@@ -324,7 +324,7 @@ function paintEnd(event)
         //isPainting = false;
         pen.isPainting = false;
         //drawn.push(shape);
-        drawn.push( truncate(shape) );
+        drawn.push( shape );  // truncate() ?
     }
     
     //*
@@ -531,20 +531,21 @@ async function playResolutions()
     let oldRes = 0;
     let res = document.getElementById("playRes").value;
     //let rounder = document.getElementById("playSpeed").value ? mRound : Math.round ;
-    Log(res)
+    //Log(res)
     res = ( res ) ? res : 0 ;
     
     for ( let i=1; i<= 100*10**res; i++ )
     {
         //i = i/decimals; //i / (10**decimals);
-        
+
         if (pen.isPainting){
             return 
         }
         let newRes = mRound( 1/(10**res) + 100*(1-1/i) , res );
-        /*let newRes =  sumList( xDFT.filteredKI ) + sumList( xDFT.filteredKJ ) +
-                      sumList( yDFT.filteredKI ) + sumList( yDFT.filteredKJ )
-        */
+        
+        
+        //let newRes =  i/(10**res)
+        
         if (newRes > oldRes) {
             oldRes = newRes;
             document.getElementById('resolutionPick').value = newRes;
@@ -554,7 +555,7 @@ async function playResolutions()
             updateShape();
             //}
             
-            await delay(""); // milliseconds
+            await delay(); // milliseconds
         }
     }
 }
@@ -957,12 +958,18 @@ function DFT(data=false,filter=100,axis=false)
     
     
     this.frequencplot_yPos = function() {
+    
+        //if ( ! document.getElementById("checkFreqTable").checked ) { return; }
+        
         c.font = '12px Times';
         c.fillStyle = 'white';
         c.textAlign = 'center';
         c.lineWidth = 2;
         
-        doAlternate = document.getElementById("doAlternate").checked;
+        let doAlternate = document.getElementById("doAlternate").checked;
+        
+        let dec = document.getElementById("playRes").value;
+        dec = (dec) ? dec : 1;
         
         
         var
@@ -1018,8 +1025,8 @@ function DFT(data=false,filter=100,axis=false)
             
             fWidth *= (doAlternate) ? (-1) : 1;
             
-            ki = flipper* mRound(this.filteredKI[f]);
-            kj = flipper* mRound(this.filteredKJ[f]);
+            ki = flipper* mRound( this.filteredKI[f], dec ) ;
+            kj = flipper* mRound( this.filteredKJ[f], dec ) ;
             
             /*
             var ki = flipper* mRound(this.k_i[f]);
@@ -1031,7 +1038,7 @@ function DFT(data=false,filter=100,axis=false)
             
             if ( document.getElementById("checkFreqTable").checked )
             {
-                if ( Math.abs( this.filteredKI[f] ) + Math.abs( this.filteredKJ[f] ) > 0.1 )  // ?
+                if ( Math.abs(ki) + Math.abs(kj) > 0 )  //Math.abs( this.filteredKI[f] ) + Math.abs( this.filteredKJ[f] ) > 0 )  // 0.1 ?
                 {
                     tData.push( f, ki, kj );
                     //tData.push( f, ki, kj );

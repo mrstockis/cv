@@ -9,6 +9,8 @@
     <link rel="icon" href="resources/pics/favicon.ico">
     
     <script type='text/javascript' src='script.js'></script>
+    <script type='text/javascript' src=menu.js></script>
+    <script type='text/javascript' src=contact.js></script>
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
@@ -17,8 +19,10 @@
   
   <body>
     
-    <!-- <iframe src="menu.html" seamless width="100%" style="border: none"></iframe>  -->
+    <div id=main-link-container>
+    </div> <script> CreateMenu() </script>
     
+    <!--
     <table id="main-link-table" class=pdf-hide> 
       <tr>
         <td>
@@ -52,12 +56,13 @@
           <a href="contact.html">
             <img title="Contact" src="resources/pics/envelope.jpg" width=30px>
           </a>
-        </td> -->
+        </td> --
 
       </tr>
     </table>
-    <!-- <hr size="3" noshade> -->
+    <!-- <hr size="3" noshade> --
     <div id="main-link-table-space" class=pdf-hide></div>
+    -->
     
     
     <table>
@@ -73,17 +78,22 @@
       </tr>
     </table>
 
+    <div id=contact-info-container></div>
+    <script> CreateContactInfo() </script>
+    
     <!-- <h2 class=sub> Presentation</h2> -->
     <!--<h3> Contact</h3>-->
-    <p>022 465 0558 &nbsp; mickem90@gmail.com<br><em>25 Finch Street, Albert Town 9305, Otago</em>
+    <!--<p>022 465 0558 &nbsp; mickem90@gmail.com<br><em>25 Finch Street, Albert Town 9305, Otago</em>
           <!--
           <span onmouseover="document.getElementById('myimg').style.display='block';"
                 onmouseout="document.getElementById('myimg').style.display='none';">Otago
           </span>
           <img id="myimg" style="display:none" src="https://www.otago.ac.nz/cs/groups/public/@otagobulletineditor/documents/contributorimg/otago042431.jpg" />
-          -->
-      <!-- </h4> -->
+          --
+      <!-- </h4> --
     </p>
+    -->
+    
     <!--
     022 465 0558 &nbsp; mickem90@gmail.com <br>
     <em>

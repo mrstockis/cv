@@ -9,6 +9,8 @@
     <link rel="icon" href="resources/pics/favicon.ico">
     
     <script type='text/javascript' src='script.js'></script>
+    <script type='text/javascript' src=menu.js></script>
+    <script type='text/javascript' src=contact.js></script>
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
@@ -17,6 +19,10 @@
   
   <body>
   
+    <div id=main-link-container>
+    </div> <script> CreateMenu() </script>
+  
+    <!--
     <table id="main-link-table" tablespacing=10 class=pdf-hide>
       <tr>
         <td>
@@ -40,11 +46,12 @@
             <img src="resources/pics/envelope.jpg" width=30px>
           </a>
         </td>
-        -->
+        --
       </tr>
     </table>
-    <!-- <hr size="3" noshade> -->
+    <!-- <hr size="3" noshade> --
     <div id="main-link-table-space" class=pdf-hide></div>
+    -->
     
     
     <h2> Work History</h2>
@@ -145,6 +152,9 @@
     <hr>
     
     
+    <div id=contact-info-container class=pdf-hide></div>
+    <script> CreateContactInfo(with_title=true) </script>
+    <!--
     <footer class="pdf-hide">
       022 465 0558 &nbsp; mickem90@gmail.com
       <br>
@@ -152,6 +162,7 @@
         25 Finch Street, Albert Town 9305, Otago
       </em>
     </footer>
+    -->
     
     <br><br>
     

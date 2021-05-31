@@ -9,6 +9,8 @@
     <link rel="icon" href="resources/pics/favicon.ico">
     
     <script type='text/javascript' src='script.js'></script>
+    <script type='text/javascript' src=menu.js></script>
+    <script type='text/javascript' src=contact.js></script>
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=New+Tegomin&display=swap" rel="stylesheet">
@@ -19,9 +21,11 @@
   </head>
   
   <body>
+  
+    <div id=main-link-container>
+    </div> <script> CreateMenu() </script>
     
-    <!-- <iframe src="menu.html" seamless width="100%" style="border: none"></iframe>  -->
-    
+    <!--
     <table id="main-link-table"> 
       <tr>
         <td>
@@ -55,12 +59,13 @@
           <a href="contact.html">
             <img title="Contact" src="resources/pics/envelope.jpg" width=30px>
           </a>
-        </td> -->
+        </td> --
 
       </tr>
     </table>
-    <!-- <hr size="3" noshade> -->
+    <!-- <hr size="3" noshade> --
     <div id="main-link-table-space"></div>
+    -->
     
     
     <div class="avatar"></div>
@@ -124,7 +129,10 @@
     
     <br><br>
     
+    <div id=contact-info-container></div>
+    <script> CreateContactInfo(with_title=true) </script>
     
+    <!--
     <div class="pdf-hide" style="
       position: absolute;
     ">
@@ -142,9 +150,10 @@
            <span class="pop">25 Finch Street, Albert Town 9305, Otago</span>
         </em>
       </h4>
-      -->
+      --
       
     </div>
+    -->
 
     <br><br>
 
