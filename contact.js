@@ -6,7 +6,7 @@ function CreateContactInfo(head=false)
     ${ head ? "<h3> Contact</h3>" : "" }
     <p>
       <span class="pop">022 465 0558</span> &nbsp; <span class="pop">mickem90@gmail.com</span><br>
-      <em><span class="pop">25 Finch Street, Albert Town 9305, Otago</span></em>
+      <em><span class="pop">124c Tennyson St., Christchurch 8023</span></em>
     </p>
   `
     
