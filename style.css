@@ -14,6 +14,12 @@ h1,h2,h3,h4,h5
     /*font-size: 16px;*/
 }
 
+/**/
+li
+{
+    padding-top:2px;
+}
+/**/
 
 body
 {
@@ -72,11 +78,6 @@ input[type=checkbox]::hover
   border: none;
   margin: 0;
   padding: 0;
-}
-
-
-lable
-{
 }
 
 
@@ -232,13 +233,13 @@ canvas:hover
     color: rgb(255,255,255);
     font-family: 'Princess Sofia', cursive;
 }
-.cap
+/*.cap
 {
     /*font-family: 'Princess Sofia', cursive;*/
     /*font-family: 'Nanum Pen Script', cursive;*/
     /*font-family: 'Ubuntu Mono', monospace;*/
     /*color: rgba(150,50,30,.8);*/
-}
+/*}*/
 
 
 
