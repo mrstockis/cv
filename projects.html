@@ -31,7 +31,7 @@
   
   <body>
     
-    <div id=main-link-container>
+    <!--<div id=main-link-container>-->
     <!--
     <table id="main-link-table">
       <tr>
@@ -58,11 +58,11 @@
     </table>
     <div id="main-link-table-space"></div>
     -->
-    </div> <script> CreateMenu(Yeah_Do_Show_Projects=true) </script>
+    <!--</div>--> 
+    <!--<script> CreateMenu(Yeah_Do_Show_Projects=true) </script> -->
     <!--<script>CreateMenu()</script>-->
     
-    
-    <h2> Projects</h2>
+    <h2> Project page</h2>
     
     <h3> Index </h3>
     <ul>
@@ -78,6 +78,9 @@
         <li> <a href="#fourier_showcase"> Fourier Transform (DFT) </a> </li>
         <li> <a href="#pf_showcase"> Prime Factorization </a> </li>
       </ul>
+
+      <li> <a href="#useful_showcase">Utility</a>
+          
     </ul>
     
     <hr>
@@ -100,8 +103,11 @@
     <p id=gui_showcase>
       <h3>µTube</h3>
       <p class=pop>
-        here will be a showcase of µTube
+        <a href"" alt='broken'>µTube</a>
+        a lightweight mediahandler <br>
+        that can search, download and save videos and music of youtube 
       </p>
+      <img src="resources/pics/uTube.png" alt="missing">
     </p>
     
     <hr>
@@ -109,9 +115,11 @@
     <p id=terminal_showcase>
       <h3>WebSound</h3>
       <p class=pop>
-        here will be a showcase of WebSound
+        <a href="https://github.com/mrstockis/WebSound">WebSound</a>
+         is a another simple mediahandler, like µTube, but more versatile <br>
+         and made for the linux terminal, written in bash
       </p>
-      <a href="https://github.com/mrstockis/WebSound">GitHub page</a>
+      <img src="resources/pics/websound.png" height=150px alt="missing">
     </p>
     
     <hr>
@@ -511,21 +519,24 @@
             <tr>
               <td><h3 style='text-align:center'>Desmos</h3>
                 <p style='text-align:center'>
-                  Examples of DFT<br>made in Desmos,<br>an online calculator
+                  Examples of DFT<br>made in <a href="https://www.desmos.com/">Desmos</a>,<br>an online calculator
                 </p>
               </td>
               <td>
                 <iframe src="https://www.desmos.com/calculator/moqy714pu2?embed" width="300" height="300" style="border: none" frameborder=0></iframe>
-              </td>
+              </td><!--
               <td>
                 <iframe src="https://www.desmos.com/calculator/yfmmfhex4s?embed" width="440" height="300" style="border: none" frameborder=0></iframe>
+              </td>-->
+              <td>
+                <iframe src="https://www.desmos.com/calculator/39j64ssblq?embed" width="300" height="300" style="border: none" frameborder=0></iframe>
               </td>
             </tr>
             <tr>
               <td>
               </td>
               <td><i>DFT of Bat</i></td>
-              <td><i>Pokemon.jpeg</i></td>
+              <td><i>Coastal.jpeg</i></td>
             </tr>
           </table>
           <!--
@@ -545,10 +556,7 @@
             </div>
           </div>
           -->
-      </div>
-
-      
-      
+      </div>  
     </p>
     
     <hr>
@@ -563,6 +571,20 @@
       placeholder=" Number to factor"
       oninput="pf('product','factors'); pf2('product','factorsJAX')">
       <output id="factors"></output>
+    </p>
+
+    <hr>
+
+    <p id=useful_showcase>
+      <h3>Utility</h3>
+      <p class=pop>
+        <a
+          href="https://github.com/mrstockis/stuff">
+          Useful scripts
+        </a> and configs for the linux environment
+      </p>
+    </p>
+      
     </p>
     
 
