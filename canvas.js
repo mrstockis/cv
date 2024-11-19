@@ -75,6 +75,8 @@ var R = 100;  //  DFT resolution %
 
 var shape = [];  // [e] where e = [ color, size, [(x0,y0),(x1,y1),..] ]  ????
 
+var shapes = []; // to store several shapes. Shift+C will clear the list.
+
 
 var canvasMode = 'modeDFT';
 
@@ -84,7 +86,7 @@ var mouse = {
 }
 
 keyPressed = {
-    ctrl: false
+    ctrl: false,
 }
 
 var pen = {
@@ -293,7 +295,7 @@ function paintStart(event)
     mouse.y = event.y - canvasPos.top;
     
     
-    if ( canvasMode == "modeDFT" ) { clear(canvas); drawn = []}
+    if ( canvasMode == "modeDFT" ) { clear(canvas); } //drawn = []}
     
     pen.isPainting = true;
     pen.color = document.getElementById('colorPick').value;    
@@ -331,7 +333,18 @@ function paintEnd(event)
     if (canvasMode == "modeDFT") {
         //let tshape = truncate(shape);
         clear(canvas)
-        DFT_2d( shape );
+        // have it trace itself back to rejoin automatically
+        let reversed_shape = []
+        for (i=shape.length-1; i>=0 ; i--){
+            reversed_shape.push(shape[i])
+        }
+        shape = shape.concat(reversed_shape)
+        drawn.push(shape)
+
+        for (let i=0; i<drawn.length;i++){
+            DFT_2d( drawn[i] );
+            repaint(drawn)
+        }
         
         
         let doPlay = document.getElementById('alwaysPlayRes').checked;
@@ -913,7 +926,7 @@ function DFT(data=false,filter=100,axis=false)
         */
         for (var x=0 ; x<this.res ; x++) {
             FY = 0;
-            for (var n=0 ; n<this.N/2 ; n++) { 
+            for (var n=0 ; n< this.N/2 ; n++) { 
                 FY += (
                     this.filteredKI[n] * Math.cos( n * x / this.xStretch ) +
                     this.filteredKJ[n] * Math.sin( n * x / this.xStretch )
@@ -1231,7 +1244,7 @@ function makeDFT() {
     //user_dft.R = res;
     //user_dft.build();
     var user_dft = new DFT(data,res);
-    drawn=[];
+    //drawn=[];
     user_dft.show(0);
 
 }
