@@ -65,9 +65,9 @@
         min=0
         max=100
         oninput="showResolution.value=freqPercSlider.value"
-        onchange="updateFreqPerc(); buildDFTshapes(shapes);"
-        onmousemove="updateFreqPerc(); buildDFTshapes(shapes)"
-        onmouseup="updateFreqPerc(); buildDFTshapes(shapes)"
+        onchange="updateFreqPerc(); dftshapes = buildDFTshapes(shapes);"
+        onmousemove="updateFreqPerc(); dftshapes = buildDFTshapes(shapes)"
+        onmouseup="updateFreqPerc(); dftshapes = buildDFTshapes(shapes)"
         style="margin:0; z-index:10; height: 18px"
       />
 

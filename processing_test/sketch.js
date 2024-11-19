@@ -3,6 +3,7 @@ var _shape = []; // current /unsaved shape
 
 var dft2s = []; // contains the frequency weight values for each shape
 var dftshapes = []; // contains the resulting shapes of the dft2s
+var dft_current = [];
 
 var Xs = [];
 var Ys = [];
@@ -123,7 +124,7 @@ function drawShapes(arr2d,col) {
     //Select shape
     if (s == _shapes.length) {
       stroke('teal'); // the active shape is drawn last with differenct color, as appended action
-      shape = _shape;
+      shape = dft_current; //_shape;
     } else {
       shape = _shapes[s];
     }
@@ -150,6 +151,9 @@ function keyHandler() {
   switch (key) {
     case "d":
       _shape.push([mouseX, mouseY]);
+      if (_shape.length > 2) {
+        dft_current = buildDFTshapes([trunc(_shape)])[0]
+      }
       break;
 
     case "s":
@@ -157,6 +161,8 @@ function keyHandler() {
         if (_shape.length > 0) {
           shapes.push(trunc(_shape));
           _shape = [];
+          dftshapes.push(dft_current)
+          dft_current = [];
         }
         //LOG('shapes',shapes);
         pressed.s = true;
@@ -166,7 +172,7 @@ function keyHandler() {
     case "p":
       if (!pressed.p) {
         counter = 1
-        buildDFTshapes(shapes,'orange')
+        //dftshapes = buildDFTshapes(shapes,'orange')
         //LOG('shapes',shapes)
         //LOG('dftShapes',dftshapes)
         pressed.p = true;
@@ -181,7 +187,8 @@ function keyHandler() {
 
     case "r":
       if (!pressed.r) {
-        _shape = []
+        _shape = [];
+        dft_current = [];
         pressed.r = true;
       }
       break;
@@ -273,20 +280,21 @@ function buildDFTshapes(_shapes) {
   }
 
   // Store weights
-  dft2s = []
+  _dft2s = []
   for (s = 0; s < _shapes.length; s++) {
-    dft2s.push( dft2(Xs[s],Ys[s]) )
+    _dft2s.push( dft2(Xs[s],Ys[s]) )
   }
     
-  dftshapes = []
-  dft2s.forEach( dftshape => (
+  _dftshapes = []
+  _dft2s.forEach( dftshape => (
     waveX = createWave(dftshape.xaijs),
     waveY = createWave(dftshape.yaijs),
     newShape = formatForDraw(waveX,waveY).ps,
     newTruncShape = trunc( newShape ),
-    dftshapes.push(newTruncShape)
+    _dftshapes.push(newTruncShape)
     )
   )
+  return _dftshapes
   
 }
 
@@ -359,7 +367,7 @@ function draw() {
   
   if (counter < maxcount) {
     
-    buildDFTshapes(shapes)
+    dftshapes = buildDFTshapes(shapes)
     let tealToWhite = [250*(counter/maxcount),125+120*(counter/maxcount),125+120*(counter/maxcount)]
     drawShapes(dftshapes, tealToWhite )
     counter++
@@ -370,7 +378,7 @@ function draw() {
     }
   }
   if (freqPerc<=100){
-    //buildDFTshapes(shapes)
+    //dftshapes = buildDFTshapes(shapes)
     let tealToWhite = [250*(counter/maxcount),125+120*(counter/maxcount),125+120*(counter/maxcount)]
     drawShapes(dftshapes, tealToWhite )
   }
