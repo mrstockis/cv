@@ -16,6 +16,8 @@ const dim = 500;
 var counter = 10 * fps    // for animation
 var maxcount = 10 * fps
 
+var freqPerc = 100;
+
 var showOriginal = true;
 
 function LOG(title,content){
@@ -212,12 +214,16 @@ function wj(f, arr) {
   return w;
 }
 
+function updateFreqPerc(){
+  freqPerc = Number(document.getElementById("freqPercSlider").value);
+}
+
 // Returns {a0: mean, wis:cos-weights, wjs:sine-weights} for an array
 function dft(arr) {
   let a0 = mean(arr);
   let is = [];
   let js = [];
-  for (let f = 1; f < Math.ceil( (counter/maxcount) * arr.length / 2 ); f++) {
+  for (let f = 1; f < Math.ceil( (freqPerc/100) * (counter/maxcount) * arr.length / 2 ); f++) {
     is.push(wi(f, arr));
     js.push(wj(f, arr));
   }
@@ -357,11 +363,16 @@ function draw() {
     let tealToWhite = [250*(counter/maxcount),125+120*(counter/maxcount),125+120*(counter/maxcount)]
     drawShapes(dftshapes, tealToWhite )
     counter++
-    if (counter == maxcount) { showOriginal = true }
+    //if (counter == maxcount) { showOriginal = true }
   } else {
     if (showOriginal) {
       drawShapes(shapes,250)
     }
+  }
+  if (freqPerc<=100){
+    buildDFTshapes(shapes)
+    let tealToWhite = [250*(counter/maxcount),125+120*(counter/maxcount),125+120*(counter/maxcount)]
+    drawShapes(dftshapes, tealToWhite )
   }
   
 
