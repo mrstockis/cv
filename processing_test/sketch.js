@@ -370,7 +370,7 @@ function draw() {
     }
   }
   if (freqPerc<=100){
-    buildDFTshapes(shapes)
+    //buildDFTshapes(shapes)
     let tealToWhite = [250*(counter/maxcount),125+120*(counter/maxcount),125+120*(counter/maxcount)]
     drawShapes(dftshapes, tealToWhite )
   }
